@@ -1,0 +1,93 @@
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+button {
+  background-color: transparent;
+  border: transparent;
+
+  cursor: pointer;
+}
+
+$font-roboto: 'Roboto', sans-serif;
+$font-oswald: 'Oswald', sans-serif;
+
+// black color is another one used
+$red-color: #eb5757;
+
+$error-color: #ffe3e3;
+$notify-color: #63a5dc;
+$notify-color2: #e6f1fa;
+$success-color: #27ae60;
+
+$light-gray: #828282;
+$darker-gray: #3f3f3f;
+
+i {
+  color: white;
+  font-size: 1.5rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: black;
+  padding: 1em;
+
+  .fa-shopping-bag {
+    margin-left: 0.5em;
+  }
+}
+
+[data-nav-list-open='true'] {
+  transform: scale(1) translateY(63%);
+}
+[data-nav-list-open='false'] {
+  transform: scale(0) translateY(63%);
+}
+nav {
+  position: absolute;
+  left: 0;
+
+  background-color: black;
+  padding: 1em;
+  width: 100%;
+
+  translate: all 300ms;
+
+  .nav-list {
+    list-style: none;
+
+    .nav-item {
+      margin: 0.5em 0;
+
+      color: white;
+      font-family: $font-oswald;
+
+      .nav-link {
+        color: white;
+        font-family: $font-oswald;
+      }
+    }
+    .nav-item--search {
+      display: none;
+    }
+    .login-sign-cont {
+      margin-top: 1.5em;
+    }
+  }
+}
