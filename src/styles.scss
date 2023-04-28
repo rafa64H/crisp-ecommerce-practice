@@ -20,7 +20,7 @@ button {
 $font-roboto: 'Roboto', sans-serif;
 $font-oswald: 'Oswald', sans-serif;
 
-// black color is another one used
+$black-color: #000000;
 $red-color: #eb5757;
 
 $error-color: #ffe3e3;
@@ -30,6 +30,11 @@ $success-color: #27ae60;
 
 $light-gray: #828282;
 $darker-gray: #3f3f3f;
+
+img {
+  max-width: 100%;
+  height: auto;
+}
 
 i {
   color: white;
@@ -45,7 +50,7 @@ header {
   justify-content: space-between;
   align-items: center;
 
-  background-color: black;
+  background-color: $black-color;
   padding: 1em;
 
   .fa-shopping-bag {
@@ -63,13 +68,14 @@ nav {
   position: absolute;
   left: 0;
 
-  background-color: black;
+  background-color: $black-color;
   padding: 1em;
   width: 100%;
 
-  translate: all 300ms;
+  transition: all 100ms;
 
   .nav-list {
+    text-align: center;
     list-style: none;
 
     .nav-item {
@@ -90,4 +96,58 @@ nav {
       margin-top: 1.5em;
     }
   }
+}
+
+.section1 {
+  &-content {
+    &__h1 {
+    }
+    &__link {
+    }
+  }
+  &-images {
+    display: flex;
+    justify-content: center;
+
+    .section1-img {
+      width: min(50%, 25rem);
+      &:nth-child(2) {
+        margin-left: max(-27%, -8em);
+      }
+    }
+  }
+
+  &-change-background {
+    position: relative;
+
+    .arrow {
+      position: absolute;
+
+      &-left {
+        .fa-arrow-left {
+        }
+      }
+      &-right {
+        .fa-arrow-right {
+          color: $black-color;
+        }
+      }
+    }
+
+    &__squares {
+      width: fit-content;
+      margin: 0 auto;
+
+      .square {
+        border: 0.1rem solid $black-color;
+        padding: 1em;
+      }
+      [data-square-active] {
+        background-color: $black-color;
+      }
+    }
+  }
+}
+.section1-background1 {
+  background-image: url('./assets/home/hero-img.png');
 }
