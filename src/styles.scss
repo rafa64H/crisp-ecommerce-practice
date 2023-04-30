@@ -1,22 +1,3 @@
-*,
-*::before,
-*::after {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-button {
-  background-color: transparent;
-  border: transparent;
-
-  cursor: pointer;
-}
-
 $font-roboto: 'Roboto', sans-serif;
 $font-oswald: 'Oswald', sans-serif;
 
@@ -31,6 +12,35 @@ $success-color: #27ae60;
 $light-gray: #828282;
 $darker-gray: #3f3f3f;
 
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+h1 {
+  font-family: $font-oswald;
+}
+li {
+  font-family: $font-oswald;
+}
+a {
+  font-family: $font-oswald;
+}
+
+button {
+  background-color: transparent;
+  border: transparent;
+
+  cursor: pointer;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -43,6 +53,25 @@ i {
 
 a {
   text-decoration: none;
+}
+
+.link-btn-component {
+  display: inline-block;
+
+  border: 0.15rem solid $black-color;
+  padding: 0.5em 1em;
+
+  font-size: clamp(1rem, 1.4vw, 4rem);
+  color: $black-color;
+  font-weight: 600;
+
+  transition: all 150ms;
+
+  &:hover {
+    border-color: $darker-gray;
+    background-color: $darker-gray;
+    color: white;
+  }
 }
 
 header {
@@ -82,7 +111,6 @@ nav {
       margin: 0.5em 0;
 
       color: white;
-      font-family: $font-oswald;
 
       .nav-link {
         color: white;
@@ -99,7 +127,18 @@ nav {
 }
 
 .section1 {
+  .flex {
+    display: flex;
+    flex-direction: column;
+
+    /*&-content and &-images are inside this div*/
+  }
+
   &-content {
+    order: 2;
+
+    text-align: center;
+
     &__h1 {
     }
     &__link {
@@ -108,6 +147,7 @@ nav {
   &-images {
     display: flex;
     justify-content: center;
+    order: 1;
 
     .section1-img {
       width: min(50%, 25rem);
@@ -118,23 +158,34 @@ nav {
   }
 
   &-change-background {
-    position: relative;
+    display: flex;
+    align-items: flex-end;
+
+    padding: 0 10%;
 
     .arrow {
-      position: absolute;
+      padding: 0.8em;
+      background-color: rgba($color: $black-color, $alpha: 0.6);
+      transition: all 150ms;
+      &:hover {
+        background-color: rgba($color: $black-color, $alpha: 0.8);
+      }
 
       &-left {
+        order: 1;
         .fa-arrow-left {
         }
       }
       &-right {
+        order: 3;
         .fa-arrow-right {
-          color: $black-color;
         }
       }
     }
 
     &__squares {
+      order: 2;
+
       width: fit-content;
       margin: 0 auto;
 

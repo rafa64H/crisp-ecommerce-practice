@@ -1,4 +1,5 @@
 import React from 'react';
+import LinkButton from './smaller/linkButton';
 
 function SectionOne({ h1Text, linkText, classesSectionOne, srcImg1, srcImg2 }) {
   return (
@@ -6,9 +7,7 @@ function SectionOne({ h1Text, linkText, classesSectionOne, srcImg1, srcImg2 }) {
       <div className="flex">
         <div className="section1-content">
           <h1 className="section1-content__h1">{h1Text}</h1>
-          <a href="#" className="section1-content__link">
-            {linkText}
-          </a>
+          <LinkButton linkText="SHOP NOW" />
         </div>
         <div className="section1-images">
           <img src={srcImg1} alt="" className="section1-img" />
