@@ -6,7 +6,7 @@ function Header() {
   return (
     <header>
       <OpenNavBtn />
-      <img src={Logo} alt="Company logo" className="logo" />
+      <CompanyLogo />
 
       <nav data-nav-list-open="false">
         <ul className="nav-list">
@@ -35,6 +35,8 @@ export default Header;
 function OpenNavBtn() {
   function handleOpenNav(e) {
     const navMenu = document.querySelector('[data-nav-list-open]');
+
+    const navBtn = document.querySelector('.open-nav');
     const openNavBtnIcon = document.querySelector('[data-open-nav-btn-icon]');
 
     if (navMenu.dataset.navListOpen === 'true') {
@@ -43,16 +45,21 @@ function OpenNavBtn() {
       // change icon of the openNavBtn
       openNavBtnIcon.classList.remove('fa-xmark');
       openNavBtnIcon.classList.add('fa-bars');
+
+      navBtn.setAttribute('aria-expanded', 'false');
       return;
     }
     navMenu.dataset.navListOpen = 'true';
 
     openNavBtnIcon.classList.remove('fa-bars');
     openNavBtnIcon.classList.add('fa-xmark');
+    navBtn.setAttribute('aria-expanded', 'true');
   }
   return (
     <button
       className="open-nav"
+      aria-label="open navigation"
+      aria-expanded="false"
       type="button"
       onClick={(e) => handleOpenNav(e)}
     >
@@ -63,7 +70,7 @@ function OpenNavBtn() {
 
 function SearchBtn() {
   return (
-    <button type="button">
+    <button type="button" aria-label="Search something">
       <i className="fas fa-search" />
     </button>
   );
@@ -71,7 +78,7 @@ function SearchBtn() {
 
 function ShopBtn() {
   return (
-    <button type="button">
+    <button type="button" aria-label="Shopping bag">
       <i className="fas fa-shopping-bag" />
     </button>
   );
@@ -80,9 +87,21 @@ function ShopBtn() {
 function NavItem({ text, link }) {
   return (
     <li className="nav-item">
-      <a href={link} className="nav-link">
+      <a href="#" className="nav-link">
         {text}
       </a>
     </li>
+  );
+}
+
+function CompanyLogo() {
+  return (
+    <a href="#" className="logo-link">
+      <img
+        src={Logo}
+        alt="Company logo, go to home page"
+        className="logo-img"
+      />
+    </a>
   );
 }

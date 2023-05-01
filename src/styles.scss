@@ -1,8 +1,8 @@
 $font-roboto: 'Roboto', sans-serif;
 $font-oswald: 'Oswald', sans-serif;
 
-$black-color: #000000;
-$red-color: #eb5757;
+$first-color: #000000;
+$second-color: #eb5757;
 
 $error-color: #ffe3e3;
 $notify-color: #63a5dc;
@@ -58,11 +58,11 @@ a {
 .link-btn-component {
   display: inline-block;
 
-  border: 0.15rem solid $black-color;
+  border: 0.15rem solid $first-color;
   padding: 0.5em 1em;
 
   font-size: clamp(1rem, 1.4vw, 4rem);
-  color: $black-color;
+  color: $first-color;
   font-weight: 600;
 
   transition: all 150ms;
@@ -79,7 +79,7 @@ header {
   justify-content: space-between;
   align-items: center;
 
-  background-color: $black-color;
+  background-color: $first-color;
   padding: 1em;
 
   .fa-shopping-bag {
@@ -97,7 +97,7 @@ nav {
   position: absolute;
   left: 0;
 
-  background-color: $black-color;
+  background-color: $first-color;
   padding: 1em;
   width: 100%;
 
@@ -165,10 +165,10 @@ nav {
 
     .arrow {
       padding: 0.8em;
-      background-color: rgba($color: $black-color, $alpha: 0.6);
+      background-color: rgba($color: $first-color, $alpha: 0.6);
       transition: all 150ms;
       &:hover {
-        background-color: rgba($color: $black-color, $alpha: 0.8);
+        background-color: rgba($color: $first-color, $alpha: 0.8);
       }
 
       &-left {
@@ -190,15 +190,35 @@ nav {
       margin: 0 auto;
 
       .square {
-        border: 0.1rem solid $black-color;
-        padding: 1em;
+        border: 0.15rem solid $light-gray;
+        margin: 0 0.3em;
+        padding: 0.8em;
+
+        transition: all 150ms;
       }
       [data-square-active] {
-        background-color: $black-color;
+        background-color: $first-color;
+        border-color: $first-color;
+        padding: 1em;
+      }
+      .square:hover:not([data-square-active]) {
+        border-color: $first-color;
       }
     }
   }
 }
 .section1-background1 {
   background-image: url('./assets/home/hero-img.png');
+}
+
+.section2 {
+  &-background1 {
+    background-image: url('./assets/home/woman-home3.png');
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+  }
+  &-content {
+    width: 50%;
+    margin-left: auto;
+  }
 }
