@@ -5,13 +5,28 @@ function SectionTwo({
   backgroundImage,
   textTitleSectionTwo,
   textParaSectionTwo,
+  linkText,
+  imageToLeft,
+  classesSection2,
+  classesImg,
+  classesContent,
+  classesTitle,
+  classesPara,
 }) {
   return (
-    <div className={('section2', backgroundImage)}>
-      <div className="section2-content">
-        <h2 className="section2__title">{textTitleSectionTwo}</h2>
-        <p className="section2__para">{textParaSectionTwo}</p>
-        <LinkButton linkText="SEE OFFERS" />
+    <div className={`section2 ${classesSection2}`}>
+      <img
+        src={backgroundImage}
+        alt=""
+        className={`section2-img ${classesImg}`}
+        data-image-left={imageToLeft}
+      />
+      <div className={`section2-content ${classesContent}`}>
+        <h2 className={`section2__title ${classesTitle}`}>
+          {textTitleSectionTwo}
+        </h2>
+        <p className={`section2__para ${classesPara}`}>{textParaSectionTwo}</p>
+        <LinkButton linkText={linkText} />
       </div>
     </div>
   );
