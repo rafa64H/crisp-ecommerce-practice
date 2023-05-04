@@ -1,0 +1,50 @@
+[
+  {
+    "brand": "CHANEL",
+    "fontFamily": "brand-oswald",
+    "fontWeight": "weight-six-hundred",
+    "id": "brand1"
+  },
+  {
+    "brand": "BURBERRY",
+    "fontFamily": "brand-oswald",
+    "fontWeight": "weight-eight-hundred",
+    "id": "brand2"
+  },
+  {
+    "brand": "Dior",
+    "fontFamily": "brand-serif",
+    "fontWeight": "weight-five-hundred",
+    "id": "brand3"
+  },
+  {
+    "brand": "FENDI",
+    "fontFamily": "brand-oswald",
+    "fontWeight": "weight-six-hundred",
+    "id": "brand4"
+  },
+  {
+    "brand": "GUCCI",
+    "fontFamily": "brand-oswald",
+    "fontWeight": "weight-three-hundred",
+    "id": "brand5"
+  },
+  {
+    "brand": "VERSACE",
+    "fontFamily": "brand-roboto",
+    "fontWeight": "weight-six-hundred",
+    "id": "brand6"
+  },
+  {
+    "brand": "FENDI",
+    "fontFamily": "brand-oswald",
+    "fontWeight": "weight-six-hundred",
+    "id": "brand7"
+  },
+  {
+    "brand": "ARMANI",
+    "fontFamily": "brand-serif",
+    "fontWeight": "weight-three-hundred",
+    "id": "brand8"
+  }
+]

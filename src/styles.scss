@@ -233,7 +233,11 @@ nav {
     &-content {
       width: 50%;
       margin-left: auto;
-      padding: 0.5em;
+      padding: 1em;
+
+      .section2__para {
+        margin: 0.5em 0;
+      }
     }
 
     &-home2 {
@@ -246,7 +250,35 @@ nav {
       }
     }
     &-home3 {
-      background-color: #e2ccc4;
+      background-color: #edd6cc;
+    }
+  }
+}
+
+.brand-section {
+  .brand-item {
+    .brand-item__text {
+    }
+    .weight-three-hundred {
+      font-weight: 300;
+    }
+    .weight-five-hundred {
+      font-weight: 500;
+    }
+    .weight-six-hundred {
+      font-weight: 600;
+    }
+    .weight-eight-hundred {
+      font-weight: 800;
+    }
+    .brand-oswald {
+      font-family: $font-oswald;
+    }
+    .brand-roboto {
+      font-family: $font-roboto;
+    }
+    .brand-serif {
+      font-family: serif;
     }
   }
 }
