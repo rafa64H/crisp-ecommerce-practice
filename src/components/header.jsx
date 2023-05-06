@@ -15,16 +15,19 @@ function Header() {
           <NavItem text="Blog" />
           <NavItem text="Sale" />
           <NavItem text="Contact" />
+          <SearchBtn desktopOrMobile="desktop" />
+
           <div className="login-sign-cont">
             <NavItem text="Sign in" />
             <NavItem text="Create an account" />
+            <ShopBtn desktopOrMobile="desktop" />
           </div>
         </ul>
       </nav>
 
-      <div>
-        <SearchBtn />
-        <ShopBtn />
+      <div className="search-shop-btns-cont">
+        <SearchBtn desktopOrMobile="mobile" />
+        <ShopBtn desktopOrMobile="mobile" />
       </div>
     </header>
   );
@@ -68,18 +71,48 @@ function OpenNavBtn() {
   );
 }
 
-function SearchBtn() {
+function SearchBtn({ desktopOrMobile }) {
+  if (desktopOrMobile === 'mobile') {
+    return (
+      <button
+        type="button"
+        className="search-btn-mobile"
+        aria-label="Search something"
+      >
+        <i className="fas fa-search" />
+      </button>
+    );
+  }
+
   return (
-    <button type="button" aria-label="Search something">
+    <button className="search-btn-desktop" type="button">
       <i className="fas fa-search" />
+
+      <p className="search__p">Search</p>
     </button>
   );
 }
 
-function ShopBtn() {
+function ShopBtn({ desktopOrMobile }) {
+  if (desktopOrMobile === 'mobile') {
+    return (
+      <button
+        type="button"
+        className="shop-btn-mobile"
+        aria-label="Shopping cart"
+      >
+        <i className="fas fa-shopping-bag" />
+      </button>
+    );
+  }
+
   return (
-    <button type="button" aria-label="Shopping bag">
+    <button type="button" className="shop-btn-desktop">
       <i className="fas fa-shopping-bag" />
+      <div className="shop-btn-text">
+        <p className="shop-btn-text__p">Shopping cart</p>
+        <p className="shop-btn-text__eur">0.00 EUR</p>
+      </div>
     </button>
   );
 }

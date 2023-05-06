@@ -83,11 +83,31 @@ a {
   font-weight: 600;
 
   transition: all 200ms;
+}
 
-  &:hover {
-    border-color: $darker-gray;
-    background-color: $darker-gray;
-    color: white;
+.search-btn-desktop {
+  display: none;
+  align-items: center;
+
+  .search__p {
+    color: #fff;
+    font-family: $font-oswald;
+    font-size: $third-font-size;
+  }
+}
+
+.shop-btn-desktop {
+  display: none;
+
+  .shop-btn-text {
+    margin-left: 0.5em;
+
+    & > * {
+      color: #fff;
+    }
+    &__eur {
+      font-weight: 600;
+    }
   }
 }
 
@@ -99,46 +119,46 @@ header {
   background-color: $first-color;
   padding: 1em;
 
-  .fa-shopping-bag {
+  .shop-btn-mobile {
     margin-left: 0.5em;
   }
-}
 
-[data-nav-list-open='true'] {
-  transform: scale(1) translateY(62%);
-}
-[data-nav-list-open='false'] {
-  transform: scale(0) translateY(62%);
-}
-nav {
-  position: absolute;
-  left: 0;
+  [data-nav-list-open='true'] {
+    transform: scale(1) translateY(62%);
+  }
+  [data-nav-list-open='false'] {
+    transform: scale(0) translateY(62%);
+  }
+  nav {
+    position: absolute;
+    left: 0;
 
-  background-color: $first-color;
-  padding: 1em;
-  width: 100%;
+    background-color: $first-color;
+    padding: 1em;
+    width: 100%;
 
-  transition: all 100ms;
+    transition: all 100ms;
 
-  .nav-list {
-    text-align: center;
-    list-style: none;
+    .nav-list {
+      text-align: center;
+      list-style: none;
 
-    .nav-item {
-      margin: 0.5em 0;
+      .nav-item {
+        margin: 0.5em 0;
 
-      color: white;
-
-      .nav-link {
         color: white;
-        font-family: $font-oswald;
+
+        .nav-link {
+          display: inline-block;
+          color: white;
+        }
       }
-    }
-    .nav-item--search {
-      display: none;
-    }
-    .login-sign-cont {
-      margin-top: 1.5em;
+      .nav-item--search {
+        display: none;
+      }
+      .login-sign-cont {
+        margin-top: 1.5em;
+      }
     }
   }
 }
@@ -184,9 +204,6 @@ nav {
       padding: 0.8em;
       background-color: rgba($color: $first-color, $alpha: 0.6);
       transition: all 200ms;
-      &:hover {
-        background-color: rgba($color: $first-color, $alpha: 0.8);
-      }
 
       &-left {
         order: 1;
@@ -217,9 +234,6 @@ nav {
         background-color: $first-color;
         border-color: $first-color;
         padding: 1em;
-      }
-      .square:hover:not([data-square-active]) {
-        border-color: $first-color;
       }
     }
   }
@@ -264,39 +278,14 @@ nav {
 }
 
 .brand-section {
-  .brand-item {
-    .brand-item__text {
-    }
-    .weight-three-hundred {
-      font-weight: 300;
-    }
-    .weight-five-hundred {
-      font-weight: 500;
-    }
-    .weight-six-hundred {
-      font-weight: 600;
-    }
-    .weight-eight-hundred {
-      font-weight: 800;
-    }
-    .brand-oswald {
-      font-family: $font-oswald;
-    }
-    .brand-roboto {
-      font-family: $font-roboto;
-    }
-    .brand-serif {
-      font-family: serif;
-    }
-  }
-}
-.brand-section {
   margin: 1em;
 
   .flex-border-title {
     display: none;
     justify-content: space-between;
     align-items: flex-start;
+
+    margin-top: 3em;
 
     .border-top-left {
       border-bottom: 0.15em solid $light-gray;
@@ -331,14 +320,105 @@ nav {
 
       transition: all 200ms;
 
-      &:hover {
+      &:focus {
         border-color: $first-color;
+      }
+
+      .weight-three-hundred {
+        font-weight: 300;
+      }
+      .weight-five-hundred {
+        font-weight: 500;
+      }
+      .weight-six-hundred {
+        font-weight: 600;
+      }
+      .weight-eight-hundred {
+        font-weight: 800;
+      }
+      .brand-oswald {
+        font-family: $font-oswald;
+      }
+      .brand-roboto {
+        font-family: $font-roboto;
+      }
+      .brand-serif {
+        font-family: serif;
       }
     }
   }
 }
 
 @media screen and (min-width: 1200px) {
+  .shop-btn-mobile {
+    display: none;
+  }
+  .shop-btn-desktop {
+    display: flex;
+  }
+
+  .search-btn-mobile {
+    display: none;
+  }
+  .search-btn-desktop {
+    display: flex;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: $first-color;
+    padding: 1em;
+
+    .open-nav {
+      display: none;
+    }
+
+    .shop-btn-mobile {
+      margin-left: 0.5em;
+    }
+
+    [data-nav-list-open='true'] {
+      transform: scale(1) translateY(0);
+    }
+    [data-nav-list-open='false'] {
+      transform: scale(1) translateY(0);
+    }
+    nav {
+      position: static;
+
+      background-color: $first-color;
+      padding: 1em;
+      width: 70%;
+
+      transition: all 200ms;
+
+      .nav-list {
+        display: flex;
+        align-items: center;
+
+        .nav-item {
+          margin: 0.5em;
+        }
+        .login-sign-cont {
+          display: flex;
+          align-items: center;
+          margin: 0;
+          margin-left: auto;
+
+          .shop-btn-desktop {
+            margin-left: 0.5em;
+          }
+        }
+      }
+    }
+    .search-shop-btns-cont {
+      display: none;
+    }
+  }
+
   .grid {
     display: grid;
     margin: 1em;
@@ -381,7 +461,57 @@ nav {
 
         text-align: center;
         color: $first-color;
+
+        &:hover {
+          border-color: $first-color;
+        }
       }
     }
+  }
+}
+
+@media (hover: hover) {
+  .link-btn-component:hover {
+    border-color: $darker-gray;
+    background-color: $darker-gray;
+    color: white;
+  }
+
+  .nav-item {
+    position: relative;
+    &::after {
+      display: block;
+      content: ('');
+
+      padding: 0.05em 0;
+      width: 100%;
+      background-color: #fff;
+
+      transform: scaleX(0);
+      transition: all 200ms;
+    }
+    &:hover::after {
+      transform: scaleX(1);
+    }
+  }
+
+  .arrow:hover {
+    background-color: rgba($color: $first-color, $alpha: 0.8);
+  }
+
+  .square:hover:not([data-square-active]) {
+    border-color: $first-color;
+  }
+}
+
+@media (hover: none) {
+  .link-btn-component:focus {
+    border-color: $darker-gray;
+    background-color: $darker-gray;
+    color: white;
+  }
+
+  .arrow:focus {
+    background-color: rgba($color: $first-color, $alpha: 0.8);
   }
 }
