@@ -1,6 +1,11 @@
 $font-roboto: 'Roboto', sans-serif;
 $font-oswald: 'Oswald', sans-serif;
 
+$first-font-size: clamp(2.1rem, 4vw, 6rem);
+$second-font-size: clamp(1.8rem, 3vw, 4.5rem);
+$third-font-size: clamp(1.3rem, 1.5vw, 3rem);
+$fourth-font-size: clamp(1rem, 1.3vw, 2rem);
+
 $first-color: #000000;
 $second-color: #eb5757;
 
@@ -27,12 +32,18 @@ body {
 
 h1 {
   font-family: $font-oswald;
+  font-size: $first-font-size;
 }
 h2 {
   font-family: $font-oswald;
+  font-size: $second-font-size;
+}
+h3 {
+  font-size: $third-font-size;
 }
 p {
   font-family: $font-roboto;
+  font-size: $fourth-font-size;
   color: $darker-gray;
 }
 
@@ -52,11 +63,12 @@ button {
 
 i {
   color: white;
-  font-size: 1.5rem;
+  font-size: clamp(1.7rem, 1.6vw, 3rem);
 }
 
 a {
   text-decoration: none;
+  font-size: $third-font-size;
 }
 
 .link-btn-component {
@@ -65,11 +77,12 @@ a {
   border: 0.15rem solid $first-color;
   padding: 0.5em 1em;
 
-  font-size: clamp(1rem, 1.4vw, 4rem);
+  font-size: $third-font-size;
+  text-align: center;
   color: $first-color;
   font-weight: 600;
 
-  transition: all 150ms;
+  transition: all 200ms;
 
   &:hover {
     border-color: $darker-gray;
@@ -92,10 +105,10 @@ header {
 }
 
 [data-nav-list-open='true'] {
-  transform: scale(1) translateY(63%);
+  transform: scale(1) translateY(62%);
 }
 [data-nav-list-open='false'] {
-  transform: scale(0) translateY(63%);
+  transform: scale(0) translateY(62%);
 }
 nav {
   position: absolute;
@@ -170,7 +183,7 @@ nav {
     .arrow {
       padding: 0.8em;
       background-color: rgba($color: $first-color, $alpha: 0.6);
-      transition: all 150ms;
+      transition: all 200ms;
       &:hover {
         background-color: rgba($color: $first-color, $alpha: 0.8);
       }
@@ -198,7 +211,7 @@ nav {
         margin: 0 0.3em;
         padding: 0.8em;
 
-        transition: all 150ms;
+        transition: all 200ms;
       }
       [data-square-active] {
         background-color: $first-color;
@@ -221,19 +234,18 @@ nav {
     align-items: center;
 
     background-color: #eeecee;
-    margin: 0.5em;
+    margin: 0.5em auto;
 
     &-img {
-      width: 50%;
+      width: 100%;
       align-self: flex-end;
     }
     [data-image-left='false'] {
       order: 2;
     }
     &-content {
-      width: 50%;
-      margin-left: auto;
-      padding: 1em;
+      width: 70%;
+      margin: 2em clamp(0.25em, 5vw, 4em);
 
       .section2__para {
         margin: 0.5em 0;
@@ -242,11 +254,7 @@ nav {
 
     &-home2 {
       background-color: #dedbd3;
-      .section2-content {
-        padding: 2em 0.5em;
-      }
       .section2-img {
-        width: 90%;
       }
     }
     &-home3 {
@@ -282,11 +290,64 @@ nav {
     }
   }
 }
+.brand-section {
+  margin: 1em;
+
+  .flex-border-title {
+    display: none;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .border-top-left {
+      border-bottom: 0.15em solid $light-gray;
+      width: 100%;
+    }
+    .border-top-right {
+      border-bottom: 0.15em solid $light-gray;
+      width: 100%;
+    }
+    .brand-section__title {
+      width: 100%;
+
+      text-align: center;
+
+      transform: translateY(-50%);
+    }
+  }
+
+  .grid-brands {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+
+    padding: 1em;
+
+    .brand-item {
+      padding: 1em;
+      border: 0.15em solid $light-gray;
+
+      text-align: center;
+      color: $first-color;
+
+      transition: all 200ms;
+
+      &:hover {
+        border-color: $first-color;
+      }
+    }
+  }
+}
 
 @media screen and (min-width: 1200px) {
   .grid {
     display: grid;
+    margin: 1em;
     grid-gap: 1em;
+
+    .section2 {
+      margin: 0;
+    }
+
     .grid-item1 {
       grid-column: 1/1;
     }
@@ -296,6 +357,31 @@ nav {
     }
     .grid-item3 {
       grid-column: 1/1;
+    }
+  }
+
+  .brand-section {
+    margin: 1em;
+    border-left: 0.15em solid $light-gray;
+    border-right: 0.15em solid $light-gray;
+    border-bottom: 0.15em solid $light-gray;
+
+    .flex-border-title {
+      display: flex;
+    }
+
+    .grid-brands {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .brand-item {
+        padding: 1em;
+        border-color: transparent;
+
+        text-align: center;
+        color: $first-color;
+      }
     }
   }
 }

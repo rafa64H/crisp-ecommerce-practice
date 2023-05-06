@@ -30,6 +30,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       srcImg1={womanHomeOne}
       srcImg2={womanHomeTwo}
     />
+
+    <BrandSection brandsTitle="Choose your brand" brandsObject={brandsData} />
+
     <section className="grid">
       <SectionTwo
         backgroundImage={womanHomeThree}
@@ -41,21 +44,20 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       />
       <SectionTwo
         backgroundImage={womanHomeFive}
-        textTitleSectionTwo="BRAND NEW STYLE"
-        textParaSectionTwo="Popular clothing brands"
-        linkText="SEE OFFERS"
+        textTitleSectionTwo="UP TO 40% OFF"
+        textParaSectionTwo="Special offers and great deals"
+        linkText="SHOP NOW"
         imageToLeft="false"
         classesSection2="section2-home2 grid-item2"
       />
       <SectionTwo
         backgroundImage={womanHomeFour}
-        textTitleSectionTwo="UP TO 40% OFF"
-        textParaSectionTwo="Special offers and great deals"
-        linkText="SHOP NOW"
+        textTitleSectionTwo="BRAND NEW STYLE"
+        textParaSectionTwo="Popular clothing brands"
+        linkText="SEE OFFERS"
         imageToLeft="false"
         classesSection2="section2-home3 grid-item3"
       />
     </section>
-    <BrandSection brandsObject={brandsData} />
   </React.StrictMode>
 );
