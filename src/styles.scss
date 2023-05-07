@@ -1,3 +1,4 @@
+//Variables
 $font-roboto: 'Roboto', sans-serif;
 $font-oswald: 'Oswald', sans-serif;
 
@@ -16,7 +17,9 @@ $success-color: #27ae60;
 
 $light-gray: #828282;
 $darker-gray: #3f3f3f;
+//Variables END
 
+//Universal selector and tags
 *,
 *::before,
 *::after {
@@ -52,6 +55,9 @@ li {
 }
 a {
   font-family: $font-oswald;
+  text-decoration: none;
+  font-size: $third-font-size;
+  cursor: pointer;
 }
 
 button {
@@ -65,13 +71,9 @@ i {
   color: white;
   font-size: clamp(1.7rem, 1.6vw, 3rem);
 }
+//Universal selector and tags END
 
-a {
-  text-decoration: none;
-  font-size: $third-font-size;
-  cursor: pointer;
-}
-
+//Very used components
 .link-btn-component {
   display: inline-block;
 
@@ -111,6 +113,7 @@ a {
     }
   }
 }
+//Very used components END
 
 header {
   display: flex;
@@ -165,7 +168,7 @@ header {
 }
 
 .section1 {
-  .flex {
+  .flex-section1 {
     display: flex;
     flex-direction: column;
 
@@ -243,7 +246,7 @@ header {
   background-image: url('./assets/home/hero-img.png');
 }
 
-.grid {
+.grid-section2 {
   .section2 {
     display: flex;
     align-items: center;
@@ -351,6 +354,7 @@ header {
 }
 
 @media screen and (min-width: 1200px) {
+  //very used components
   .shop-btn-mobile {
     display: none;
   }
@@ -364,6 +368,7 @@ header {
   .search-btn-desktop {
     display: flex;
   }
+  //very used components END
 
   header {
     display: flex;
@@ -420,7 +425,7 @@ header {
     }
   }
 
-  .grid {
+  .grid-section2 {
     display: grid;
     margin: 1em;
     grid-gap: 1em;
@@ -429,14 +434,14 @@ header {
       margin: 0;
     }
 
-    .grid-item1 {
+    .grid-section2-item1 {
       grid-column: 1/1;
     }
-    .grid-item2 {
+    .grid-section2-item2 {
       grid-column: 2/2;
       grid-row: 1/3;
     }
-    .grid-item3 {
+    .grid-section2-item3 {
       grid-column: 1/1;
     }
   }
@@ -462,10 +467,6 @@ header {
 
         text-align: center;
         color: $first-color;
-
-        &:hover {
-          border-color: $first-color;
-        }
       }
     }
   }

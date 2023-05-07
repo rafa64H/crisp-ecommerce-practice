@@ -1,8 +1,7 @@
 import React from 'react';
 
 const BrandSection = ({ brandsObject, brandsTitle }) => {
-  const brandsArray = brandsObject;
-  const brandsToShow = brandsArray.map((brandItemObject) => (
+  const brandsToShow = brandsObject.map((brandItemObject) => (
     <BrandItem
       brand={brandItemObject.brand}
       fontFamily={brandItemObject.fontFamily}

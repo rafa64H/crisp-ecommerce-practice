@@ -33,14 +33,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
     <BrandSection brandsTitle="Choose your brand" brandsObject={brandsData} />
 
-    <section className="grid">
+    <section className="grid-section2">
       <SectionTwo
         backgroundImage={womanHomeThree}
         textTitleSectionTwo="CHOOSE YOUR LOOK"
         textParaSectionTwo="See our clothing collections"
         linkText="SEE OFFERS"
         imageToLeft="true"
-        classesSection2="grid-item1"
+        classesSection2="grid-section2-item1"
       />
       <SectionTwo
         backgroundImage={womanHomeFive}
@@ -48,7 +48,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         textParaSectionTwo="Special offers and great deals"
         linkText="SHOP NOW"
         imageToLeft="false"
-        classesSection2="section2-home2 grid-item2"
+        classesSection2="section2-home2 grid-section2-item2"
       />
       <SectionTwo
         backgroundImage={womanHomeFour}
@@ -56,7 +56,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         textParaSectionTwo="Popular clothing brands"
         linkText="SEE OFFERS"
         imageToLeft="false"
-        classesSection2="section2-home3 grid-item3"
+        classesSection2="section2-home3 grid-section2-item3"
       />
     </section>
   </React.StrictMode>

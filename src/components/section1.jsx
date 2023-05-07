@@ -9,11 +9,12 @@ const SectionOne = ({
   srcImg2,
 }) => (
   <section className={classesSectionOne}>
-    <div className="flex">
+    <div className="flex-section1">
       <div className="section1-content">
         <h1 className="section1-content__h1">{h1Text}</h1>
         <LinkButton linkText="SHOP NOW" />
       </div>
+
       <div className="section1-images">
         <img src={srcImg1} alt="" className="section1-img" />
         <img src={srcImg2} alt="" className="section1-img" />
@@ -23,6 +24,7 @@ const SectionOne = ({
     <div className="section1-change-background">
       <ArrowLeft />
       <ArrowRight />
+
       <div className="section1-change-background__squares">
         <button
           type="button"
