@@ -1,6 +1,6 @@
 import React from 'react';
 
-function BrandSection({ brandsObject, brandsTitle }) {
+const BrandSection = ({ brandsObject, brandsTitle }) => {
   const brandsArray = brandsObject;
   const brandsToShow = brandsArray.map((brandItemObject) => (
     <BrandItem
@@ -21,16 +21,12 @@ function BrandSection({ brandsObject, brandsTitle }) {
       <div className="grid-brands">{brandsToShow}</div>
     </section>
   );
-}
+};
 
 export default BrandSection;
 
-function BrandItem({ fontFamily, fontWeight, brand }) {
-  return (
-    <a href="#" className="brand-item">
-      <h3 className={`brand-item__text ${fontFamily} ${fontWeight}`}>
-        {brand}
-      </h3>
-    </a>
-  );
-}
+const BrandItem = ({ fontFamily, fontWeight, brand }) => (
+  <a href="#" className="brand-item">
+    <h3 className={`brand-item__text ${fontFamily} ${fontWeight}`}>{brand}</h3>
+  </a>
+);

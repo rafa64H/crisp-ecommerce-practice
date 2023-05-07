@@ -69,6 +69,7 @@ i {
 a {
   text-decoration: none;
   font-size: $third-font-size;
+  cursor: pointer;
 }
 
 .link-btn-component {
@@ -477,8 +478,7 @@ header {
     color: white;
   }
 
-  .nav-item {
-    position: relative;
+  .nav-link {
     &::after {
       display: block;
       content: ('');
