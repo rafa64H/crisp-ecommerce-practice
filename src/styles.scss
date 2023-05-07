@@ -338,35 +338,58 @@ header {
 
 //SectionTwo
 .section2 {
-  display: flex;
-  align-items: center;
-
-  background-color: #eeecee;
   margin: 0.5em auto;
 
-  &-img {
-    width: 100%;
-    align-self: flex-end;
-  }
-  [data-image-left='false'] {
-    order: 2;
-  }
   &-content {
-    width: 70%;
-    margin: 2em clamp(0.25em, 5vw, 4em);
+    width: min(90%, 45rem);
+    padding: 3em;
 
     .section2__para {
       margin: 0.5em 0;
     }
   }
 
-  &-home2 {
-    background-color: #dedbd3;
-    .section2-img {
+  &-home1 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    background-image: linear-gradient(90deg, #f2f0ef00, #edebeb 50%),
+      url('./assets/home/woman-home3.png');
+    background-repeat: no-repeat;
+    background-size: min(cover, 50%);
+    background-position: 0% center;
+
+    .section2-content {
+      width: min(90%, 25rem);
     }
   }
+
+  &-home2 {
+    display: flex;
+    align-items: center;
+
+    background-image: linear-gradient(90deg, #dfddd3 50%, #d1cdc100),
+      url('./assets/home/woman-home5.png');
+    background-repeat: no-repeat;
+    background-size: min(cover, 50%);
+    background-position: 100% 15%;
+  }
   &-home3 {
-    background-color: #edd6cc;
+    background-image: linear-gradient(90deg, #f4ded3 50%, #f5dfd400),
+      url('./assets/home/woman-home4.png');
+    background-repeat: no-repeat;
+    background-size: min(cover, 50%);
+    background-position: 100% 15%;
+  }
+
+  &-home4 {
+    background: linear-gradient(90deg, #dae8f0e5 50%, #cadeee1a),
+      url('./assets/home/woman-home6.png');
+
+    background-repeat: no-repeat;
+    background-size: min(cover, 50%);
+    background-position: 100% center;
   }
 }
 //SectionTwo END
@@ -535,6 +558,15 @@ header {
     }
     .grid-section2-item3 {
       grid-column: 1/1;
+    }
+  }
+
+  .section2 {
+    &-home4 {
+      .section2__title {
+        border-top: 0.01em solid $first-color;
+        border-right: 0.01em solid $first-color;
+      }
     }
   }
 }

@@ -2,32 +2,18 @@ import React from 'react';
 import LinkButton from './smaller/linkButton';
 
 const SectionTwo = ({
-  backgroundImage,
   textTitleSectionTwo,
   textParaSectionTwo,
   linkText,
-  imageToLeft,
   classesSection2,
-  classesImg,
-  classesContent,
-  classesTitle,
-  classesPara,
 }) => (
-  <div className={`section2 ${classesSection2}`}>
-    <img
-      src={backgroundImage}
-      alt=""
-      className={`section2-img ${classesImg}`}
-      data-image-left={imageToLeft}
-    />
-    <div className={`section2-content ${classesContent}`}>
-      <h2 className={`section2__title ${classesTitle}`}>
-        {textTitleSectionTwo}
-      </h2>
-      <p className={`section2__para ${classesPara}`}>{textParaSectionTwo}</p>
+  <section className={`section2 ${classesSection2}`}>
+    <div className="section2-content">
+      <h2 className="section2__title">{textTitleSectionTwo}</h2>
+      <p className="section2__para">{textParaSectionTwo}</p>
       <LinkButton linkText={linkText} />
     </div>
-  </div>
+  </section>
 );
 
 export default SectionTwo;

@@ -12,7 +12,7 @@ const SectionOne = ({
     <div className="flex-section1">
       <div className="section1-content">
         <h1 className="section1-content__h1">{h1Text}</h1>
-        <LinkButton linkText="SHOP NOW" />
+        <LinkButton linkText={linkText} />
       </div>
 
       <div className="section1-images">

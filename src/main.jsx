@@ -35,29 +35,29 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
     <section className="grid-section2">
       <SectionTwo
-        backgroundImage={womanHomeThree}
         textTitleSectionTwo="CHOOSE YOUR LOOK"
         textParaSectionTwo="See our clothing collections"
         linkText="SEE OFFERS"
-        imageToLeft="true"
-        classesSection2="grid-section2-item1"
+        classesSection2="section2-home1 grid-section2-item1"
       />
       <SectionTwo
-        backgroundImage={womanHomeFive}
         textTitleSectionTwo="UP TO 40% OFF"
         textParaSectionTwo="Special offers and great deals"
         linkText="SHOP NOW"
-        imageToLeft="false"
         classesSection2="section2-home2 grid-section2-item2"
       />
       <SectionTwo
-        backgroundImage={womanHomeFour}
         textTitleSectionTwo="BRAND NEW STYLE"
         textParaSectionTwo="Popular clothing brands"
         linkText="SEE OFFERS"
-        imageToLeft="false"
         classesSection2="section2-home3 grid-section2-item3"
       />
     </section>
+    <SectionTwo
+      textTitleSectionTwo="SHOPING WITHOUT LIMITS"
+      textParaSectionTwo="Choose the best option for you, and it does not matter whether you are"
+      linkText="SHOW NOW"
+      classesSection2="section2-home4"
+    />
   </React.StrictMode>
 );
