@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 
-import Logo from '../assets/logo.png';
+import CompanyLogo from './smaller/companyLogo';
 
 const Header = () => (
   <header>
@@ -153,10 +153,4 @@ const NavItem = ({ text, link }) => (
       {text}
     </a>
   </li>
-);
-
-const CompanyLogo = () => (
-  <a href="./index.html" className="logo-link">
-    <img src={Logo} alt="Company logo, go to home page" className="logo-img" />
-  </a>
 );

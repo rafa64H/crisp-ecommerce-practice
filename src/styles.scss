@@ -390,9 +390,53 @@ header {
     background-repeat: no-repeat;
     background-size: min(cover, 50%);
     background-position: 100% center;
+    margin: 1em;
+  }
+
+  &-home5 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(90deg, #dae8f09a 100%, #dae8f09a),
+      url('./assets/home/woman-home7.png');
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin: 1em;
+
+    text-align: center;
   }
 }
 //SectionTwo END
+
+//----------------------------------------------------------------
+
+//SectionThree
+.section3 {
+  background-color: $notify-color2;
+  padding: 1em;
+
+  &-item {
+    display: flex;
+    align-items: center;
+
+    width: min(80%, 20rem);
+    margin: 1em auto;
+
+    &__icon {
+      color: $first-color;
+    }
+    &__para {
+      margin-left: 0.35em;
+      color: $first-color;
+      font-size: $third-font-size;
+      font-weight: 600;
+    }
+  }
+}
+//SectionThree END
 
 //----------------------------------------------------------------
 
@@ -482,6 +526,11 @@ header {
       padding: 2em;
 
       text-align: left;
+
+      &__h1 {
+        border-top: 0.01em solid $first-color;
+        border-right: 0.01em solid $first-color;
+      }
     }
     &-images {
       display: flex;
@@ -567,6 +616,21 @@ header {
         border-top: 0.01em solid $first-color;
         border-right: 0.01em solid $first-color;
       }
+    }
+  }
+
+  .section3 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: $notify-color2;
+    padding: 2em;
+
+    &-item {
+      width: auto;
+      margin: 0;
     }
   }
 }

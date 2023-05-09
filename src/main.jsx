@@ -8,14 +8,11 @@ import Header from './components/header';
 import SectionOne from './components/section1';
 import SectionTwo from './components/section2';
 import BrandSection from './components/brandSection';
+import SectionThree from './components/section3';
 
 // Images
 import womanHomeOne from './assets/home/woman-home2.png';
 import womanHomeTwo from './assets/home/woman-home1.png';
-import womanHomeThree from './assets/home/woman-home3.png';
-import womanHomeFour from './assets/home/woman-home4.png';
-import womanHomeFive from './assets/home/woman-home5.png';
-import womanHomeSix from './assets/home/woman-home6.png';
 
 // Data
 import brandsData from './data/brands.json';
@@ -59,5 +56,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       linkText="SHOW NOW"
       classesSection2="section2-home4"
     />
+    <SectionTwo
+      textTitleSectionTwo="EXLORE THE BEST OF YOU"
+      textParaSectionTwo="You can choose the best option for you, and it does not matter whether you are in Prague or San Fransisco"
+      linkText="SHOW NOW"
+      classesSection2="section2-home5"
+    />
+    <SectionThree />
   </React.StrictMode>
 );
