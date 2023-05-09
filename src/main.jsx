@@ -9,6 +9,7 @@ import SectionOne from './components/section1';
 import SectionTwo from './components/section2';
 import BrandSection from './components/brandSection';
 import SectionThree from './components/section3';
+import Footer from './components/footer';
 
 // Images
 import womanHomeOne from './assets/home/woman-home2.png';
@@ -63,5 +64,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       classesSection2="section2-home5"
     />
     <SectionThree />
+    <Footer />
   </React.StrictMode>
 );

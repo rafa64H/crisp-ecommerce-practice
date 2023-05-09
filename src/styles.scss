@@ -44,7 +44,13 @@ h2 {
   font-size: $second-font-size;
 }
 h3 {
+  font-family: $font-oswald;
   font-size: $third-font-size;
+}
+h4 {
+  font-family: $font-oswald;
+  font-size: $fourth-font-size;
+  font-weight: 900;
 }
 p {
   font-family: $font-roboto;
@@ -431,12 +437,27 @@ header {
     &__para {
       margin-left: 0.35em;
       color: $first-color;
-      font-size: $third-font-size;
       font-weight: 600;
     }
   }
 }
 //SectionThree END
+
+//----------------------------------------------------------------
+
+footer {
+  background-color: $first-color;
+  color: #fff;
+
+  .footer-section {
+    &__btn {
+      color: #fff;
+      font-weight: 700;
+      font-family: $font-oswald;
+      font-size: $third-font-size;
+    }
+  }
+}
 
 //----------------------------------------------------------------
 
