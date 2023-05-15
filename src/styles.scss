@@ -444,21 +444,71 @@ header {
 //SectionThree END
 
 //----------------------------------------------------------------
+[data-footer-list-expanded='false'] {
+  position: absolute;
 
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+}
+[data-footer-list-expanded='true'] {
+  position: relative;
+
+  transform: scaleY(1);
+  transform-origin: 50% 0%;
+}
 footer {
   background-color: $first-color;
+  padding: 1em;
+
   color: #fff;
+
+  p {
+    color: $light-gray;
+  }
+
+  a {
+    color: white;
+  }
 
   .footer-section {
     &__btn {
+      display: block;
+
+      width: 100%;
+      margin: 0.5em 0;
+      border-bottom: 1px solid $light-gray;
+
       color: #fff;
+      text-align: left;
       font-weight: 700;
       font-family: $font-oswald;
       font-size: $third-font-size;
     }
+    &__title {
+      display: none;
+    }
+
+    &__list {
+      margin: 0.5em 0;
+
+      transition: all 200ms;
+      list-style: none;
+
+      &-item {
+        margin: 0.4em 0;
+      }
+
+      &-item--social {
+        display: grid;
+        grid-template-columns: 4em 4em;
+      }
+    }
+  }
+
+  .footer-copyright {
+    margin: 0.5em 0;
   }
 }
-
 //----------------------------------------------------------------
 
 //Media Queries
@@ -654,6 +704,62 @@ footer {
       margin: 0;
     }
   }
+
+  [data-footer-list-expanded='false'] {
+    position: static;
+
+    transform: scaleY(1);
+  }
+  footer {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-row-gap: 1em;
+
+    padding: 2em;
+
+    color: #fff;
+
+    p {
+      color: $light-gray;
+    }
+
+    a {
+      color: white;
+    }
+
+    .footer-section {
+      &__btn {
+        display: none;
+      }
+      &__title {
+        display: block;
+      }
+
+      &__list {
+        margin: 0;
+
+        &-item {
+          margin: 0.25em 0;
+        }
+
+        &-item--social {
+          display: grid;
+          grid-template-columns: 3em 3em;
+        }
+      }
+    }
+
+    .footer-copyright {
+      grid-column: 1/6;
+      grid-row: 2/2;
+
+      &--2 {
+        grid-row: 3/3;
+      }
+
+      margin: 0;
+    }
+  }
 }
 
 @media (hover: hover) {
@@ -686,6 +792,10 @@ footer {
 
   .square:hover:not([data-square-active]) {
     border-color: $first-color;
+  }
+
+  .footer-link:hover {
+    text-decoration: underline;
   }
 }
 

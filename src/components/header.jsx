@@ -1,35 +1,62 @@
-import { React, useState } from 'react';
+import { React, useEffect } from 'react';
 
 import CompanyLogo from './smaller/companyLogo';
 
-const Header = () => (
-  <header>
-    <OpenNavBtn />
-    <CompanyLogo />
+const Header = () => {
+  function showOrHideToAccessibility() {
+    const mq = window.matchMedia('(min-width: 1200px)');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const navigationBar = document.querySelector('nav');
 
-    <nav data-nav-list-open="false">
-      <ul className="nav-list">
-        <NavItem text="Home" link="./index.html" />
-        <NavItem text="Shop" />
-        <NavItem text="Blog" />
-        <NavItem text="Sale" />
-        <NavItem text="Contact" />
-        <SearchBtn desktopOrMobile="desktop" />
+    if (mq.matches) {
+      showToAccessibility();
+    } else {
+      hideToAccessibility();
+    }
 
-        <div className="login-sign-cont">
-          <NavItem text="Sign in" />
-          <NavItem text="Create an account" />
-          <ShopBtn desktopOrMobile="desktop" />
-        </div>
-      </ul>
-    </nav>
+    function hideToAccessibility() {
+      navLinks.forEach((link) => link.setAttribute('tabIndex', '-1'));
+    }
 
-    <div className="search-shop-btns-cont">
-      <SearchBtn desktopOrMobile="mobile" />
-      <ShopBtn desktopOrMobile="mobile" />
-    </div>
-  </header>
-);
+    function showToAccessibility() {
+      navLinks.forEach((link) => link.setAttribute('tabIndex', '0'));
+      navigationBar.removeAttribute('aria-hidden');
+    }
+  }
+
+  useEffect(() => {
+    showOrHideToAccessibility();
+  }, []);
+
+  return (
+    <header>
+      <OpenNavBtn />
+      <CompanyLogo />
+
+      <nav data-nav-list-open="false" aria-hidden="true">
+        <ul className="nav-list">
+          <NavItem text="Home" link="./index.html" />
+          <NavItem text="Shop" />
+          <NavItem text="Blog" />
+          <NavItem text="Sale" />
+          <NavItem text="Contact" />
+          <SearchBtn desktopOrMobile="desktop" />
+
+          <div className="login-sign-cont">
+            <NavItem text="Sign in" />
+            <NavItem text="Create an account" />
+            <ShopBtn desktopOrMobile="desktop" />
+          </div>
+        </ul>
+      </nav>
+
+      <div className="search-shop-btns-cont">
+        <SearchBtn desktopOrMobile="mobile" />
+        <ShopBtn desktopOrMobile="mobile" />
+      </div>
+    </header>
+  );
+};
 
 export default Header;
 
