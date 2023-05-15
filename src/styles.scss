@@ -444,6 +444,8 @@ header {
 //SectionThree END
 
 //----------------------------------------------------------------
+
+//Footer
 [data-footer-list-expanded='false'] {
   position: absolute;
 
@@ -509,10 +511,13 @@ footer {
     margin: 0.5em 0;
   }
 }
+//Footer END
+
 //----------------------------------------------------------------
 
 //Media Queries
 @media screen and (min-width: 1200px) {
+  ////Media Very used components
   .shop-btn-mobile {
     display: none;
   }
@@ -526,7 +531,11 @@ footer {
   .search-btn-desktop {
     display: flex;
   }
+  ////Media Very used components END
 
+  ////--------------------
+
+  ////Media Header
   header {
     display: flex;
     justify-content: space-between;
@@ -581,7 +590,11 @@ footer {
       display: none;
     }
   }
+  ////Media Header END
 
+  ////--------------------
+
+  ////Media SectionOne
   .section1 {
     .flex-section1 {
       display: flex;
@@ -634,7 +647,11 @@ footer {
       }
     }
   }
+  ////Media SectionOne END
 
+  ////--------------------
+
+  ////Media BrandSection
   .brand-section {
     margin: 1em;
     border-left: 0.15em solid $light-gray;
@@ -659,7 +676,11 @@ footer {
       }
     }
   }
+  ////Media BrandSectionEND
 
+  ////--------------------
+
+  ////Media SectionTwo
   .grid-section2 {
     display: grid;
     margin: 1em;
@@ -689,7 +710,11 @@ footer {
       }
     }
   }
+  ////Media SectionTwo END
 
+  ////--------------------
+
+  ////Media SectionThree
   .section3 {
     display: flex;
     flex-wrap: wrap;
@@ -704,7 +729,11 @@ footer {
       margin: 0;
     }
   }
+  ////Media SectionThree END
 
+  ////--------------------
+
+  ////Media Footer
   [data-footer-list-expanded='false'] {
     position: static;
 
@@ -760,8 +789,10 @@ footer {
       margin: 0;
     }
   }
+  ////Media Footer END
 }
 
+///Media only devices with :hover
 @media (hover: hover) {
   .link-btn-component:hover {
     border-color: $darker-gray;
@@ -798,7 +829,11 @@ footer {
     text-decoration: underline;
   }
 }
+///Media only devices with :hover END
 
+///----------------------------------
+
+///Media only devices without :hover
 @media (hover: none) {
   .link-btn-component:focus {
     border-color: $darker-gray;
@@ -810,4 +845,6 @@ footer {
     background-color: rgba($color: $first-color, $alpha: 0.8);
   }
 }
+///Media only devices without :hover END
+
 //Media Queries END
