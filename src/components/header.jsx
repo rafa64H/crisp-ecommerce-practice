@@ -4,6 +4,7 @@ import CompanyLogo from './smaller/companyLogo';
 
 const Header = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1200px)');
@@ -25,25 +26,46 @@ const Header = () => {
 
   return (
     <header>
-      <OpenNavBtn />
+      <OpenNavBtn isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
       <CompanyLogo />
 
-      <nav data-nav-list-open="false" aria-hidden={!isLargeScreen}>
+      <nav
+        data-nav-list-open={isNavOpen.toString()}
+        aria-hidden={!isLargeScreen && !isNavOpen}
+      >
         <ul className="nav-list">
           <NavItem
             text="Home"
             link="./index.html"
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isNavOpen}
           />
-          <NavItem text="Shop" isLargeScreen={isLargeScreen} />
-          <NavItem text="Blog" isLargeScreen={isLargeScreen} />
-          <NavItem text="Sale" isLargeScreen={isLargeScreen} />
-          <NavItem text="Contact" isLargeScreen={isLargeScreen} />
+          <NavItem
+            text="Shop"
+            shouldShowTabIndex={isLargeScreen || isNavOpen}
+          />
+          <NavItem
+            text="Blog"
+            shouldShowTabIndex={isLargeScreen || isNavOpen}
+          />
+          <NavItem
+            text="Sale"
+            shouldShowTabIndex={isLargeScreen || isNavOpen}
+          />
+          <NavItem
+            text="Contact"
+            shouldShowTabIndex={isLargeScreen || isNavOpen}
+          />
           <SearchBtn desktopOrMobile="desktop" />
 
           <div className="login-sign-cont">
-            <NavItem text="Sign in" isLargeScreen={isLargeScreen} />
-            <NavItem text="Create an account" isLargeScreen={isLargeScreen} />
+            <NavItem
+              text="Sign in"
+              shouldShowTabIndex={isLargeScreen || isNavOpen}
+            />
+            <NavItem
+              text="Create an account"
+              shouldShowTabIndex={isLargeScreen || isNavOpen}
+            />
             <ShopBtn desktopOrMobile="desktop" />
           </div>
         </ul>
@@ -59,59 +81,22 @@ const Header = () => {
 
 export default Header;
 
-const OpenNavBtn = () => {
+const OpenNavBtn = ({ isNavOpen, setIsNavOpen }) => {
   function handleOpenNav(e) {
-    const navMenu = document.querySelector('[data-nav-list-open]');
-
-    const navBtn = document.querySelector('.open-nav');
     const openNavBtnIcon = document.querySelector('[data-open-nav-btn-icon]');
 
-    const allNavLinks = navMenu.querySelectorAll('.nav-link');
-
-    if (navMenu.dataset.navListOpen === 'true') {
-      // close nav menu
-      navMenu.dataset.navListOpen = 'false';
-
-      changeNavBtnIcon(openNavBtnIcon, 'true');
-
-      hideScreenReaders(navMenu, navBtn, allNavLinks);
-      return;
-    }
-    // open nav menu
-    navMenu.dataset.navListOpen = 'true';
-
-    changeNavBtnIcon(openNavBtnIcon, 'false');
-    showScreenReaders(navMenu, navBtn, allNavLinks);
+    changeNavBtnIcon(openNavBtnIcon, isNavOpen);
+    setIsNavOpen(!isNavOpen);
   }
 
   function changeNavBtnIcon(icon, navMenuOpen) {
-    if (navMenuOpen === 'true') {
+    if (navMenuOpen) {
       icon.classList.remove('fa-xmark');
       icon.classList.add('fa-bars');
     } else {
       icon.classList.remove('fa-bars');
       icon.classList.add('fa-xmark');
     }
-  }
-
-  function hideScreenReaders(navMenu, navBtn, allNavLinks) {
-    navMenu.setAttribute('aria-hidden', 'true');
-    navBtn.setAttribute('aria-expanded', 'false');
-    navBtn.setAttribute('aria-label', 'open navigation');
-
-    allNavLinks.forEach((navLink) => {
-      navLink.tabIndex = -1;
-    });
-  }
-
-  function showScreenReaders(navMenu, navBtn, allNavLinks) {
-    navMenu.setAttribute('aria-hidden', 'false');
-    navBtn.setAttribute('aria-expanded', 'true');
-    navBtn.setAttribute('aria-label', 'close navigation');
-
-    allNavLinks.forEach((navLink) => {
-      navLink.tabIndex = 0;
-    });
   }
 
   return (
@@ -173,9 +158,9 @@ const ShopBtn = ({ desktopOrMobile }) => {
   );
 };
 
-const NavItem = ({ text, link, isLargeScreen }) => (
+const NavItem = ({ text, link, shouldShowTabIndex }) => (
   <li className="nav-item">
-    <a href={link} tabIndex={isLargeScreen ? 0 : -1} className="nav-link">
+    <a href={link} tabIndex={shouldShowTabIndex ? 0 : -1} className="nav-link">
       {text}
     </a>
   </li>
