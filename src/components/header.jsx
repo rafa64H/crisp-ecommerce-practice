@@ -1,31 +1,26 @@
-import { React, useEffect } from 'react';
+import { React, useEffect, useState } from 'react';
 
 import CompanyLogo from './smaller/companyLogo';
 
 const Header = () => {
-  function showOrHideToAccessibility() {
-    const mq = window.matchMedia('(min-width: 1200px)');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const navigationBar = document.querySelector('nav');
-
-    if (mq.matches) {
-      showToAccessibility();
-    } else {
-      hideToAccessibility();
-    }
-
-    function hideToAccessibility() {
-      navLinks.forEach((link) => link.setAttribute('tabIndex', '-1'));
-    }
-
-    function showToAccessibility() {
-      navLinks.forEach((link) => link.setAttribute('tabIndex', '0'));
-      navigationBar.removeAttribute('aria-hidden');
-    }
-  }
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
 
   useEffect(() => {
-    showOrHideToAccessibility();
+    const mediaQuery = window.matchMedia('(min-width: 1200px)');
+
+    if (mediaQuery.matches) {
+      setIsLargeScreen(true);
+    }
+
+    const handleMediaQueryChange = (event) => {
+      setIsLargeScreen(event.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaQueryChange);
+    };
   }, []);
 
   return (
@@ -33,18 +28,22 @@ const Header = () => {
       <OpenNavBtn />
       <CompanyLogo />
 
-      <nav data-nav-list-open="false" aria-hidden="true">
+      <nav data-nav-list-open="false" aria-hidden={!isLargeScreen}>
         <ul className="nav-list">
-          <NavItem text="Home" link="./index.html" />
-          <NavItem text="Shop" />
-          <NavItem text="Blog" />
-          <NavItem text="Sale" />
-          <NavItem text="Contact" />
+          <NavItem
+            text="Home"
+            link="./index.html"
+            isLargeScreen={isLargeScreen}
+          />
+          <NavItem text="Shop" isLargeScreen={isLargeScreen} />
+          <NavItem text="Blog" isLargeScreen={isLargeScreen} />
+          <NavItem text="Sale" isLargeScreen={isLargeScreen} />
+          <NavItem text="Contact" isLargeScreen={isLargeScreen} />
           <SearchBtn desktopOrMobile="desktop" />
 
           <div className="login-sign-cont">
-            <NavItem text="Sign in" />
-            <NavItem text="Create an account" />
+            <NavItem text="Sign in" isLargeScreen={isLargeScreen} />
+            <NavItem text="Create an account" isLargeScreen={isLargeScreen} />
             <ShopBtn desktopOrMobile="desktop" />
           </div>
         </ul>
@@ -174,9 +173,9 @@ const ShopBtn = ({ desktopOrMobile }) => {
   );
 };
 
-const NavItem = ({ text, link }) => (
+const NavItem = ({ text, link, isLargeScreen }) => (
   <li className="nav-item">
-    <a href={link} tabIndex="-1" className="nav-link">
+    <a href={link} tabIndex={isLargeScreen ? 0 : -1} className="nav-link">
       {text}
     </a>
   </li>

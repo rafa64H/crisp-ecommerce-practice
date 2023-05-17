@@ -1,7 +1,27 @@
-import { React, useEffect } from 'react';
+import { React, useEffect, useState } from 'react';
 import CompanyLogo from './smaller/companyLogo';
 
-function Footer() {
+const Footer = () => {
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 1200px)');
+
+    if (mediaQuery.matches) {
+      setIsLargeScreen(true);
+    }
+
+    const handleMediaQueryChange = (event) => {
+      setIsLargeScreen(event.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleMediaQueryChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaQueryChange);
+    };
+  }, []);
+
   return (
     <footer>
       <section className="footer-section">
@@ -20,13 +40,22 @@ function Footer() {
 
         <ul
           className="footer-section__list"
-          aria-label="hidden"
+          aria-hidden={!isLargeScreen}
           data-footer-list-expanded="false"
         >
-          <FooterListItem footerItemText="MEN" />
-          <FooterListItem footerItemText="WOMEN" />
-          <FooterListItem footerItemText="NEW ARRIVALS" />
-          <FooterListItem footerItemText="SHOES" />
+          <FooterListItem isLargeScreen={isLargeScreen} footerItemText="MEN" />
+          <FooterListItem
+            isLargeScreen={isLargeScreen}
+            footerItemText="WOMEN"
+          />
+          <FooterListItem
+            isLargeScreen={isLargeScreen}
+            footerItemText="NEW ARRIVALS"
+          />
+          <FooterListItem
+            isLargeScreen={isLargeScreen}
+            footerItemText="SHOES"
+          />
         </ul>
       </section>
       <section className="footer-section">
@@ -42,14 +71,26 @@ function Footer() {
 
         <ul
           className="footer-section__list"
-          aria-label="hidden"
+          aria-hidden={!isLargeScreen}
           data-footer-list-expanded="false"
         >
-          <FooterListItem footerItemText="ABOUT US" />
-          <FooterListItem footerItemText="MY ACCOUNT" />
-          <FooterListItem footerItemText="ORDERS HISTORY" />
-          <FooterListItem footerItemText="MY WISHLIST" />
-          <FooterListItem footerItemText="BLOG" />
+          <FooterListItem
+            isLargeScreen={isLargeScreen}
+            footerItemText="ABOUT US"
+          />
+          <FooterListItem
+            isLargeScreen={isLargeScreen}
+            footerItemText="MY ACCOUNT"
+          />
+          <FooterListItem
+            isLargeScreen={isLargeScreen}
+            footerItemText="ORDERS HISTORY"
+          />
+          <FooterListItem
+            isLargeScreen={isLargeScreen}
+            footerItemText="MY WISHLIST"
+          />
+          <FooterListItem isLargeScreen={isLargeScreen} footerItemText="BLOG" />
         </ul>
       </section>
       <section className="footer-section">
@@ -65,7 +106,7 @@ function Footer() {
 
         <ul
           className="footer-section__list"
-          aria-label="hidden"
+          aria-hidden={!isLargeScreen}
           data-footer-list-expanded="false"
         >
           <FooterListItemContact
@@ -99,20 +140,23 @@ function Footer() {
 
         <ul
           className="footer-section__list"
-          aria-label="hidden"
+          aria-hidden={!isLargeScreen}
           data-footer-list-expanded="false"
         >
           <FooterListItemSocial
+            isLargeScreen={isLargeScreen}
             socialLink="#"
             socialText="Facebook"
             socialIcon="fa-brands fa-facebook-f"
           />
           <FooterListItemSocial
+            isLargeScreen={isLargeScreen}
             socialLink="#"
             socialText="Twitter"
             socialIcon="fa-brands fa-twitter"
           />
           <FooterListItemSocial
+            isLargeScreen={isLargeScreen}
             socialLink="#"
             socialText="Instagram"
             socialIcon="fa-brands fa-instagram"
@@ -128,37 +172,11 @@ function Footer() {
       </p>
     </footer>
   );
-}
+};
 
 export default Footer;
 
 const FooterSectionTitle = ({ desktopOrMobile, footerSectionTitleText }) => {
-  function showToScreenReaderIfDesktop() {
-    const footerLinkElems = document.querySelectorAll('.footer-link');
-    const footerSectionListElems = document.querySelectorAll(
-      '.footer-section__list'
-    );
-
-    if (window.matchMedia('(min-width: 1200px)').matches) {
-      showAllToScreenReaders(footerLinkElems, footerSectionListElems);
-    } else {
-      hideAllToScreenReaders(footerLinkElems, footerSectionListElems);
-    }
-
-    function showAllToScreenReaders(footerLinks, footerLists) {
-      footerLinks.forEach((elem) => (elem.tabIndex = 0));
-      footerLists.forEach((elem) => elem.setAttribute('aria-hidden', 'false'));
-    }
-    function hideAllToScreenReaders(footerLinks, footerLists) {
-      footerLinks.forEach((elem) => (elem.tabIndex = -1));
-      footerLists.forEach((elem) => elem.setAttribute('aria-hidden', 'true'));
-    }
-  }
-
-  useEffect(() => {
-    showToScreenReaderIfDesktop();
-  }, []);
-
   // This is for mobiles <FooterSectionTitle>
   function handleFooterSectionTitleBtn(e) {
     const btn = e.target.closest('button');
@@ -223,9 +241,9 @@ const FooterSectionTitle = ({ desktopOrMobile, footerSectionTitleText }) => {
   );
 };
 
-const FooterListItem = ({ footerLink, footerItemText }) => (
+const FooterListItem = ({ footerLink, footerItemText, isLargeScreen }) => (
   <li className="footer-section__list-item">
-    <a href="#" className="footer-link">
+    <a href="#" className="footer-link" tabIndex={isLargeScreen ? 0 : -1}>
       {footerItemText}
     </a>
   </li>
@@ -238,16 +256,29 @@ const FooterListItemContact = ({ footerContactTitle, footerContactPara }) => (
   </li>
 );
 
-const FooterListItemSocial = ({ socialLink, socialText, socialIcon }) => (
+const FooterListItemSocial = ({
+  socialLink,
+  socialText,
+  socialIcon,
+  isLargeScreen,
+}) => (
   <li className="footer-section__list-item footer-section__list-item--social">
-    <a href={socialLink} className="footer-link">
+    <a
+      href={socialLink}
+      className="footer-link"
+      tabIndex={isLargeScreen ? 0 : -1}
+    >
       <i
         className={`footer-social__icon ${socialIcon}`}
         aria-label={socialText}
       />
     </a>
 
-    <a href={socialLink} className="footer-link">
+    <a
+      href={socialLink}
+      className="footer-link"
+      tabIndex={isLargeScreen ? 0 : -1}
+    >
       {socialText}
     </a>
   </li>
