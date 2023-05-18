@@ -113,6 +113,7 @@ const OpenNavBtn = ({ isNavOpen, setIsNavOpen }) => {
 };
 
 const SearchBtn = ({ desktopOrMobile }) => {
+  // This will have display:none if window width > 1200px
   if (desktopOrMobile === 'mobile') {
     return (
       <button
@@ -125,6 +126,7 @@ const SearchBtn = ({ desktopOrMobile }) => {
     );
   }
 
+  // This will have display:none if window width < 1200px
   return (
     <button className="search-btn-desktop" type="button">
       <i className="fas fa-search" />
@@ -135,6 +137,7 @@ const SearchBtn = ({ desktopOrMobile }) => {
 };
 
 const ShopBtn = ({ desktopOrMobile }) => {
+  // This will have display:none if window width > 1200px
   if (desktopOrMobile === 'mobile') {
     return (
       <button
@@ -147,6 +150,7 @@ const ShopBtn = ({ desktopOrMobile }) => {
     );
   }
 
+  // This will have display:none if window width < 1200px
   return (
     <button type="button" className="shop-btn-desktop">
       <i className="fas fa-shopping-bag" />
