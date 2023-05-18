@@ -4,6 +4,11 @@ import CompanyLogo from './smaller/companyLogo';
 const Footer = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
 
+  const [isListOpen1, setIsListOpen1] = useState(false);
+  const [isListOpen2, setIsListOpen2] = useState(false);
+  const [isListOpen3, setIsListOpen3] = useState(false);
+  const [isListOpen4, setIsListOpen4] = useState(false);
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1200px)');
 
@@ -36,24 +41,29 @@ const Footer = () => {
         <FooterSectionTitle
           desktopOrMobile="mobile"
           footerSectionTitleText="FEATURES"
+          isListOpen={isListOpen1}
+          setIsListOpen={setIsListOpen1}
         />
 
         <ul
           className="footer-section__list"
-          aria-hidden={!isLargeScreen}
-          data-footer-list-expanded="false"
+          aria-hidden={!isLargeScreen && !isListOpen1}
+          data-footer-list-expanded={isListOpen1.toString()}
         >
-          <FooterListItem isLargeScreen={isLargeScreen} footerItemText="MEN" />
           <FooterListItem
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen1}
+            footerItemText="MEN"
+          />
+          <FooterListItem
+            shouldShowTabIndex={isLargeScreen || isListOpen1}
             footerItemText="WOMEN"
           />
           <FooterListItem
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen1}
             footerItemText="NEW ARRIVALS"
           />
           <FooterListItem
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen1}
             footerItemText="SHOES"
           />
         </ul>
@@ -67,30 +77,35 @@ const Footer = () => {
         <FooterSectionTitle
           desktopOrMobile="mobile"
           footerSectionTitleText="MENU"
+          isListOpen={isListOpen2}
+          setIsListOpen={setIsListOpen2}
         />
 
         <ul
           className="footer-section__list"
-          aria-hidden={!isLargeScreen}
-          data-footer-list-expanded="false"
+          aria-hidden={!isLargeScreen && !isListOpen2}
+          data-footer-list-expanded={isListOpen2.toString()}
         >
           <FooterListItem
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="ABOUT US"
           />
           <FooterListItem
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="MY ACCOUNT"
           />
           <FooterListItem
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="ORDERS HISTORY"
           />
           <FooterListItem
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="MY WISHLIST"
           />
-          <FooterListItem isLargeScreen={isLargeScreen} footerItemText="BLOG" />
+          <FooterListItem
+            shouldShowTabIndex={isLargeScreen || isListOpen2}
+            footerItemText="BLOG"
+          />
         </ul>
       </section>
       <section className="footer-section">
@@ -102,12 +117,14 @@ const Footer = () => {
         <FooterSectionTitle
           desktopOrMobile="mobile"
           footerSectionTitleText="CONTACT US"
+          isListOpen={isListOpen3}
+          setIsListOpen={setIsListOpen3}
         />
 
         <ul
           className="footer-section__list"
-          aria-hidden={!isLargeScreen}
-          data-footer-list-expanded="false"
+          aria-hidden={!isLargeScreen && !isListOpen3}
+          data-footer-list-expanded={isListOpen3.toString()}
         >
           <FooterListItemContact
             footerContactTitle="ADDRESS:"
@@ -136,27 +153,29 @@ const Footer = () => {
         <FooterSectionTitle
           desktopOrMobile="mobile"
           footerSectionTitleText="FOLLOW US"
+          isListOpen={isListOpen4}
+          setIsListOpen={setIsListOpen4}
         />
 
         <ul
           className="footer-section__list"
-          aria-hidden={!isLargeScreen}
-          data-footer-list-expanded="false"
+          aria-hidden={!isLargeScreen && !isListOpen4}
+          data-footer-list-expanded={isListOpen4.toString()}
         >
           <FooterListItemSocial
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen4}
             socialLink="#"
             socialText="Facebook"
             socialIcon="fa-brands fa-facebook-f"
           />
           <FooterListItemSocial
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen4}
             socialLink="#"
             socialText="Twitter"
             socialIcon="fa-brands fa-twitter"
           />
           <FooterListItemSocial
-            isLargeScreen={isLargeScreen}
+            shouldShowTabIndex={isLargeScreen || isListOpen4}
             socialLink="#"
             socialText="Instagram"
             socialIcon="fa-brands fa-instagram"
@@ -176,37 +195,22 @@ const Footer = () => {
 
 export default Footer;
 
-const FooterSectionTitle = ({ desktopOrMobile, footerSectionTitleText }) => {
+const FooterSectionTitle = ({
+  desktopOrMobile,
+  footerSectionTitleText,
+  isListOpen,
+  setIsListOpen,
+}) => {
   // This is for mobiles <FooterSectionTitle>
   function handleFooterSectionTitleBtn(e) {
     const btn = e.target.closest('button');
-    const footerSectionList = btn.nextElementSibling;
-    const isExpanded = footerSectionList.getAttribute(
-      'data-footer-list-expanded'
-    );
-    const footerLinks = footerSectionList.querySelectorAll('.footer-link');
 
-    if (isExpanded === 'true') {
-      collapseAndHideToScreenReaders();
+    if (isListOpen) {
       changeIconBtn(true);
     } else {
-      expandAndShowToScreenReaders();
       changeIconBtn(false);
     }
-
-    function expandAndShowToScreenReaders() {
-      footerSectionList.dataset.footerListExpanded = 'true';
-      footerSectionList.setAttribute('aria-hidden', 'false');
-      btn.setAttribute('aria-expanded', 'true');
-      footerLinks.forEach((link) => link.setAttribute('tabIndex', '0'));
-    }
-
-    function collapseAndHideToScreenReaders() {
-      footerSectionList.dataset.footerListExpanded = 'false';
-      footerSectionList.setAttribute('aria-hidden', 'true');
-      btn.setAttribute('aria-expanded', 'false');
-      footerLinks.forEach((link) => link.setAttribute('tabIndex', '-1'));
-    }
+    setIsListOpen(!isListOpen);
 
     function changeIconBtn(boolean) {
       const btnIcon = btn.querySelector('.footer-section__btn-icon');
@@ -232,7 +236,7 @@ const FooterSectionTitle = ({ desktopOrMobile, footerSectionTitleText }) => {
       onClick={(e) => {
         handleFooterSectionTitleBtn(e);
       }}
-      aria-expanded="false"
+      aria-expanded={isListOpen}
       className="footer-section__btn"
     >
       {footerSectionTitleText}
@@ -241,9 +245,9 @@ const FooterSectionTitle = ({ desktopOrMobile, footerSectionTitleText }) => {
   );
 };
 
-const FooterListItem = ({ footerLink, footerItemText, isLargeScreen }) => (
+const FooterListItem = ({ footerLink, footerItemText, shouldShowTabIndex }) => (
   <li className="footer-section__list-item">
-    <a href="#" className="footer-link" tabIndex={isLargeScreen ? 0 : -1}>
+    <a href="#" className="footer-link" tabIndex={shouldShowTabIndex ? 0 : -1}>
       {footerItemText}
     </a>
   </li>
@@ -260,13 +264,13 @@ const FooterListItemSocial = ({
   socialLink,
   socialText,
   socialIcon,
-  isLargeScreen,
+  shouldShowTabIndex,
 }) => (
   <li className="footer-section__list-item footer-section__list-item--social">
     <a
       href={socialLink}
       className="footer-link"
-      tabIndex={isLargeScreen ? 0 : -1}
+      tabIndex={shouldShowTabIndex ? 0 : -1}
     >
       <i
         className={`footer-social__icon ${socialIcon}`}
@@ -277,7 +281,7 @@ const FooterListItemSocial = ({
     <a
       href={socialLink}
       className="footer-link"
-      tabIndex={isLargeScreen ? 0 : -1}
+      tabIndex={shouldShowTabIndex ? 0 : -1}
     >
       {socialText}
     </a>
