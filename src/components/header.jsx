@@ -41,6 +41,7 @@ const Header = () => {
           />
           <NavItem
             text="Shop"
+            link="./shop.html"
             shouldShowTabIndex={isLargeScreen || isNavOpen}
           />
           <NavItem
