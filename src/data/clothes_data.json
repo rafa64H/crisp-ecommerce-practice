@@ -1,0 +1,569 @@
+[
+  [
+    {
+      "productName": "Extra Fine Cotton Short-Sleeve Shirt",
+      "gender": "MEN",
+      "productId": 457450,
+      "reviewScore": 0,
+      "totalReviews": 0,
+      "price": 29.9,
+      "priceString": "29.90",
+      "productDescription": "Updated roomy regular fit. Made with ultra-long cotton for an exquisite texture and color.",
+      "productOverview": [
+        "Made of 100% ultra-long cotton fibers with an elegant texture.",
+        "Garment-washed for a tastefully casual look, high-quality feel, and soft touch.",
+        "Updated with an on-trend, relaxed regular fit.",
+        "Versatile button-down collar.",
+        "The collar roll ensures a sleek look even when the top button is unbuttoned.",
+        "Roomy in the shoulders, body, and sleeves for a tastefully casual style.",
+        "Designed for easy arm movement.",
+        "The stitching creates a casual style."
+      ],
+
+      "sizes": {
+        "xxs": ["XXS", true],
+        "xs": ["XS", true],
+        "s": ["S", true],
+        "m": ["M", true],
+        "l": ["L", true],
+        "xl": ["XL", true],
+        "xxl": ["XXL", false],
+        "3xl": ["3XL", true]
+      },
+
+      "colors": [
+        {
+          "name": "00 WHITE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
+        },
+        {
+          "name": "18 WINE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110960506665193574/1110960616799215716/extra-fine-cotton-short-sleeve-shirt-wine.jpg"
+        },
+        {
+          "name": "69 NAVY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110960506665193574/1110960617419972718/extra-fine-cotton-short-sleeve-shirt-navy.jpg"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1110960506665193574/1110960573157486673/extra-fine-cotton-short-sleeve-shirt-other-images-1.jpg",
+        "https://cdn.discordapp.com/attachments/1110960506665193574/1110960572809355314/extra-fine-cotton-short-sleeve-shirt-other-images-2.jpg",
+        "https://cdn.discordapp.com/attachments/1110960506665193574/1110960573534978099/extra-fine-cotton-short-sleeve-shirt-other-images3.jpg"
+      ],
+
+      "category": "TOP"
+    },
+
+    {
+      "productName": "Oxford Striped Slim-Fit Long-Sleeve Shirt",
+      "gender": "MEN",
+      "productId": 456631,
+      "reviewScore": 4.6,
+      "totalReviews": 3,
+      "price": 29.9,
+      "priceString": "29.90",
+      "productDescription": "Crisp fabric with a premium feel. A classic shirt in every detail.",
+      "productOverview": [
+        "Finely woven premium fabric made with special combed yarn to achieve a remarkably crisp yet supple feel.",
+        "The collar, sleeves, hem line, cuff width, placket width, yoke height, and stitching have been designed with meticulous attention to detail based on years of research into classic Oxford shirt styles.",
+        "Button-down collar creates a stylish S-shaped collar roll.",
+        "Traditional gusseted hems.",
+        "Subtly glossy premium resin buttons with a shape and thickness carefully designed to be comfortable to the fingertips and easy to fasten.",
+        "A versatile shirt for casual and formal styles.",
+        "This versatile shirt easily tucks in, sizes up for an oversized look, styles as a light outer layer with the buttons undone, or layers under a jacket, sweater, or sweatshirt"
+      ],
+
+      "sizes": {
+        "xs": ["XS", true],
+        "s": ["S", false],
+        "m": ["M", true],
+        "l": ["L", false],
+        "xl": ["XL", false],
+        "xxl": ["XXL", true],
+        "3xl": ["3XL", true]
+      },
+
+      "colors": [
+        {
+          "name": "65 BLUE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110979964536365106/1110980068538331136/oxford-striped-slim-fit-long-sleeve-shirt-blue.jpg"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1110979964536365106/1110980013458722887/oxford-striped-slim-fit-long-sleeve-shirt-other-images-1.jpg",
+        "https://cdn.discordapp.com/attachments/1110979964536365106/1110980013144145930/oxford-striped-slim-fit-long-sleeve-shirt-other-images-2.jpg",
+        "https://cdn.discordapp.com/attachments/1110979964536365106/1110980012817006713/oxford-striped-slim-fit-long-sleeve-shirt-other-images-3.jpg",
+        "https://cdn.discordapp.com/attachments/1110979964536365106/1110980012271734846/oxford-striped-slim-fit-long-sleeve-shirt-other-images-4.jpg",
+        "https://cdn.discordapp.com/attachments/1110979964536365106/1110980011852300348/oxford-striped-slim-fit-long-sleeve-shirt-other-images-5.jpg"
+      ],
+
+      "category": "TOP"
+    },
+
+    {
+      "productName": "Pleated Wide Pants",
+      "gender": "MEN",
+      "productId": 461614,
+      "reviewScore": 5,
+      "totalReviews": 7,
+      "price": 49.9,
+      "priceString": "49.90",
+      "productDescription": "2-way vertical and horizontal stretch for comfort. Elegant fabric is suitable for both casual and business wear.",
+      "productOverview": [
+        "Updated to a straight cut.",
+        "In response to customer feedback, the rise is slightly shallower.",
+        "High-quality yarn with an elegant texture.",
+        "Comfortable 2-way stretch fabric that stretches vertically and horizontally.",
+        "Wrinkle-resistant for easy care. *Shape to dry after washing.",
+        "The moderate wide fit is perfect for business and casual settings."
+      ],
+
+      "sizes": {
+        "xxs": ["XXS", true],
+        "xs": ["XS", true],
+        "s": ["S", true],
+        "m": ["M", true],
+        "l": ["L", true],
+        "xl": ["XL", true],
+        "xxl": ["XXL", true]
+      },
+
+      "colors": [
+        {
+          "name": "06 GRAY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110982741463404694/1110982834962845847/pleated-wide-pants-gray.jpg"
+        },
+        {
+          "name": "09 BLACK",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110982741463404694/1110982835281596446/pleated-wide-pants-black.jpg"
+        },
+        {
+          "name": "32 BEIGE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110982741463404694/1110982835550027797/pleated-wide-pants-beige.jpg"
+        },
+        {
+          "name": "69 NAVY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110982741463404694/1110982834627280966/pleated-wide-pants-navy.jpg"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1110982741463404694/1110982798111690792/pleated-wide-pants-other-images-1.jpg",
+        "https://cdn.discordapp.com/attachments/1110982741463404694/1110982797813887076/pleated-wide-pants-other-images-2.jpg",
+        "https://cdn.discordapp.com/attachments/1110982741463404694/1110982797469958144/pleated-wide-pants-other-images-3.jpg",
+        "https://cdn.discordapp.com/attachments/1110982741463404694/1110982797050531930/pleated-wide-pants-other-images-4.jpg",
+        "https://cdn.discordapp.com/attachments/1110982741463404694/1110982796656263208/pleated-wide-pants-other-images-5.jpg"
+      ],
+
+      "category": "BOTTOM"
+    },
+    {
+      "productName": "Cargo Jogger Pants",
+      "gender": "MEN",
+      "productId": 458725,
+      "reviewScore": 4.9,
+      "totalReviews": 10,
+      "price": 49.9,
+      "priceString": "49.90",
+      "productDescription": "A modern take on traditional cargo pants. Elastic at the hems for a sleek look.",
+      "productOverview": [
+        "Cargo-style jogger pants inspired by classic military pants.",
+        "Slim fit tapered cut.",
+        "Elastic waist for comfort.",
+        "Jogger style with elasticated hems."
+      ],
+
+      "sizes": {
+        "xxs": ["XXS", true],
+        "xs": ["XS", true],
+        "s": ["S", true],
+        "m": ["M", true],
+        "l": ["L", true],
+        "xl": ["XL", true],
+        "xxl": ["XXL", true],
+        "3xl": ["3XL", true]
+      },
+
+      "colors": [
+        {
+          "name": "08 DARK GRAY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987691048321034/cargo-jogger-pants-dark-gray.jpg"
+        },
+        {
+          "name": "09 BLACK",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987691698430003/cargo-jogger-pants-black.jpg"
+        },
+        {
+          "name": "35 BROWN",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987691396444293/cargo-jogger-pants-brown.jpg"
+        },
+        {
+          "name": "57 OLIVE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987690737934477/cargo-jogger-pants-olive.jpg"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1110987189988380714/1110987233374240789/cargo-jogger-pants-other-images-1.jpg",
+        "https://cdn.discordapp.com/attachments/1110987189988380714/1110987233072263229/cargo-jogger-pants-other-images-2.jpg",
+        "https://cdn.discordapp.com/attachments/1110987189988380714/1110987232619286548/cargo-jogger-pants-other-images-3.jpg",
+        "https://cdn.discordapp.com/attachments/1110987189988380714/1110987232220807279/cargo-jogger-pants-other-images-4.jpg",
+        "https://cdn.discordapp.com/attachments/1110987189988380714/1110987231772037280/cargo-jogger-pants-other-images-5.jpg"
+      ],
+
+      "category": "BOTTOM"
+    },
+
+    {
+      "productName": "Mini Short-Sleeve T-Shirt",
+      "gender": "WOMEN",
+      "productId": 455762,
+      "reviewScore": 4.6,
+      "totalReviews": 10,
+      "price": 14.9,
+      "priceString": "14.90",
+      "productDescription": "Updated roomy regular fit. Made with ultra-long cotton for an exquisite texture and color.",
+      "productOverview": [
+        "Smooth, stretchy cotton ribbed fabric.",
+        "The fabric is perfect for a fitted silhouette.",
+        "Tight-fitting basic T-shirt with a shorter length.",
+        "Mini T-shirt with a 90s/Y2K look.",
+        "The neckline and set-in sleeves make this a versatile styling piece.",
+        "Versatile design goes well with any style.",
+        "The fitted cut is perfect for layering.",
+        "Pair with different outfits for a casual, smart, or sporty style."
+      ],
+
+      "sizes": {
+        "xxs": ["XXS", true],
+        "xs": ["XS", true],
+        "s": ["S", true],
+        "m": ["M", true],
+        "l": ["L", true],
+        "xl": ["XL", true],
+        "xxl": ["XXL", false]
+      },
+
+      "colors": [
+        {
+          "name": "00 WHITE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912230650183801/mini-short-sleeve-white.png"
+        },
+        {
+          "name": "03 GRAY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912231493259378/mini-short-sleeve-gray.png"
+        },
+        {
+          "name": "09 BLACK",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912232541823036/mini-short-sleeve-black.png"
+        },
+        {
+          "name": "11 PINK",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912231086399498/mini-short-sleeve-pink.png"
+        },
+        {
+          "name": "35 BROWN",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912232076247090/mini-short-sleeve-brown.png"
+        },
+        {
+          "name": "60 LIGHT BLUE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912956579352666/mini-short-sleeve-light-blue.png"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1109911960734150667/1109912126199443546/mini-short-sleeve-other-images-5.png",
+        "https://cdn.discordapp.com/attachments/1109911960734150667/1109912126660804699/mini-short-sleeve-other-images-4.png",
+        "https://cdn.discordapp.com/attachments/1109911960734150667/1109912126946033715/mini-short-sleeve-other-images-3.png",
+        "https://cdn.discordapp.com/attachments/1109911960734150667/1109912127277379664/mini-short-sleeve-other-images-2.png",
+        "https://cdn.discordapp.com/attachments/1109911960734150667/1109912127633883258/mini-short-sleeve-other-images-1.png"
+      ],
+
+      "category": "TOP"
+    },
+
+    {
+      "productName": "Ribbed Square Neck Sleeveless Dress",
+      "gender": "WOMEN",
+      "productId": 457823,
+      "reviewScore": 43,
+      "totalReviews": 10,
+      "price": 45,
+      "priceString": "45.00",
+      "productDescription": "Stylish square neckline and ribbed fabric for a perfect fit.",
+      "productOverview": [
+        "Stretchy cotton ribbed fabric.",
+        "Flattering square neckline.",
+        "Fitted cut.",
+        "Perfect for wearing on its own or in layered looks."
+      ],
+
+      "sizes": {
+        "xxs": ["XXS", false],
+        "xs": ["XS", true],
+        "s": ["S", true],
+        "m": ["M", false],
+        "l": ["L", true],
+        "xl": ["XL", true],
+        "xxl": ["XXL", false]
+      },
+
+      "colors": [
+        {
+          "name": "00 WHITE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943720784179240/ribbed-square-neck-sleeveless-dress-black.jpg"
+        },
+        {
+          "name": "26 ORANGE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943719785943051/ribbed-square-neck-sleeveless-dress-orange.jpg"
+        },
+        {
+          "name": "30 NATURAL",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943720096309369/ribbed-square-neck-sleeveless-dress-natural.jpg"
+        },
+        {
+          "name": "64 BLUE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943720440250508/ribbed-square-neck-sleeveless-dress-blue.jpg"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1109941976935174234/1109943648751194294/ribbed-square-neck-sleeveless-dress-other-images-1.jpg",
+        "https://cdn.discordapp.com/attachments/1109941976935174234/1109943648457609266/ribbed-square-neck-sleeveless-dress-other-images-2.jpg",
+        "https://cdn.discordapp.com/attachments/1109941976935174234/1109943648172376168/ribbed-square-neck-sleeveless-dress-other-images-3.jpg"
+      ],
+
+      "category": "TOP"
+    },
+
+    {
+      "productName": "Ribbed Square Neck Sleeveless Dress",
+      "gender": "WOMEN",
+      "productId": 457823,
+      "reviewScore": 4.3,
+      "totalReviews": 10,
+      "price": 45,
+      "priceString": "45.00",
+      "productDescription": "Stylish square neckline and ribbed fabric for a perfect fit.",
+      "productOverview": [
+        "Stretchy cotton ribbed fabric.",
+        "Flattering square neckline.",
+        "Fitted cut.",
+        "Perfect for wearing on its own or in layered looks."
+      ],
+
+      "sizes": {
+        "xxs": ["XXS", false],
+        "xs": ["XS", true],
+        "s": ["S", true],
+        "m": ["M", true],
+        "l": ["L", true],
+        "xl": ["XL", true],
+        "xxl": ["XXL", false]
+      },
+
+      "colors": [
+        {
+          "name": "00 WHITE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926714290753556/ribbed-tank-top-white.jpg"
+        },
+        {
+          "name": "02 LIGHT GRAY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926714588532747/ribbed-tank-top-light-gray.jpg"
+        },
+        {
+          "name": "03 GRAY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926715268026378/ribbed-tank-top-gray.jpg"
+        },
+        {
+          "name": "09 BLACK",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926716308213870/ribbed-tank-top-black.jpg"
+        },
+        {
+          "name": "31 BEIGE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926716756987975/ribbed-tank-top-beige.jpg"
+        },
+        {
+          "name": "34 BROWN",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926715632914493/ribbed-tank-top-brown.jpg"
+        },
+        {
+          "name": "55 GREEN",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926714903109813/ribbed-tank-top-green.jpg"
+        },
+        {
+          "name": "62 BLUE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926715968462908/ribbed-tank-top-blue.jpg"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1109926416650338455/1109926655016833105/ribbed-tank-top-other-images-1.jpg",
+        "https://cdn.discordapp.com/attachments/1109926416650338455/1109926654651932815/ribbed-tank-top-other-images-2.jpg",
+        "https://cdn.discordapp.com/attachments/1109926416650338455/1109926654240895109/ribbed-tank-top-other-images-3.jpg",
+        "https://cdn.discordapp.com/attachments/1109926416650338455/1109926653821456415/ribbed-tank-top-other-images-4.jpg",
+        "https://cdn.discordapp.com/attachments/1109926416650338455/1109926653351698603/ribbed-tank-top-other-images-5.jpg"
+      ],
+
+      "category": "TOP"
+    },
+
+    {
+      "productName": "Ultra Stretch High-Rise Cropped Leggings",
+      "gender": "WOMEN",
+      "productId": 456192,
+      "reviewScore": 4.7,
+      "totalReviews": 14,
+      "price": 35.45,
+      "priceString": "35.45",
+      "productDescription": "Superb stretch for easy comfort. Meticulous details for a polished look.",
+      "productOverview": [
+        "Made with Ultra Stretch fabric.",
+        "High-waisted design creates a leg-flattering effect.",
+        "Flattering cropped length.",
+        "Now designed with stretchy fabric for extra comfort.",
+        "Comfortable and stylish design with carefully considered buttons, stitchwork, and back pocket sizing.",
+        "Fully elastic waist.",
+        "With belt loops."
+      ],
+
+      "sizes": {
+        "xxs": ["XXS", true],
+        "xs": ["XS", true],
+        "s": ["S", true],
+        "m": ["M", true],
+        "l": ["L", true],
+        "xl": ["XL", true],
+        "xxl": ["XXL", true]
+      },
+
+      "colors": [
+        {
+          "name": "01 OFF WHITE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109949180392259666/1109949334860079238/ultra-stretch-high-rise-cropped-leggings-pants-off-white.jpg"
+        },
+        {
+          "name": "09 BLACK",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109949180392259666/1109949335128518746/ultra-stretch-high-rise-cropped-leggings-pants-black.jpg"
+        },
+        {
+          "name": "12 PINK",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109949180392259666/1109949334574858341/ultra-stretch-high-rise-cropped-leggings-pants-pink.jpg"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1109949180392259666/1109949268753662074/ultra-stretch-high-rise-cropped-leggings-pants-other-images-1.jpg",
+        "https://cdn.discordapp.com/attachments/1109949180392259666/1109949268439072858/ultra-stretch-high-rise-cropped-leggings-pants-other-images-2.jpg",
+        "https://cdn.discordapp.com/attachments/1109949180392259666/1109949268132896868/ultra-stretch-high-rise-cropped-leggings-pants-other-images-3.jpg",
+        "https://cdn.discordapp.com/attachments/1109949180392259666/1109949267835109548/ultra-stretch-high-rise-cropped-leggings-pants-other-images-4.jpg"
+      ],
+
+      "category": "BOTTOM"
+    },
+
+    {
+      "productName": "Wide Straight Cargo Pants",
+      "gender": "WOMEN",
+      "productId": 461643,
+      "reviewScore": 4.3,
+      "totalReviews": 19,
+      "price": 44.35,
+      "priceString": "44.35",
+      "productDescription": "100% cotton work pants. Elastic waistband for comfort.",
+      "productOverview": [
+        "100% cotton body.",
+        "On-trend wide cut.",
+        "Comfortable elastic waist.",
+        "Classic work pant details. Featuring cargo pockets at the sides and a flap pocket at the back."
+      ],
+
+      "sizes": {
+        "xxs": ["XXS", false],
+        "xs": ["XS", true],
+        "s": ["S", true],
+        "m": ["M", true],
+        "l": ["L", true],
+        "xl": ["XL", true],
+        "xxl": ["XXL", false]
+      },
+
+      "colors": [
+        {
+          "name": "08 DARK GRAY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109954267906855055/1109956329545682985/wide-straight-cargo-pants-dark-gray.jpg"
+        },
+        {
+          "name": "30 NATURAL",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109954267906855055/1109956328958464171/wide-straight-cargo-pants-natural.jpg"
+        },
+        {
+          "name": "53 GREEN",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1109954267906855055/1109956329243688960/wide-straight-cargo-pants-green.jpg"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1109954267906855055/1109954405148672081/wide-straight-cargo-pants-other-images-2.jpg",
+        "https://cdn.discordapp.com/attachments/1109954267906855055/1109954404766978098/wide-straight-cargo-pants-other-images-3.jpg",
+        "https://cdn.discordapp.com/attachments/1109954267906855055/1109954404414672926/wide-straight-cargo-pants-other-images-4.jpg",
+        "https://cdn.discordapp.com/attachments/1109954267906855055/1109954404104290404/wide-straight-cargo-pants-other-images-5.jpg",
+        "https://cdn.discordapp.com/attachments/1109954267906855055/1109954403680653485/wide-straight-cargo-pants-other-images-6.jpg"
+      ],
+
+      "category": "BOTTOM"
+    },
+
+    {
+      "productName": "DRY-EX Crew Neck Short-Sleeve T-Shirt (Lightweight)",
+      "gender": "UNISEX",
+      "productId": 456773,
+      "reviewScore": 5,
+      "totalReviews": 2,
+      "price": 19.9,
+      "priceString": "19.90",
+      "productDescription": "A high-performance T-shirt with quick-drying 'DRY-EX'. Now lighter for even greater comfort.",
+      "productOverview": [
+        "Made of 100% ultra-long cotton fibers with an elegant texture.",
+        "Garment-washed for a tastefully casual look, high-quality feel, and soft touch.",
+        "Updated with an on-trend, relaxed regular fit.",
+        "Versatile button-down collar.",
+        "The collar roll ensures a sleek look even when the top button is unbuttoned.",
+        "Roomy in the shoulders, body, and sleeves for a tastefully casual style.",
+        "Designed for easy arm movement.",
+        "The stitching creates a casual style."
+      ],
+
+      "sizes": {
+        "xxs": ["XXS", true],
+        "xs": ["XS", true],
+        "s": ["S", true],
+        "m": ["M", true],
+        "l": ["L", true],
+        "xl": ["XL", true],
+        "xxl": ["XXL", true],
+        "3xl": ["3XL", true]
+      },
+
+      "colors": [
+        {
+          "name": "03 GRAY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110956947328479242/1110957070888468631/crew-neck-short-sleeve-t-shirt-gray.jpg"
+        },
+        {
+          "name": "08 DARK GRAY",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110956947328479242/1110957071203061771/crew-neck-short-sleeve-t-shirt-dark-gray.jpg"
+        },
+        {
+          "name": "13 RED",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110956947328479242/1110957070578106399/crew-neck-short-sleeve-t-shirt-pink.jpg"
+        },
+        {
+          "name": "64 BLUE",
+          "imageUrl": "https://cdn.discordapp.com/attachments/1110956947328479242/1110957071559573594/crew-neck-short-sleeve-t-shirt-blue.jpg"
+        }
+      ],
+      "otherImages": [
+        "https://cdn.discordapp.com/attachments/1110956947328479242/1110957009588719737/crew-neck-short-sleeve-t-shirt-other-images-1.jpg",
+        "https://cdn.discordapp.com/attachments/1110956947328479242/1110957009223831583/crew-neck-short-sleeve-t-shirt-other-images-2.jpg",
+        "https://cdn.discordapp.com/attachments/1110956947328479242/1110957008900861952/crew-neck-short-sleeve-t-shirt-other-images-3.jpg",
+        "https://cdn.discordapp.com/attachments/1110956947328479242/1110957008514977944/crew-neck-short-sleeve-t-shirt-other-images-4.jpg"
+      ],
+
+      "category": "TOP"
+    }
+  ]
+]
