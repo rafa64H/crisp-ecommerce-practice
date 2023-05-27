@@ -414,6 +414,20 @@ header {
 
     text-align: center;
   }
+
+  &-shop1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(90deg, #dae8f09a 100%, #dae8f09a),
+      url('./assets/shop/woman-shop1.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    text-align: center;
+  }
 }
 //SectionTwo END
 
@@ -703,7 +717,8 @@ footer {
   }
 
   .section2 {
-    &-home4 {
+    &-home4,
+    &-shop1 {
       .section2__title {
         border-top: 0.01em solid $first-color;
         border-right: 0.01em solid $first-color;
