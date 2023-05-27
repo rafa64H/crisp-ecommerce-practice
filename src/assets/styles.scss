@@ -260,7 +260,7 @@ header {
   }
 }
 .section1-background1 {
-  background-image: url('./assets/home/hero-img.png');
+  background-image: url('./home/hero-img.png');
 }
 //SectionOne END
 
@@ -361,7 +361,7 @@ header {
     align-items: center;
 
     background-image: linear-gradient(90deg, #f2f0ef00, #edebeb 50%),
-      url('./assets/home/woman-home3.png');
+      url('./home/woman-home3.png');
     background-repeat: no-repeat;
     background-size: min(cover, 50%);
     background-position: 0% center;
@@ -376,14 +376,14 @@ header {
     align-items: center;
 
     background-image: linear-gradient(90deg, #dfddd3 50%, #d1cdc100),
-      url('./assets/home/woman-home5.png');
+      url('./home/woman-home5.png');
     background-repeat: no-repeat;
     background-size: min(cover, 50%);
     background-position: 100% 15%;
   }
   &-home3 {
     background-image: linear-gradient(90deg, #f4ded3 50%, #f5dfd400),
-      url('./assets/home/woman-home4.png');
+      url('./home/woman-home4.png');
     background-repeat: no-repeat;
     background-size: min(cover, 50%);
     background-position: 100% 15%;
@@ -391,7 +391,7 @@ header {
 
   &-home4 {
     background: linear-gradient(90deg, #dae8f0e5 50%, #cadeee1a),
-      url('./assets/home/woman-home6.png');
+      url('./home/woman-home6.png');
 
     background-repeat: no-repeat;
     background-size: min(cover, 50%);
@@ -405,7 +405,7 @@ header {
     align-items: center;
 
     background: linear-gradient(90deg, #dae8f09a 100%, #dae8f09a),
-      url('./assets/home/woman-home7.png');
+      url('./home/woman-home7.png');
 
     background-repeat: no-repeat;
     background-size: cover;
@@ -421,7 +421,7 @@ header {
     align-items: center;
 
     background: linear-gradient(90deg, #dae8f09a 100%, #dae8f09a),
-      url('./assets/shop/woman-shop1.png');
+      url('./shop/woman-shop1.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;

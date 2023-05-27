@@ -3,20 +3,20 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 // Components and sass
-import './styles.scss';
-import Header from './components/header';
-import SectionOne from './components/section1';
-import SectionTwo from './components/section2';
-import BrandSection from './components/brandSection';
-import SectionThree from './components/section3';
-import Footer from './components/footer';
+import '../../assets/styles.scss';
+import Header from '../../components/ui/header';
+import SectionOne from './section1';
+import SectionTwo from '../../components/ui/section2';
+import BrandSection from './brandSection';
+import SectionThree from '../../components/ui/section3';
+import Footer from '../../components/ui/footer';
 
 // Images
-import womanHomeOne from './assets/home/woman-home2.png';
-import womanHomeTwo from './assets/home/woman-home1.png';
+import womanHomeOne from '../../assets/home/woman-home2.png';
+import womanHomeTwo from '../../assets/home/woman-home1.png';
 
 // Data
-import brandsData from './data/brands.json';
+import brandsData from '../../data/brands.json';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

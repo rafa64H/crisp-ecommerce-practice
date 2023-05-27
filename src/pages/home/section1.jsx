@@ -1,5 +1,5 @@
 import React from 'react';
-import LinkButton from './smaller/linkButton';
+import LinkButton from '../../components/ui/smaller/linkButton';
 
 const SectionOne = ({
   h1Text,

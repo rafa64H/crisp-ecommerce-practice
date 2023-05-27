@@ -3,12 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 // Components and sass
-import './styles.scss';
-import Header from './components/header';
-import SectionTwo from './components/section2';
-import ShopSection from './components/shopSection';
-import SectionThree from './components/section3';
-import Footer from './components/footer';
+import '../../assets/styles.scss';
+import Header from '../../components/ui/header';
+import SectionTwo from '../../components/ui/section2';
+import ShopSection from '../../components/ui/shopSection';
+import SectionThree from '../../components/ui/section3';
+import Footer from '../../components/ui/footer';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
