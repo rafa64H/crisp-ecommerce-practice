@@ -34,14 +34,17 @@
       "colors": [
         {
           "name": "00 WHITE",
+          "class": "clothes-00white",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
         },
         {
           "name": "18 WINE",
+          "class": "clothes-18wine",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110960506665193574/1110960616799215716/extra-fine-cotton-short-sleeve-shirt-wine.jpg"
         },
         {
           "name": "69 NAVY",
+          "class": "clothes-69navy",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110960506665193574/1110960617419972718/extra-fine-cotton-short-sleeve-shirt-navy.jpg"
         }
       ],
@@ -86,6 +89,7 @@
       "colors": [
         {
           "name": "65 BLUE",
+          "class": "clothes-64-65blue",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110979964536365106/1110980068538331136/oxford-striped-slim-fit-long-sleeve-shirt-blue.jpg"
         }
       ],
@@ -131,18 +135,22 @@
       "colors": [
         {
           "name": "06 GRAY",
+          "class": ".clothes-06gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110982741463404694/1110982834962845847/pleated-wide-pants-gray.jpg"
         },
         {
           "name": "09 BLACK",
+          "class": "clothes-09black",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110982741463404694/1110982835281596446/pleated-wide-pants-black.jpg"
         },
         {
           "name": "32 BEIGE",
+          "class": "clothes-32beige",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110982741463404694/1110982835550027797/pleated-wide-pants-beige.jpg"
         },
         {
           "name": "69 NAVY",
+          "class": "clothes-69navy",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110982741463404694/1110982834627280966/pleated-wide-pants-navy.jpg"
         }
       ],
@@ -186,18 +194,22 @@
       "colors": [
         {
           "name": "08 DARK GRAY",
+          "class": ".clothes-08dark-gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987691048321034/cargo-jogger-pants-dark-gray.jpg"
         },
         {
           "name": "09 BLACK",
+          "class": "clothes-09black",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987691698430003/cargo-jogger-pants-black.jpg"
         },
         {
           "name": "35 BROWN",
+          "class": "clothes-35brown",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987691396444293/cargo-jogger-pants-brown.jpg"
         },
         {
           "name": "57 OLIVE",
+          "class": "clothes-35brown",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987690737934477/cargo-jogger-pants-olive.jpg"
         }
       ],
@@ -245,26 +257,32 @@
       "colors": [
         {
           "name": "00 WHITE",
+          "class": "clothes-00white",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912230650183801/mini-short-sleeve-white.png"
         },
         {
           "name": "03 GRAY",
+          "class": "clothes-03gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912231493259378/mini-short-sleeve-gray.png"
         },
         {
           "name": "09 BLACK",
+          "class": "clothes-09black",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912232541823036/mini-short-sleeve-black.png"
         },
         {
           "name": "11 PINK",
+          "class": "clothes-11pink",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912231086399498/mini-short-sleeve-pink.png"
         },
         {
           "name": "35 BROWN",
+          "class": "clothes-35brown",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912232076247090/mini-short-sleeve-brown.png"
         },
         {
           "name": "60 LIGHT BLUE",
+          "class": "clothes-60light-blue",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109911960734150667/1109912956579352666/mini-short-sleeve-light-blue.png"
         }
       ],
@@ -308,18 +326,22 @@
       "colors": [
         {
           "name": "00 WHITE",
+          "class": "clothes-00white",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943720784179240/ribbed-square-neck-sleeveless-dress-black.jpg"
         },
         {
           "name": "26 ORANGE",
+          "class": "clothes-26orange",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943719785943051/ribbed-square-neck-sleeveless-dress-orange.jpg"
         },
         {
           "name": "30 NATURAL",
+          "class": "clothes-30natural",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943720096309369/ribbed-square-neck-sleeveless-dress-natural.jpg"
         },
         {
           "name": "64 BLUE",
+          "class": "clothes-64-65blue",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943720440250508/ribbed-square-neck-sleeveless-dress-blue.jpg"
         }
       ],
@@ -361,34 +383,42 @@
       "colors": [
         {
           "name": "00 WHITE",
+          "class": "clothes-00white",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926714290753556/ribbed-tank-top-white.jpg"
         },
         {
           "name": "02 LIGHT GRAY",
+          "class": "clothes-03gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926714588532747/ribbed-tank-top-light-gray.jpg"
         },
         {
           "name": "03 GRAY",
+          "class": "clothes-03gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926715268026378/ribbed-tank-top-gray.jpg"
         },
         {
           "name": "09 BLACK",
+          "class": "clothes-09black",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926716308213870/ribbed-tank-top-black.jpg"
         },
         {
           "name": "31 BEIGE",
+          "class": "clothes-32beige",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926716756987975/ribbed-tank-top-beige.jpg"
         },
         {
           "name": "34 BROWN",
+          "class": "clothes-35brown",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926715632914493/ribbed-tank-top-brown.jpg"
         },
         {
           "name": "55 GREEN",
+          "class": "clothes-55green",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926714903109813/ribbed-tank-top-green.jpg"
         },
         {
           "name": "62 BLUE",
+          "class": "clothes-64-65blue",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926715968462908/ribbed-tank-top-blue.jpg"
         }
       ],
@@ -435,14 +465,17 @@
       "colors": [
         {
           "name": "01 OFF WHITE",
+          "class": "clothes-00white",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109949180392259666/1109949334860079238/ultra-stretch-high-rise-cropped-leggings-pants-off-white.jpg"
         },
         {
           "name": "09 BLACK",
+          "class": "clothes-09black",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109949180392259666/1109949335128518746/ultra-stretch-high-rise-cropped-leggings-pants-black.jpg"
         },
         {
           "name": "12 PINK",
+          "class": "clothes-11pink",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109949180392259666/1109949334574858341/ultra-stretch-high-rise-cropped-leggings-pants-pink.jpg"
         }
       ],
@@ -485,14 +518,17 @@
       "colors": [
         {
           "name": "08 DARK GRAY",
+          "class": ".clothes-08dark-gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109954267906855055/1109956329545682985/wide-straight-cargo-pants-dark-gray.jpg"
         },
         {
           "name": "30 NATURAL",
+          "class": "clothes-30natural",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109954267906855055/1109956328958464171/wide-straight-cargo-pants-natural.jpg"
         },
         {
           "name": "53 GREEN",
+          "class": "clothes-55green",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109954267906855055/1109956329243688960/wide-straight-cargo-pants-green.jpg"
         }
       ],
@@ -541,18 +577,22 @@
       "colors": [
         {
           "name": "03 GRAY",
+          "class": "clothes-03gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110956947328479242/1110957070888468631/crew-neck-short-sleeve-t-shirt-gray.jpg"
         },
         {
           "name": "08 DARK GRAY",
+          "class": ".clothes-08dark-gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110956947328479242/1110957071203061771/crew-neck-short-sleeve-t-shirt-dark-gray.jpg"
         },
         {
           "name": "13 RED",
+          "class": "clothes-13red",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110956947328479242/1110957070578106399/crew-neck-short-sleeve-t-shirt-pink.jpg"
         },
         {
           "name": "64 BLUE",
+          "class": "clothes-64-65blue",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110956947328479242/1110957071559573594/crew-neck-short-sleeve-t-shirt-blue.jpg"
         }
       ],
