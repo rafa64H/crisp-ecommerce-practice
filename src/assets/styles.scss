@@ -123,6 +123,107 @@ i {
     }
   }
 }
+
+.clothes-card-li {
+  margin: 0.5em;
+
+  width: min(50%, 18rem);
+
+  .clothes-card {
+    display: block;
+
+    &__name {
+      margin: 0.5em 0;
+      font-weight: 300;
+    }
+
+    &-colors {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 8rem;
+
+      &__button {
+        border: 1px solid transparent;
+        padding: 1em;
+
+        transition: all 300ms;
+
+        &:hover {
+          border: 1px solid $second-color;
+        }
+      }
+      .clothes-00white {
+        background-color: #e8e7ec;
+      }
+
+      .clothes-09black {
+        background-color: #202022;
+      }
+
+      .clothes-18wine {
+        background-color: #74373f;
+      }
+
+      .clothes-69navy {
+        background-color: #1b2338;
+      }
+
+      .clothes-64-65blue {
+        background-color: #5279c6;
+      }
+
+      .clothes-35brown {
+        background-color: #7e6048;
+      }
+
+      .clothes-06gray {
+        background-color: #1b2338;
+      }
+
+      .clothes-32beige {
+        background-color: #1b2338;
+      }
+
+      .clothes-08dark-gray {
+        background-color: #312b2f;
+      }
+
+      .clothes-57olive {
+        background-color: #47473b;
+      }
+
+      .clothes-03gray {
+        background-color: #b2b0b1;
+      }
+
+      .clothes-11pink {
+        background-color: #debfce;
+      }
+
+      .clothes-60light-blue {
+        background-color: #aec9d4;
+      }
+
+      .clothes-26orange {
+        background-color: #d57250;
+      }
+
+      .clothes-30natural {
+        background-color: #e6d9d0;
+      }
+
+      .clothes-55green {
+        background-color: #0f6443;
+      }
+
+      .clothes-13red {
+        background-color: #b5444e;
+      }
+    }
+  }
+}
+
 //Very used components END
 
 //----------------------------------------------------------------
