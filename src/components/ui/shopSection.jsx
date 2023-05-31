@@ -10,7 +10,7 @@ const ShopSection = ({ clothesData, iterations }) => {
         productColors={item.colors}
         productImg={item.colors[0].imageUrl}
         gender={item.gender}
-        price={item.price}
+        productPrice={item.price}
         category={item.category}
         key={uuidv4()}
       />

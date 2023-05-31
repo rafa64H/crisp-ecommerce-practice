@@ -43,13 +43,16 @@ const ClothesCard = ({
     <li className="clothes-card-li">
       <a href="#" className="clothes-card">
         <img className="clothes-card__img" src={imageSrc} alt={productName} />
-        <p className="clothes-card__category-gender">
-          {category} {gender}
-        </p>
-        <h3 className="clothes-card__name">{productName}</h3>
-        <p className="clothes-card__price">
-          <strong>{productPrice}</strong>
-        </p>
+
+        <div className="clothes-card-text">
+          <p className="clothes-card-text__category-gender">
+            {category} {gender}
+          </p>
+          <h3 className="clothes-card-text__name">{productName}</h3>
+          <p className="clothes-card-text__price">
+            <strong>{productPrice}$</strong>
+          </p>
+        </div>
 
         <div className="clothes-card-colors" onClick={(e) => handleDefault(e)}>
           {productColorsButtons}

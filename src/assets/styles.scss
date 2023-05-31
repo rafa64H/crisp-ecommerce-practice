@@ -144,19 +144,22 @@ i {
       border: 2px solid $first-color;
     }
 
-    &__img {
-      aspect-ratio: 9/16;
-      object-fit: cover;
-      width: 100%;
-    }
+    &-text {
+      margin: 0 0.5em;
 
-    &__category-gender {
-      margin: 0.5em 0.5rem;
-    }
+      &__category-gender {
+        margin: 0.5em 0;
+      }
 
-    &__name {
-      margin: 0.5em 0.5rem;
-      font-weight: 300;
+      &__price {
+        color: $first-color;
+        font-size: $third-font-size;
+      }
+
+      &__name {
+        margin: 0.5em 0;
+        font-weight: 300;
+      }
     }
 
     &-colors {
@@ -171,7 +174,7 @@ i {
         display: block;
 
         border: 3px solid transparent;
-        padding: 0.5rem;
+        padding: 0.7rem;
         margin: 0.25em 0.5em;
 
         transition: all 300ms;
