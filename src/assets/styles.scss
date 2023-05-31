@@ -132,6 +132,8 @@ i {
   .clothes-card {
     display: block;
 
+    color: $first-color;
+
     &__name {
       margin: 0.5em 0;
       font-weight: 300;
@@ -143,6 +145,12 @@ i {
       justify-content: space-between;
       width: 8rem;
 
+      [data-color-active='true'] {
+        border: 3px solid $second-color !important;
+      }
+      [data-color-active='false'] {
+        border: 1px solid transparent;
+      }
       &__button {
         border: 1px solid transparent;
         padding: 1em;
@@ -153,6 +161,7 @@ i {
           border: 1px solid $second-color;
         }
       }
+
       .clothes-00white {
         background-color: #e8e7ec;
       }

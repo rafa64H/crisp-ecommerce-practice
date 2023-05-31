@@ -11,7 +11,7 @@ const ShopSection = () => {
         <ClothesCard
           productName={clothesData[0][0].productName}
           productColors={clothesData[0][0].colors}
-          productImg={clothesData[0][0].otherImages[0]}
+          productImg={clothesData[0][0].colors[0].imageUrl}
           gender={clothesData[0][0].gender}
           price={clothesData[0][0].price}
           category={clothesData[0][0].category}

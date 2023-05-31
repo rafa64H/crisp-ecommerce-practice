@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const ClothesCard = ({
@@ -9,14 +9,32 @@ const ClothesCard = ({
   productPrice,
   productColors,
 }) => {
+  const [imageSrc, setImageSrc] = useState(`${productImg}`);
+  const [activeBtn, setActiveBtn] = useState(0);
+
   function handleDefault(e) {
     e.preventDefault();
   }
-  const productColorsButtons = productColors.map((color) => (
+
+  function changeImage(imageUrl) {
+    setImageSrc(imageUrl);
+  }
+
+  function changeActiveBtn(index) {
+    setActiveBtn(index);
+  }
+
+  const productColorsButtons = productColors.map((color, index) => (
     <button
       type="button"
       className={`clothes-card-colors__button ${color.class}`}
-      aria-label={`${color.name}`}
+      aria-label={`See ${color.name} of ${productName}`}
+      onClick={(e) => {
+        changeImage(color.imageUrl);
+        changeActiveBtn(index);
+      }}
+      data-color-active={activeBtn === index}
+      aria-pressed={activeBtn === index}
       key={uuidv4()}
     />
   ));
@@ -24,7 +42,7 @@ const ClothesCard = ({
   return (
     <li className="clothes-card-li">
       <a href="#" className="clothes-card">
-        <img className="clothes-card__img" src={productImg} alt={productName} />
+        <img className="clothes-card__img" src={imageSrc} alt={productName} />
         <p className="clothes-card__category-gender">
           {category} {gender}
         </p>
@@ -32,11 +50,10 @@ const ClothesCard = ({
         <p className="clothes-card__price">
           <strong>{productPrice}</strong>
         </p>
-
-        <div className="clothes-card-colors" onClick={(e) => handleDefault(e)}>
-          {productColorsButtons}
-        </div>
       </a>
+      <div className="clothes-card-colors" onClick={(e) => handleDefault(e)}>
+        {productColorsButtons}
+      </div>
     </li>
   );
 };
