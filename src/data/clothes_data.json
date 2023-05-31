@@ -135,7 +135,7 @@
       "colors": [
         {
           "name": "06 GRAY",
-          "class": ".clothes-06gray",
+          "class": "clothes-06gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110982741463404694/1110982834962845847/pleated-wide-pants-gray.jpg"
         },
         {
@@ -194,7 +194,7 @@
       "colors": [
         {
           "name": "08 DARK GRAY",
-          "class": ".clothes-08dark-gray",
+          "class": "clothes-08dark-gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987691048321034/cargo-jogger-pants-dark-gray.jpg"
         },
         {
@@ -209,7 +209,7 @@
         },
         {
           "name": "57 OLIVE",
-          "class": "clothes-35brown",
+          "class": "clothes-57olive",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110987189988380714/1110987690737934477/cargo-jogger-pants-olive.jpg"
         }
       ],
@@ -325,8 +325,8 @@
 
       "colors": [
         {
-          "name": "00 WHITE",
-          "class": "clothes-00white",
+          "name": "09 BLACK",
+          "class": "clothes-09black",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943720784179240/ribbed-square-neck-sleeveless-dress-black.jpg"
         },
         {
@@ -388,7 +388,7 @@
         },
         {
           "name": "02 LIGHT GRAY",
-          "class": "clothes-03gray",
+          "class": "clothes-02light-gray",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926714588532747/ribbed-tank-top-light-gray.jpg"
         },
         {

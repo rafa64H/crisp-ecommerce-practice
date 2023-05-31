@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import ClothesCard from './smaller/clothesCard';
 
-import clothesData from '../../data/clothes_data.json';
+const ShopSection = ({ clothesData, iterations }) => {
+  function getAllClothesFromJson() {
+    const clothes = clothesData.map((item, index) => (
+      <ClothesCard
+        productName={item.productName}
+        productColors={item.colors}
+        productImg={item.colors[0].imageUrl}
+        gender={item.gender}
+        price={item.price}
+        category={item.category}
+        key={uuidv4()}
+      />
+    ));
+    return clothes;
+  }
 
-const ShopSection = () => {
-  console.log(clothesData[0]);
+  console.log(getAllClothesFromJson());
+
   return (
     <section className="shop-section">
-      <ul className="shop-section-list">
-        <ClothesCard
-          productName={clothesData[0][0].productName}
-          productColors={clothesData[0][0].colors}
-          productImg={clothesData[0][0].colors[0].imageUrl}
-          gender={clothesData[0][0].gender}
-          price={clothesData[0][0].price}
-          category={clothesData[0][0].category}
-        />
-      </ul>
+      <ul className="shop-section-list">{getAllClothesFromJson()}</ul>
     </section>
   );
 };

@@ -50,10 +50,11 @@ const ClothesCard = ({
         <p className="clothes-card__price">
           <strong>{productPrice}</strong>
         </p>
+
+        <div className="clothes-card-colors" onClick={(e) => handleDefault(e)}>
+          {productColorsButtons}
+        </div>
       </a>
-      <div className="clothes-card-colors" onClick={(e) => handleDefault(e)}>
-        {productColorsButtons}
-      </div>
     </li>
   );
 };

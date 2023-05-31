@@ -60,6 +60,7 @@ p {
 
 li {
   font-family: $font-oswald;
+  list-style: none;
 }
 a {
   font-family: $font-oswald;
@@ -127,43 +128,65 @@ i {
 .clothes-card-li {
   margin: 0.5em;
 
-  width: min(50%, 18rem);
+  width: min(50%, 12rem);
 
   .clothes-card {
     display: block;
 
+    border: 2px solid transparent;
+    padding-bottom: 0.3em;
+
     color: $first-color;
 
+    transition: border 300ms;
+
+    &:hover {
+      border: 2px solid $first-color;
+    }
+
+    &__img {
+      aspect-ratio: 9/16;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    &__category-gender {
+      margin: 0.5em 0.5rem;
+    }
+
     &__name {
-      margin: 0.5em 0;
+      margin: 0.5em 0.5rem;
       font-weight: 300;
     }
 
     &-colors {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
-      width: 8rem;
 
       [data-color-active='true'] {
         border: 3px solid $second-color !important;
       }
-      [data-color-active='false'] {
-        border: 1px solid transparent;
-      }
       &__button {
-        border: 1px solid transparent;
-        padding: 1em;
+        display: block;
+
+        border: 3px solid transparent;
+        padding: 0.5rem;
+        margin: 0.25em 0.5em;
 
         transition: all 300ms;
 
         &:hover {
-          border: 1px solid $second-color;
+          border-color: $first-color;
         }
       }
 
       .clothes-00white {
-        background-color: #e8e7ec;
+        background-color: #f3f3f3;
+      }
+
+      .clothes-02light-gray {
+        background-color: #cfcfcf;
       }
 
       .clothes-09black {
@@ -187,11 +210,11 @@ i {
       }
 
       .clothes-06gray {
-        background-color: #1b2338;
+        background-color: #535257;
       }
 
       .clothes-32beige {
-        background-color: #1b2338;
+        background-color: #b9a990;
       }
 
       .clothes-08dark-gray {
@@ -636,6 +659,19 @@ footer {
   }
 }
 //Footer END
+
+//----------------------------------------------------------------
+
+//shopSection
+
+.shop-section-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+}
+
+//shopSection END
 
 //----------------------------------------------------------------
 

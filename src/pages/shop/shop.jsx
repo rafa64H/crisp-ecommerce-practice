@@ -2,6 +2,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
+// data
+import clothesData from '../../data/clothes_data.json';
+
 // Components and sass
 import '../../assets/styles.scss';
 import Header from '../../components/ui/header';
@@ -20,7 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       classesSection2="section2-shop1"
     />
 
-    <ShopSection />
+    <ShopSection clothesData={clothesData[0]} iterations={2} />
 
     <Footer />
   </React.StrictMode>
