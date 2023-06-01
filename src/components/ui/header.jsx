@@ -70,20 +70,18 @@ const Header = () => {
 export default Header;
 
 const OpenNavBtn = ({ isNavOpen, setIsNavOpen }) => {
-  function handleOpenNav(e) {
-    const openNavBtnIcon = document.querySelector('[data-open-nav-btn-icon]');
+  const [iconNavBtn, setIconNavBtn] = useState('fa-bars');
 
-    changeNavBtnIcon(openNavBtnIcon, isNavOpen);
+  function handleOpenNav(e) {
+    changeNavBtnIcon(isNavOpen);
     setIsNavOpen(!isNavOpen);
   }
 
-  function changeNavBtnIcon(icon, navMenuOpen) {
-    if (navMenuOpen) {
-      icon.classList.remove('fa-xmark');
-      icon.classList.add('fa-bars');
+  function changeNavBtnIcon(isNavOpen) {
+    if (isNavOpen) {
+      setIconNavBtn('fa-bars');
     } else {
-      icon.classList.remove('fa-bars');
-      icon.classList.add('fa-xmark');
+      setIconNavBtn('fa-xmark');
     }
   }
 
@@ -95,7 +93,7 @@ const OpenNavBtn = ({ isNavOpen, setIsNavOpen }) => {
       type="button"
       onClick={(e) => handleOpenNav(e)}
     >
-      <i className="fa-solid fa-bars" data-open-nav-btn-icon />
+      <i className={`fa-solid ${iconNavBtn}`} data-open-nav-btn-icon />
     </button>
   );
 };

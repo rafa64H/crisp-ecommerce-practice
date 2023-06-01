@@ -188,6 +188,8 @@ const FooterSectionTitle = ({
   isListOpen,
   setIsListOpen,
 }) => {
+  const [iconBtnFooter, setIconBtnFooter] = useState('fa-plus');
+
   // This is for mobiles <FooterSectionTitle>
   function handleFooterSectionTitleBtn(e) {
     const btn = e.target.closest('button');
@@ -200,14 +202,9 @@ const FooterSectionTitle = ({
     setIsListOpen(!isListOpen);
 
     function changeIconBtn(boolean) {
-      const btnIcon = btn.querySelector('.footer-section__btn-icon');
-      if (boolean) {
-        btnIcon.classList.remove('fa-minus');
-        btnIcon.classList.add('fa-plus');
-      } else {
-        btnIcon.classList.remove('fa-plus');
-        btnIcon.classList.add('fa-minus');
-      }
+      if (boolean) return setIconBtnFooter('fa-plus');
+
+      return setIconBtnFooter('fa-minus');
     }
   }
 
