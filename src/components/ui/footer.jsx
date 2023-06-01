@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import CompanyLogo from './smaller/companyLogo';
+import handleLargeScreen from '../utils/handleLargeScreen';
 
 const Footer = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -10,21 +11,7 @@ const Footer = () => {
   const [isListOpen4, setIsListOpen4] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 1200px)');
-
-    if (mediaQuery.matches) {
-      setIsLargeScreen(true);
-    }
-
-    const handleMediaQueryChange = (event) => {
-      setIsLargeScreen(event.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleMediaQueryChange);
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMediaQueryChange);
-    };
+    handleLargeScreen(setIsLargeScreen);
   }, []);
 
   return (
