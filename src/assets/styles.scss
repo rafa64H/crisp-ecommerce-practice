@@ -481,6 +481,8 @@ header {
 //SectionTwo
 .section2 {
   margin: 0.5em auto;
+  background-size: min(cover, 50%);
+  background-repeat: no-repeat;
 
   &-content {
     width: min(90%, 45rem);
@@ -498,9 +500,6 @@ header {
 
     background-image: linear-gradient(90deg, #f2f0ef00, #edebeb 50%),
       url('./home/woman-home3.png');
-    background-repeat: no-repeat;
-    background-size: min(cover, 50%);
-    background-position: 0% center;
 
     .section2-content {
       width: min(90%, 25rem);
@@ -513,25 +512,16 @@ header {
 
     background-image: linear-gradient(90deg, #dfddd3 50%, #d1cdc100),
       url('./home/woman-home5.png');
-    background-repeat: no-repeat;
-    background-size: min(cover, 50%);
-    background-position: 100% 15%;
   }
   &-home3 {
     background-image: linear-gradient(90deg, #f4ded3 50%, #f5dfd400),
       url('./home/woman-home4.png');
-    background-repeat: no-repeat;
-    background-size: min(cover, 50%);
-    background-position: 100% 15%;
   }
 
   &-home4 {
     background: linear-gradient(90deg, #dae8f0e5 50%, #cadeee1a),
       url('./home/woman-home6.png');
 
-    background-repeat: no-repeat;
-    background-size: min(cover, 50%);
-    background-position: 100% center;
     margin: 1em;
   }
 
@@ -543,9 +533,6 @@ header {
     background: linear-gradient(90deg, #dae8f09a 100%, #dae8f09a),
       url('./home/woman-home7.png');
 
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     margin: 1em;
 
     text-align: center;
@@ -558,11 +545,21 @@ header {
 
     background: linear-gradient(90deg, #dae8f09a 100%, #dae8f09a),
       url('./shop/woman-shop1.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
 
     text-align: center;
+  }
+
+  &-background-left {
+    background-position: 0% center;
+  }
+
+  &-background-right {
+    background-position: 100% 15%;
+  }
+
+  &-background-center {
+    background-size: cover;
+    background-position: center;
   }
 }
 //SectionTwo END
@@ -994,21 +991,5 @@ footer {
   }
 }
 ///Media only devices with :hover END
-
-///----------------------------------
-
-///Media only devices without :hover
-@media (hover: none) {
-  .link-btn-component:focus {
-    border-color: $darker-gray;
-    background-color: $darker-gray;
-    color: white;
-  }
-
-  .arrow:focus {
-    background-color: rgba($color: $first-color, $alpha: 0.8);
-  }
-}
-///Media only devices without :hover END
 
 //Media Queries END
