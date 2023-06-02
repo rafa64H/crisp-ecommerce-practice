@@ -166,98 +166,99 @@ i {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-
-      [data-color-active='true'] {
-        border: 3px solid $second-color !important;
-      }
-      &__button {
-        display: block;
-
-        border: 3px solid transparent;
-        padding: 0.7rem;
-        margin: 0.25em 0.5em;
-
-        transition: all 300ms;
-
-        &:hover {
-          border-color: $first-color;
-        }
-      }
-
-      .clothes-00white {
-        background-color: #f3f3f3;
-      }
-
-      .clothes-02light-gray {
-        background-color: #cfcfcf;
-      }
-
-      .clothes-09black {
-        background-color: #202022;
-      }
-
-      .clothes-18wine {
-        background-color: #74373f;
-      }
-
-      .clothes-69navy {
-        background-color: #1b2338;
-      }
-
-      .clothes-64-65blue {
-        background-color: #5279c6;
-      }
-
-      .clothes-35brown {
-        background-color: #7e6048;
-      }
-
-      .clothes-06gray {
-        background-color: #535257;
-      }
-
-      .clothes-32beige {
-        background-color: #b9a990;
-      }
-
-      .clothes-08dark-gray {
-        background-color: #312b2f;
-      }
-
-      .clothes-57olive {
-        background-color: #47473b;
-      }
-
-      .clothes-03gray {
-        background-color: #b2b0b1;
-      }
-
-      .clothes-11pink {
-        background-color: #debfce;
-      }
-
-      .clothes-60light-blue {
-        background-color: #aec9d4;
-      }
-
-      .clothes-26orange {
-        background-color: #d57250;
-      }
-
-      .clothes-30natural {
-        background-color: #e6d9d0;
-      }
-
-      .clothes-55green {
-        background-color: #0f6443;
-      }
-
-      .clothes-13red {
-        background-color: #b5444e;
-      }
     }
   }
 }
+
+[data-color-active='true'] {
+  border: 3px solid $second-color !important;
+}
+.clothes-color-btn {
+  display: block;
+
+  border: 3px solid transparent;
+  padding: 0.7rem;
+  margin: 0.25em 0.5em;
+
+  transition: all 300ms;
+
+  &:hover {
+    border-color: $first-color;
+  }
+}
+////Also in clothes-color-btn
+.clothes-00white {
+  background-color: #f3f3f3;
+}
+
+.clothes-02light-gray {
+  background-color: #cfcfcf;
+}
+
+.clothes-09black {
+  background-color: #202022;
+}
+
+.clothes-18wine {
+  background-color: #74373f;
+}
+
+.clothes-69navy {
+  background-color: #1b2338;
+}
+
+.clothes-64-65blue {
+  background-color: #5279c6;
+}
+
+.clothes-35brown {
+  background-color: #7e6048;
+}
+
+.clothes-06gray {
+  background-color: #535257;
+}
+
+.clothes-32beige {
+  background-color: #b9a990;
+}
+
+.clothes-08dark-gray {
+  background-color: #312b2f;
+}
+
+.clothes-57olive {
+  background-color: #47473b;
+}
+
+.clothes-03gray {
+  background-color: #b2b0b1;
+}
+
+.clothes-11pink {
+  background-color: #debfce;
+}
+
+.clothes-60light-blue {
+  background-color: #aec9d4;
+}
+
+.clothes-26orange {
+  background-color: #d57250;
+}
+
+.clothes-30natural {
+  background-color: #e6d9d0;
+}
+
+.clothes-55green {
+  background-color: #0f6443;
+}
+
+.clothes-13red {
+  background-color: #b5444e;
+}
+////Also in clothes-color-btn END
 
 //Very used components END
 

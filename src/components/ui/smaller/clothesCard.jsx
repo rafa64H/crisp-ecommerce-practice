@@ -27,7 +27,7 @@ const ClothesCard = ({
   const productColorsButtons = productColors.map((color, index) => (
     <button
       type="button"
-      className={`clothes-card-colors__button ${color.class}`}
+      className={`clothes-color-btn ${color.class}`}
       aria-label={`See ${color.name} of ${productName}`}
       onClick={(e) => {
         changeImage(color.imageUrl);

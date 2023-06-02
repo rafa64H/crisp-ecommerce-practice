@@ -18,8 +18,6 @@ const ShopSection = ({ clothesData, iterations }) => {
     return clothes;
   }
 
-  console.log(getAllClothesFromJson());
-
   return (
     <section className="shop-section">
       <ul className="shop-section-list">{getAllClothesFromJson()}</ul>
