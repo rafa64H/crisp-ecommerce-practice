@@ -163,9 +163,6 @@ i {
     }
 
     &-colors {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
     }
   }
 }
@@ -174,11 +171,11 @@ i {
   border: 3px solid $second-color !important;
 }
 .clothes-color-btn {
-  display: block;
+  display: inline-block;
 
   border: 3px solid transparent;
   padding: 0.7rem;
-  margin: 0.25em 0.5em;
+  margin: 0.25em 0.25em;
 
   transition: all 300ms;
 
@@ -207,7 +204,7 @@ i {
   background-color: #1b2338;
 }
 
-.clothes-64-65blue {
+.clothes-64blue {
   background-color: #5279c6;
 }
 
@@ -670,6 +667,37 @@ footer {
   flex-wrap: wrap;
   justify-content: center;
   align-items: baseline;
+}
+
+.shop-section-filters {
+  &-list {
+    &__gender,
+    &__size {
+      border: 2px solid $first-color;
+      margin: 0 0.25em;
+      padding: 0.5em;
+
+      font-size: $fourth-font-size;
+      font-weight: 600;
+
+      transition: all 300ms;
+
+      &:hover {
+        background-color: $first-color;
+        color: white;
+      }
+    }
+    [data-active-filter-gender='true'],
+    [data-active-filter-size='true'] {
+      border-color: $second-color;
+      background-color: $first-color;
+      color: white;
+    }
+
+    .clothes-color-btn {
+      display: inline-block;
+    }
+  }
 }
 
 //shopSection END

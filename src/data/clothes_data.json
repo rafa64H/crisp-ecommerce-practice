@@ -88,8 +88,8 @@
 
       "colors": [
         {
-          "name": "65 BLUE",
-          "class": "clothes-64-65blue",
+          "name": "64 BLUE",
+          "class": "clothes-64blue",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110979964536365106/1110980068538331136/oxford-striped-slim-fit-long-sleeve-shirt-blue.jpg"
         }
       ],
@@ -341,7 +341,7 @@
         },
         {
           "name": "64 BLUE",
-          "class": "clothes-64-65blue",
+          "class": "clothes-64blue",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109941976935174234/1109943720440250508/ribbed-square-neck-sleeveless-dress-blue.jpg"
         }
       ],
@@ -417,8 +417,8 @@
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926714903109813/ribbed-tank-top-green.jpg"
         },
         {
-          "name": "62 BLUE",
-          "class": "clothes-64-65blue",
+          "name": "64 BLUE",
+          "class": "clothes-64blue",
           "imageUrl": "https://cdn.discordapp.com/attachments/1109926416650338455/1109926715968462908/ribbed-tank-top-blue.jpg"
         }
       ],
@@ -592,7 +592,7 @@
         },
         {
           "name": "64 BLUE",
-          "class": "clothes-64-65blue",
+          "class": "clothes-64blue",
           "imageUrl": "https://cdn.discordapp.com/attachments/1110956947328479242/1110957071559573594/crew-neck-short-sleeve-t-shirt-blue.jpg"
         }
       ],
