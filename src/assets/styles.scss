@@ -161,9 +161,6 @@ i {
         font-weight: 300;
       }
     }
-
-    &-colors {
-    }
   }
 }
 
@@ -669,34 +666,81 @@ footer {
   align-items: baseline;
 }
 
-.shop-section-filters {
-  &-list {
-    &__gender,
-    &__size {
-      border: 2px solid $first-color;
-      margin: 0 0.25em;
-      padding: 0.5em;
+.shop-section {
+  &-expand-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 
-      font-size: $fourth-font-size;
-      font-weight: 600;
+    margin: 0 auto;
+    width: 90%;
+    border: 2px solid $light-gray;
+    padding: 0.25em;
 
-      transition: all 300ms;
+    text-align: left;
+    font-family: $font-oswald;
+    font-size: $second-font-size;
 
-      &:hover {
+    .icon {
+      color: $first-color;
+      font-size: $second-font-size;
+    }
+  }
+
+  .shop-section-filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: absolute;
+
+    transform: scaleY(0);
+    opacity: 0;
+    transform-origin: 50% 0%;
+
+    transition: all 300ms;
+
+    &__btn {
+      font-family: $font-oswald;
+      font-size: $third-font-size;
+      font-weight: 900;
+    }
+
+    &-list {
+      &__gender,
+      &__size {
+        border: 2px solid $first-color;
+        margin: 0.25em;
+        padding: 0.5em;
+
+        font-size: $fourth-font-size;
+        font-weight: 600;
+
+        transition: all 300ms;
+
+        &:hover {
+          background-color: $first-color;
+          color: white;
+        }
+      }
+      [data-active-filter-gender='true'],
+      [data-active-filter-size='true'] {
+        border-color: $second-color;
         background-color: $first-color;
         color: white;
       }
-    }
-    [data-active-filter-gender='true'],
-    [data-active-filter-size='true'] {
-      border-color: $second-color;
-      background-color: $first-color;
-      color: white;
-    }
 
-    .clothes-color-btn {
-      display: inline-block;
+      .clothes-color-btn {
+        display: inline-block;
+      }
     }
+  }
+  [data-show-shop-section-filters='true'] {
+    position: relative;
+
+    transform: scaleY(1);
+    opacity: 1;
+    transform-origin: 50% 0%;
   }
 }
 

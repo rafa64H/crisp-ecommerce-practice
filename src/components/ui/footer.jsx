@@ -192,8 +192,6 @@ const FooterSectionTitle = ({
 
   // This is for mobiles <FooterSectionTitle>
   function handleFooterSectionTitleBtn(e) {
-    const btn = e.target.closest('button');
-
     if (isListOpen) {
       changeIconBtn(true);
     } else {

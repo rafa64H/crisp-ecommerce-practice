@@ -7,6 +7,9 @@ const ShopSection = ({ clothesData, iterations }) => {
   const [filterSizeActive, setFilterSizeActive] = useState(null);
   const [filterColorActive, setFilterColorActive] = useState(null);
 
+  const [showShopSectionFilters, setShowShopSectionFilters] = useState(false);
+  const [expandFiltersIcon, setExpandFiltersIcon] = useState('fa-plus');
+
   const allGenders = ['MEN', 'WOMEN', 'UNISEX'];
   const allSizes = ['xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', '3xl'];
   const allColors = [
@@ -34,6 +37,15 @@ const ShopSection = ({ clothesData, iterations }) => {
     if (index === filterBtnState) return setFilterBtnState(null);
     return setFilterBtnState(index);
   }
+  function handleClickExpandFilters() {
+    if (expandFiltersIcon === 'fa-plus') {
+      setExpandFiltersIcon('fa-minus');
+      setShowShopSectionFilters(true);
+    } else {
+      setExpandFiltersIcon('fa-plus');
+      setShowShopSectionFilters(false);
+    }
+  }
 
   function getAllClothesFromJson() {
     const clothes = clothesData.map((item, index) => (
@@ -52,13 +64,23 @@ const ShopSection = ({ clothesData, iterations }) => {
 
   return (
     <section className="shop-section">
-      <button type="button" className="shop-section-filters-expand">
+      <button
+        type="button"
+        className="shop-section-expand-filters"
+        onClick={handleClickExpandFilters}
+      >
         Filters
+        <i className={`fa-solid ${expandFiltersIcon} icon`} />
       </button>
-      <div className="shop-section-filters">
+
+      <div
+        className="shop-section-filters"
+        data-show-shop-section-filters={showShopSectionFilters}
+      >
         <button type="button" className="shop-section-filters__btn">
           Gender
         </button>
+
         <ul className="shop-section-filters-list">
           {allGenders.map((gender, index) => (
             <GenderFilterItem
