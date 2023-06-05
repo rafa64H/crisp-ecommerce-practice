@@ -1024,6 +1024,56 @@ footer {
     }
   }
   ////Media Footer END
+
+  ////--------------------
+
+  ////Media ShopSection
+  .shop-section {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+
+    &-expand-filters {
+      display: none;
+    }
+
+    .shop-section-filters {
+      display: block;
+
+      position: static;
+
+      border-right: 2px solid $light-gray;
+
+      transform: scaleY(1);
+      opacity: 1;
+
+      transition: none;
+
+      &__btn {
+      }
+
+      &-list {
+        &__gender,
+        &__size {
+          &:hover {
+          }
+        }
+        [data-active-filter-gender='true'],
+        [data-active-filter-size='true'] {
+        }
+
+        .clothes-color-btn {
+          display: inline-block;
+        }
+      }
+    }
+
+    .shop-section-list {
+    }
+
+    &-list {
+    }
+  }
+  ////Media ShopSection END
 }
 
 ///Media only devices with :hover

@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ClothesCard from './smaller/clothesCard';
+import handleLargeScreen from '../utils/handleLargeScreen';
 
 const ShopSection = ({ clothesData, iterations }) => {
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  useEffect(() => {
+    handleLargeScreen(setIsLargeScreen);
+  }, []);
+
   const [filterGenderActive, setFilterGenderActive] = useState(null);
   const [filterSizeActive, setFilterSizeActive] = useState(null);
   const [filterColorActive, setFilterColorActive] = useState(null);
@@ -33,10 +40,6 @@ const ShopSection = ({ clothesData, iterations }) => {
     ['13 RED', 'clothes-13red'],
   ];
 
-  function handleClickFilter(index, filterBtnState, setFilterBtnState) {
-    if (index === filterBtnState) return setFilterBtnState(null);
-    return setFilterBtnState(index);
-  }
   function handleClickExpandFilters() {
     if (expandFiltersIcon === 'fa-plus') {
       setExpandFiltersIcon('fa-minus');
@@ -45,6 +48,11 @@ const ShopSection = ({ clothesData, iterations }) => {
       setExpandFiltersIcon('fa-plus');
       setShowShopSectionFilters(false);
     }
+  }
+
+  function handleClickFilter(index, filterBtnState, setFilterBtnState) {
+    if (index === filterBtnState) return setFilterBtnState(null);
+    return setFilterBtnState(index);
   }
 
   function getAllClothesFromJson() {
@@ -67,6 +75,7 @@ const ShopSection = ({ clothesData, iterations }) => {
       <button
         type="button"
         className="shop-section-expand-filters"
+        aria-expanded={showShopSectionFilters}
         onClick={handleClickExpandFilters}
       >
         Filters
@@ -76,10 +85,11 @@ const ShopSection = ({ clothesData, iterations }) => {
       <div
         className="shop-section-filters"
         data-show-shop-section-filters={showShopSectionFilters}
+        aria-hidden={!showShopSectionFilters && !isLargeScreen}
       >
-        <button type="button" className="shop-section-filters__btn">
+        <h3 type="button" className="shop-section-filters__btn">
           Gender
-        </button>
+        </h3>
 
         <ul className="shop-section-filters-list">
           {allGenders.map((gender, index) => (
@@ -93,13 +103,15 @@ const ShopSection = ({ clothesData, iterations }) => {
                   setFilterGenderActive
                 )
               }
+              key={uuidv4()}
+              changeTabIndex={showShopSectionFilters || isLargeScreen}
             />
           ))}
         </ul>
 
-        <button type="button" className="shop-section-filters__btn">
+        <h3 type="button" className="shop-section-filters__btn">
           Size
-        </button>
+        </h3>
         <ul className="shop-section-filters-list">
           {allSizes.map((size, index) => (
             <SizeFilterItem
@@ -108,13 +120,15 @@ const ShopSection = ({ clothesData, iterations }) => {
               onClick={() =>
                 handleClickFilter(index, filterSizeActive, setFilterSizeActive)
               }
+              changeTabIndex={showShopSectionFilters || isLargeScreen}
+              key={uuidv4()}
             />
           ))}
         </ul>
 
-        <button type="button" className="shop-section-filters__btn">
+        <h3 type="button" className="shop-section-filters__btn">
           Colors
-        </button>
+        </h3>
         <ul className="shop-section-filters-list">
           {allColors.map((color, index) => (
             <ColorFilterItem
@@ -128,13 +142,15 @@ const ShopSection = ({ clothesData, iterations }) => {
                   setFilterColorActive
                 )
               }
+              changeTabIndex={showShopSectionFilters || isLargeScreen}
+              key={uuidv4()}
             />
           ))}
         </ul>
 
-        <button type="button" className="shop-section-filters__btn">
+        <h3 type="button" className="shop-section-filters__btn">
           Price
-        </button>
+        </h3>
         <ul className="shop-section-filters-list" />
       </div>
 
@@ -145,36 +161,61 @@ const ShopSection = ({ clothesData, iterations }) => {
 
 export default ShopSection;
 
-const GenderFilterItem = ({ gender, isActiveGender, onClick }) => (
+const GenderFilterItem = ({
+  key,
+  gender,
+  isActiveGender,
+  changeTabIndex,
+  onClick,
+}) => (
   <button
+    key={key}
     type="button"
+    className="shop-section-filters-list__gender"
     data-active-filter-gender={isActiveGender}
     aria-pressed={isActiveGender}
-    className="shop-section-filters-list__gender"
+    tabIndex={changeTabIndex ? '0' : '-1'}
     onClick={onClick}
   >
     {gender}
   </button>
 );
 
-const SizeFilterItem = ({ size, isActiveSize, onClick }) => (
+const SizeFilterItem = ({
+  key,
+  size,
+  isActiveSize,
+  changeTabIndex,
+  onClick,
+}) => (
   <button
+    key={key}
     type="button"
+    className="shop-section-filters-list__size"
     data-active-filter-size={isActiveSize}
     aria-pressed={isActiveSize}
-    className="shop-section-filters-list__size"
+    tabIndex={changeTabIndex ? '0' : '-1'}
     onClick={onClick}
   >
     {size.toUpperCase()}
   </button>
 );
 
-const ColorFilterItem = ({ color, colorClass, isActiveColor, onClick }) => (
+const ColorFilterItem = ({
+  key,
+  color,
+  colorClass,
+  changeTabIndex,
+  isActiveColor,
+  onClick,
+}) => (
   <button
+    key={key}
     type="button"
-    aria-label={color}
     className={`clothes-color-btn ${colorClass}`}
     data-color-active={isActiveColor}
+    aria-label={color}
+    tabIndex={changeTabIndex ? '0' : '-1'}
     onClick={onClick}
   />
 );
