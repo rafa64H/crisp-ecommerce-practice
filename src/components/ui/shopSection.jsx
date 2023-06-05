@@ -87,7 +87,7 @@ const ShopSection = ({ clothesData, iterations }) => {
         data-show-shop-section-filters={showShopSectionFilters}
         aria-hidden={!showShopSectionFilters && !isLargeScreen}
       >
-        <h3 type="button" className="shop-section-filters__btn">
+        <h3 type="button" className="shop-section-filters__title">
           Gender
         </h3>
 
@@ -109,7 +109,7 @@ const ShopSection = ({ clothesData, iterations }) => {
           ))}
         </ul>
 
-        <h3 type="button" className="shop-section-filters__btn">
+        <h3 type="button" className="shop-section-filters__title">
           Size
         </h3>
         <ul className="shop-section-filters-list">
@@ -126,7 +126,7 @@ const ShopSection = ({ clothesData, iterations }) => {
           ))}
         </ul>
 
-        <h3 type="button" className="shop-section-filters__btn">
+        <h3 type="button" className="shop-section-filters__title">
           Colors
         </h3>
         <ul className="shop-section-filters-list">
@@ -148,7 +148,7 @@ const ShopSection = ({ clothesData, iterations }) => {
           ))}
         </ul>
 
-        <h3 type="button" className="shop-section-filters__btn">
+        <h3 type="button" className="shop-section-filters__title">
           Price
         </h3>
         <ul className="shop-section-filters-list" />

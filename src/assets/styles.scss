@@ -700,12 +700,6 @@ footer {
 
     transition: all 300ms;
 
-    &__btn {
-      font-family: $font-oswald;
-      font-size: $third-font-size;
-      font-weight: 900;
-    }
-
     &-list {
       &__gender,
       &__size {
@@ -1048,19 +1042,7 @@ footer {
 
       transition: none;
 
-      &__btn {
-      }
-
       &-list {
-        &__gender,
-        &__size {
-          &:hover {
-          }
-        }
-        [data-active-filter-gender='true'],
-        [data-active-filter-size='true'] {
-        }
-
         .clothes-color-btn {
           display: inline-block;
         }
