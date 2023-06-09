@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import ClothesCard from './smaller/clothesCard';
-import handleLargeScreen from '../utils/handleLargeScreen';
 
-const ShopSection = ({ clothesData, iterations }) => {
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
+import { FiltersContext } from '../../pages/shop/shopWithFilters';
 
-  useEffect(() => {
-    handleLargeScreen(setIsLargeScreen);
-  }, []);
+const FiltersForListClothesCard = ({ isLargeScreen }) => {
+  const { activeFilters, setActiveFilters } = useContext(FiltersContext);
 
   const [filterGenderActive, setFilterGenderActive] = useState(null);
   const [filterSizeActive, setFilterSizeActive] = useState(null);
@@ -50,28 +46,42 @@ const ShopSection = ({ clothesData, iterations }) => {
     }
   }
 
-  function handleClickFilter(index, filterBtnState, setFilterBtnState) {
-    if (index === filterBtnState) return setFilterBtnState(null);
-    return setFilterBtnState(index);
+  function handleClickFilter(
+    index,
+    filterName,
+    filterBtnState,
+    setFilterBtnState
+  ) {
+    if (index === filterBtnState) {
+      setFilterBtnState(null);
+    } else {
+      setFilterBtnState(index);
+    }
   }
 
-  function getAllClothesFromJson() {
-    const clothes = clothesData.map((item, index) => (
-      <ClothesCard
-        productName={item.productName}
-        productColors={item.colors}
-        productImg={item.colors[0].imageUrl}
-        gender={item.gender}
-        productPrice={item.price}
-        category={item.category}
-        key={uuidv4()}
-      />
-    ));
-    return clothes;
+  function handleChangeFiltersContext(
+    index,
+    filterBtnState,
+    filterName,
+    filterValue
+  ) {
+    if (filterName === 'gender') {
+      if (index === filterBtnState)
+        return setActiveFilters({ ...activeFilters, gender: null });
+      setActiveFilters({ ...activeFilters, gender: filterValue });
+    } else if (filterName === 'size') {
+      if (index === filterBtnState)
+        return setActiveFilters({ ...activeFilters, size: null });
+      setActiveFilters({ ...activeFilters, size: filterValue });
+    } else {
+      if (index === filterBtnState)
+        return setActiveFilters({ ...activeFilters, color: null });
+      setActiveFilters({ ...activeFilters, color: filterValue });
+    }
   }
 
   return (
-    <section className="shop-section">
+    <>
       <button
         type="button"
         className="shop-section-expand-filters"
@@ -88,7 +98,7 @@ const ShopSection = ({ clothesData, iterations }) => {
         aria-hidden={!showShopSectionFilters && !isLargeScreen}
       >
         <h3 type="button" className="shop-section-filters__title">
-          Gender
+          Gender filters
         </h3>
 
         <ul className="shop-section-filters-list">
@@ -96,13 +106,20 @@ const ShopSection = ({ clothesData, iterations }) => {
             <GenderFilterItem
               gender={gender}
               isActiveGender={filterGenderActive === index}
-              onClick={() =>
+              onClick={() => {
                 handleClickFilter(
                   index,
+                  gender,
                   filterGenderActive,
                   setFilterGenderActive
-                )
-              }
+                );
+                handleChangeFiltersContext(
+                  index,
+                  filterGenderActive,
+                  'gender', // filterName
+                  gender // filterValue
+                );
+              }}
               key={uuidv4()}
               changeTabIndex={showShopSectionFilters || isLargeScreen}
             />
@@ -110,16 +127,27 @@ const ShopSection = ({ clothesData, iterations }) => {
         </ul>
 
         <h3 type="button" className="shop-section-filters__title">
-          Size
+          Size filters
         </h3>
         <ul className="shop-section-filters-list">
           {allSizes.map((size, index) => (
             <SizeFilterItem
               size={`${size}`}
               isActiveSize={filterSizeActive === index}
-              onClick={() =>
-                handleClickFilter(index, filterSizeActive, setFilterSizeActive)
-              }
+              onClick={() => {
+                handleClickFilter(
+                  index,
+                  size.toUpperCase(),
+                  filterSizeActive,
+                  setFilterSizeActive
+                );
+                handleChangeFiltersContext(
+                  index,
+                  filterSizeActive,
+                  'size', // filterName
+                  size.toUpperCase() // filterValue
+                );
+              }}
               changeTabIndex={showShopSectionFilters || isLargeScreen}
               key={uuidv4()}
             />
@@ -127,7 +155,7 @@ const ShopSection = ({ clothesData, iterations }) => {
         </ul>
 
         <h3 type="button" className="shop-section-filters__title">
-          Colors
+          Colors filters
         </h3>
         <ul className="shop-section-filters-list">
           {allColors.map((color, index) => (
@@ -135,13 +163,20 @@ const ShopSection = ({ clothesData, iterations }) => {
               color={color[0]}
               colorClass={color[1]}
               isActiveColor={filterColorActive === index}
-              onClick={() =>
+              onClick={() => {
                 handleClickFilter(
                   index,
+                  color[0],
                   filterColorActive,
                   setFilterColorActive
-                )
-              }
+                );
+                handleChangeFiltersContext(
+                  index,
+                  filterColorActive,
+                  'color', // filterName
+                  color[0] // filterValue
+                );
+              }}
               changeTabIndex={showShopSectionFilters || isLargeScreen}
               key={uuidv4()}
             />
@@ -153,23 +188,19 @@ const ShopSection = ({ clothesData, iterations }) => {
         </h3>
         <ul className="shop-section-filters-list" />
       </div>
-
-      <ul className="shop-section-list">{getAllClothesFromJson()}</ul>
-    </section>
+    </>
   );
 };
 
-export default ShopSection;
+export default FiltersForListClothesCard;
 
 const GenderFilterItem = ({
-  key,
   gender,
   isActiveGender,
   changeTabIndex,
   onClick,
 }) => (
   <button
-    key={key}
     type="button"
     className="shop-section-filters-list__gender"
     data-active-filter-gender={isActiveGender}
@@ -181,15 +212,8 @@ const GenderFilterItem = ({
   </button>
 );
 
-const SizeFilterItem = ({
-  key,
-  size,
-  isActiveSize,
-  changeTabIndex,
-  onClick,
-}) => (
+const SizeFilterItem = ({ size, isActiveSize, changeTabIndex, onClick }) => (
   <button
-    key={key}
     type="button"
     className="shop-section-filters-list__size"
     data-active-filter-size={isActiveSize}
@@ -202,7 +226,6 @@ const SizeFilterItem = ({
 );
 
 const ColorFilterItem = ({
-  key,
   color,
   colorClass,
   changeTabIndex,
@@ -210,7 +233,6 @@ const ColorFilterItem = ({
   onClick,
 }) => (
   <button
-    key={key}
     type="button"
     className={`clothes-color-btn ${colorClass}`}
     data-color-active={isActiveColor}
