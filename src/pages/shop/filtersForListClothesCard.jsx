@@ -1,10 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { FiltersContext } from '../../pages/shop/shopWithFilters';
+import { FiltersContext } from './shopWithFilters';
 
 const FiltersForListClothesCard = ({ isLargeScreen }) => {
-  const { activeFilters, setActiveFilters } = useContext(FiltersContext);
+  const { activeFilters, setActiveFilters, applyFilters, setApplyFilters } =
+    useContext(FiltersContext);
 
   const [filterGenderActive, setFilterGenderActive] = useState(null);
   const [filterSizeActive, setFilterSizeActive] = useState(null);
@@ -187,6 +188,15 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
           Price
         </h3>
         <ul className="shop-section-filters-list" />
+
+        <button
+          type="button"
+          tabIndex={showShopSectionFilters || isLargeScreen ? '0' : '-1'}
+          className="link-btn-component"
+          onClick={() => setApplyFilters((prev) => prev + 1)}
+        >
+          Apply filters
+        </button>
       </div>
     </>
   );

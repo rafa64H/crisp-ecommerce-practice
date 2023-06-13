@@ -9,7 +9,6 @@ import clothesData from '../../data/clothes_data.json';
 import '../../assets/styles.scss';
 import Header from '../../components/ui/header';
 import SectionTwo from '../../components/ui/section2';
-import ShopSection from '../../components/ui/listClothesCard';
 import SectionThree from '../../components/ui/section3';
 import Footer from '../../components/ui/footer';
 import ClothesListWithFilters from './shopWithFilters';
@@ -25,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     />
 
     <ClothesListWithFilters clothesData={clothesData[0]} />
+    <SectionThree />
 
     <Footer />
   </React.StrictMode>

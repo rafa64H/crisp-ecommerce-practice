@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
-import ListClothesCard from '../../components/ui/listClothesCard';
-import FiltersForListClothesCard from '../../components/ui/filtersForListClothesCard';
+import ListClothesCardShopPage from './listClothesCardShopPage';
+import FiltersForListClothesCard from './filtersForListClothesCard';
 
 export const FiltersContext = React.createContext();
 
@@ -13,6 +13,7 @@ const ClothesListWithFilters = ({ clothesData }) => {
     size: null,
     color: null,
   });
+  const [applyFilters, setApplyFilters] = useState(0);
 
   useEffect(() => {
     handleLargeScreen(setIsLargeScreen);
@@ -20,9 +21,16 @@ const ClothesListWithFilters = ({ clothesData }) => {
 
   return (
     <section className="shop-section">
-      <FiltersContext.Provider value={{ activeFilters, setActiveFilters }}>
+      <FiltersContext.Provider
+        value={{
+          activeFilters,
+          setActiveFilters,
+          applyFilters,
+          setApplyFilters,
+        }}
+      >
         <FiltersForListClothesCard isLargeScreen={isLargeScreen} />
-        <ListClothesCard
+        <ListClothesCardShopPage
           clothesData={clothesData}
           isLargeScreen={isLargeScreen}
         />

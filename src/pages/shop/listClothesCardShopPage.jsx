@@ -1,34 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import ClothesCard from './smaller/clothesCard';
-import { FiltersContext } from '../../pages/shop/shopWithFilters';
+import ClothesCard from '../../components/ui/smaller/clothesCard';
+import getAllClothesFromJson from '../../components/utils/getAllClothesFromJson';
+import { FiltersContext } from './shopWithFilters';
 // ITERATIONS PROP ALSO COUNTS THE 0
 
-const ListClothesCard = ({ clothesData, isLargeScreen }) => {
-  const { activeFilters, setActiveFilters } = useContext(FiltersContext);
-  const [itemsToShow, setItemsToShow] = useState(getAllClothesFromJson(true));
-
-  function getAllClothesFromJson(withoutFilters) {
-    // For example: when loading the page the first time
-    if (withoutFilters) {
-      const clothes = clothesData.map((item, index) => (
-        <ClothesCard
-          productName={item.productName}
-          productColors={item.colors}
-          productImg={item.colors[0].imageUrl}
-          gender={item.gender}
-          productPrice={item.price}
-          category={item.category}
-          key={uuidv4()}
-        />
-      ));
-
-      return clothes;
-    }
-
-    const clothes = clothesData.map((item, index) => item);
-    return clothes;
-  }
+const ListClothesCardShopPage = ({ clothesData, isLargeScreen }) => {
+  const { activeFilters, setActiveFilters, applyFilters, setApplyFilters } =
+    useContext(FiltersContext);
+  const [itemsToShow, setItemsToShow] = useState(
+    getAllClothesFromJson(true, clothesData)
+  );
 
   function filterItems(filterGender, filterSize, filterColor) {
     const filteredClothes = clothesData
@@ -71,11 +53,11 @@ const ListClothesCard = ({ clothesData, isLargeScreen }) => {
   }
 
   useEffect(() => {
-    setItemsToShow(getAllClothesFromJson(true));
+    setItemsToShow(getAllClothesFromJson(true, clothesData));
     setItemsToShow(
       filterItems(activeFilters.gender, activeFilters.size, activeFilters.color)
     );
-  }, [activeFilters]);
+  }, [applyFilters]);
 
   /*
   <ClothesCard
@@ -92,4 +74,4 @@ const ListClothesCard = ({ clothesData, isLargeScreen }) => {
   return <ul className="list-clothes-card">{itemsToShow}</ul>;
 };
 
-export default ListClothesCard;
+export default ListClothesCardShopPage;
