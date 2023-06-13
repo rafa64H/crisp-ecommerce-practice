@@ -12,12 +12,17 @@ const ClothesListWithFilters = ({ clothesData }) => {
     gender: null,
     size: null,
     color: null,
+    maxPrice: 200,
   });
   const [applyFilters, setApplyFilters] = useState(0);
 
   useEffect(() => {
     handleLargeScreen(setIsLargeScreen);
   }, []);
+
+  useEffect(() => {
+    console.log(activeFilters);
+  }, [activeFilters]);
 
   return (
     <section className="shop-section">

@@ -12,14 +12,14 @@ const ListClothesCardShopPage = ({ clothesData, isLargeScreen }) => {
     getAllClothesFromJson(true, clothesData)
   );
 
-  function filterItems(filterGender, filterSize, filterColor) {
+  function filterItems(filterGender, filterSize, filterColor, filterMaxPrice) {
     const filteredClothes = clothesData
       // filter by gender
       .filter((cloth) => {
         if (filterGender === null) return cloth;
         if (cloth.gender === filterGender) return cloth;
       })
-      // filter by the size
+      // Then filter by the size
       .filter((cloth) => {
         if (filterSize === null) return cloth;
         if (
@@ -29,11 +29,15 @@ const ListClothesCardShopPage = ({ clothesData, isLargeScreen }) => {
         )
           return cloth;
       })
-      // filter by the color
+      // Then filter by the color
       .filter((cloth) => {
         if (filterColor === null) return cloth;
         if (cloth.colors.some((colorObj) => colorObj.name === filterColor))
           return cloth;
+      })
+      .filter((cloth) => {
+        if (filterMaxPrice === null) return cloth;
+        if (cloth.price <= filterMaxPrice) return cloth;
       });
 
     const clothes = filteredClothes.map((item, index) => (
@@ -55,7 +59,12 @@ const ListClothesCardShopPage = ({ clothesData, isLargeScreen }) => {
   useEffect(() => {
     setItemsToShow(getAllClothesFromJson(true, clothesData));
     setItemsToShow(
-      filterItems(activeFilters.gender, activeFilters.size, activeFilters.color)
+      filterItems(
+        activeFilters.gender,
+        activeFilters.size,
+        activeFilters.color,
+        activeFilters.maxPrice
+      )
     );
   }, [applyFilters]);
 

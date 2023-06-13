@@ -80,6 +80,16 @@ i {
   color: white;
   font-size: clamp(1.7rem, 1.6vw, 3rem);
 }
+
+////hide arrows on input number
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
 //Universal selector and tags END
 
 //----------------------------------------------------------------

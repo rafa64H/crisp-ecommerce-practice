@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { FiltersContext } from './shopWithFilters';
@@ -13,6 +13,12 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
 
   const [showShopSectionFilters, setShowShopSectionFilters] = useState(false);
   const [expandFiltersIcon, setExpandFiltersIcon] = useState('fa-plus');
+
+  const [maxPrice, setMaxPrice] = useState(200);
+
+  useEffect(() => {
+    setActiveFilters({ ...activeFilters, maxPrice: parseFloat(maxPrice) });
+  }, [maxPrice]);
 
   const allGenders = ['MEN', 'WOMEN', 'UNISEX'];
   const allSizes = ['xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', '3xl'];
@@ -187,10 +193,21 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
         <h3 type="button" className="shop-section-filters__title">
           Price
         </h3>
+
+        <input
+          type="range"
+          aria-label="Set the maximum price"
+          min="0"
+          max="200"
+          step="8"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+        />
         <ul className="shop-section-filters-list" />
 
         <button
           type="button"
+          aria-label={`Apply filters, current filters are Gender ${activeFilters.gender}. Size ${activeFilters.size}. Color ${activeFilters.color}. Max price ${activeFilters.maxPrice}`}
           tabIndex={showShopSectionFilters || isLargeScreen ? '0' : '-1'}
           className="link-btn-component"
           onClick={() => setApplyFilters((prev) => prev + 1)}
