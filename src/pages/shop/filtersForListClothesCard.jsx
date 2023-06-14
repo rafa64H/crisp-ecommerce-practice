@@ -191,7 +191,7 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
         </ul>
 
         <h3 type="button" className="shop-section-filters__title">
-          Price
+          Maximum Price
         </h3>
 
         <input
@@ -203,6 +203,7 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
           value={maxPrice}
           onChange={(e) => setMaxPrice(e.target.value)}
         />
+        <p>{maxPrice}$</p>
         <ul className="shop-section-filters-list" />
 
         <button

@@ -90,6 +90,38 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+//remove all default styles on input range
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+// Chrome, Safari, Opera, Edge and Chromium input range
+input[type='range']::-webkit-slider-runnable-track {
+  background: $first-color;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  border: none;
+  border-radius: 50%;
+  background-color: $first-color;
+  padding: 0.25rem;
+}
+
+// Firefox input range
+input[type='range']::-moz-range-track {
+  background: white;
+  border: 1px solid $first-color;
+}
+input[type='range']::-moz-range-thumb {
+  border: none; /*Removes extra plies*/
+  border-radius: 50%; /*Removes default border-radius that FF applies*/
+  background-color: $first-color;
+}
 //Universal selector and tags END
 
 //----------------------------------------------------------------
@@ -677,6 +709,8 @@ footer {
 }
 
 .shop-section {
+  margin-bottom: 1em;
+
   &-expand-filters {
     display: flex;
     justify-content: space-between;
@@ -1046,6 +1080,7 @@ footer {
       position: static;
 
       border-right: 2px solid $light-gray;
+      padding: 0.5em;
 
       transform: scaleY(1);
       opacity: 1;
