@@ -1,4 +1,6 @@
 import { React, useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../config-firebase/firebase';
 
 import CompanyLogo from './smaller/companyLogo';
 import handleLargeScreen from '../utils/handleLargeScreen';
@@ -7,8 +9,20 @@ const Header = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
 
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+
   useEffect(() => {
     handleLargeScreen(setIsLargeScreen);
+  }, []);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserLoggedIn(true);
+      } else {
+        setUserLoggedIn(false);
+      }
+    });
   }, []);
 
   return (
@@ -46,15 +60,19 @@ const Header = () => {
           <SearchBtn desktopOrMobile="desktop" />
 
           <div className="login-sign-cont">
-            <NavItem
+            <NavItemAccount
               text="Sign in"
+              userLoggedIn={userLoggedIn}
               shouldShowTabIndex={isLargeScreen || isNavOpen}
             />
-            <NavItem
-            link={'./create-account.html'}
+            <NavItemAccount
+              link="./create-account.html"
               text="Create an account"
+              userLoggedIn={userLoggedIn}
               shouldShowTabIndex={isLargeScreen || isNavOpen}
             />
+            <ProfileLink userLoggedIn={userLoggedIn} />
+
             <ShopBtn desktopOrMobile="desktop" />
           </div>
         </ul>
@@ -153,6 +171,29 @@ const NavItem = ({ text, link, shouldShowTabIndex }) => (
   <li className="nav-item">
     <a href={link} tabIndex={shouldShowTabIndex ? 0 : -1} className="nav-link">
       {text}
+    </a>
+  </li>
+);
+
+const NavItemAccount = ({ text, userLoggedIn, link, shouldShowTabIndex }) => (
+  <li
+    className="nav-item"
+    data-user-loggedin-nav-item-account={`${userLoggedIn}`}
+  >
+    <a href={link} tabIndex={shouldShowTabIndex ? 0 : -1} className="nav-link">
+      {text}
+    </a>
+  </li>
+);
+
+const ProfileLink = ({ userLoggedIn, link, shouldShowTabIndex }) => (
+  <li className="nav-item" data-user-loggedin-profile-link={`${userLoggedIn}`}>
+    <a
+      href={link}
+      tabIndex={shouldShowTabIndex ? 0 : -1}
+      className="nav-link--profile"
+    >
+      <i className="fa-solid fa-user" />
     </a>
   </li>
 );

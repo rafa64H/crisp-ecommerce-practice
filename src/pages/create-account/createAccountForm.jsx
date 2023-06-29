@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createUser } from '../../components/utils/authFunctions';
+import { auth } from '../../config-firebase/firebase';
 
 const CreateAccountForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -44,7 +45,7 @@ const CreateAccountForm = () => {
     }
 
     try {
-      createUser(
+      await createUser(
         firstNameRef.current.value,
         lastNameRef.current.value,
         emailRef.current.value,

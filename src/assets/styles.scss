@@ -379,10 +379,10 @@ header {
   }
 
   [data-nav-list-open='true'] {
-    transform: scale(1) translateY(62%);
+    transform: scale(1) translateY(60%);
   }
   [data-nav-list-open='false'] {
-    transform: scale(0) translateY(62%);
+    transform: scale(0) translateY(60%);
   }
   nav {
     position: absolute;
@@ -399,6 +399,7 @@ header {
       list-style: none;
 
       .nav-item {
+        display: block;
         margin: 0.5em 0;
 
         color: white;
@@ -408,11 +409,30 @@ header {
           color: white;
         }
       }
+      [data-user-loggedin-nav-item-account='true'] {
+        display: none;
+      }
       .nav-item--search {
         display: none;
       }
       .login-sign-cont {
         margin-top: 1.5em;
+      }
+      .nav-link--profile {
+        display: inline-block;
+
+        padding: 0.5em 0.7em;
+        border: 2px solid transparent;
+        border-radius: 50%;
+
+        transition: all 200ms;
+        &:hover {
+          background-color: $second-color;
+          border-color: white;
+        }
+      }
+      [data-user-loggedin-profile-link='false'] {
+        display: none;
       }
     }
   }
