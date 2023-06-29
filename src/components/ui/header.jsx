@@ -51,6 +51,7 @@ const Header = () => {
               shouldShowTabIndex={isLargeScreen || isNavOpen}
             />
             <NavItem
+            link={'./create-account.html'}
               text="Create an account"
               shouldShowTabIndex={isLargeScreen || isNavOpen}
             />

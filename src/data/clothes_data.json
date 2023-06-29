@@ -301,8 +301,8 @@
       "productName": "Ribbed Square Neck Sleeveless Dress",
       "gender": "WOMEN",
       "productId": 457823,
-      "reviewScore": 43,
-      "totalReviews": 10,
+      "reviewScore": 4.7,
+      "totalReviews": 15,
       "price": 45,
       "priceString": "45.00",
       "productDescription": "Stylish square neckline and ribbed fabric for a perfect fit.",
@@ -355,13 +355,13 @@
     },
 
     {
-      "productName": "Ribbed Square Neck Sleeveless Dress",
+      "productName": "Ribbed Tank Top",
       "gender": "WOMEN",
-      "productId": 457823,
+      "productId": 458965,
       "reviewScore": 4.3,
       "totalReviews": 10,
-      "price": 45,
-      "priceString": "45.00",
+      "price": 12.4,
+      "priceString": "12.40",
       "productDescription": "Stylish square neckline and ribbed fabric for a perfect fit.",
       "productOverview": [
         "Stretchy cotton ribbed fabric.",

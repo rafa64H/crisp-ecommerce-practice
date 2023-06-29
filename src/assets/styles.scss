@@ -52,7 +52,9 @@ h4 {
   font-size: $fourth-font-size;
   font-weight: 900;
 }
-p {
+p,
+label,
+aside {
   font-family: $font-roboto;
   font-size: $fourth-font-size;
   color: $darker-gray;
@@ -73,6 +75,10 @@ button {
   background-color: transparent;
   border: transparent;
 
+  cursor: pointer;
+}
+
+input[type='submit'] {
   cursor: pointer;
 }
 
@@ -296,6 +302,65 @@ input[type='range']::-moz-range-thumb {
 }
 ////Also in clothes-color-btn END
 
+.form-account {
+  width: min(95%, 40rem);
+  margin: 2em auto;
+  border-top: 2px solid $light-gray;
+
+  .form-account__title {
+    color: $darker-gray;
+  }
+}
+
+.error-message-form {
+  display: inline-block;
+  color: $second-color;
+  margin: 1em 0;
+}
+
+.form-input-container {
+  margin: 1em 0;
+
+  .form-input-label {
+    display: block;
+
+    .input-required {
+      color: red;
+    }
+  }
+
+  .form-input-typing {
+    width: 100%;
+    padding: 0.75em;
+    border: 2px solid $darker-gray;
+  }
+  [data-error-input-typing='true'] {
+    border-color: $second-color;
+  }
+}
+
+.black-btn {
+  display: block;
+
+  padding: 1em;
+  border: 2px solid transparent;
+  margin: 0 auto;
+  background-color: $first-color;
+
+  color: white;
+  font-size: $fourth-font-size;
+  font-family: $font-oswald;
+  font-weight: 600;
+
+  transition: all 200ms;
+
+  &:hover {
+    background-color: white;
+    border-color: $first-color;
+
+    color: $first-color;
+  }
+}
 //Very used components END
 
 //----------------------------------------------------------------
@@ -784,6 +849,14 @@ footer {
 
 //shopSection END
 
+.create-account-title {
+  width: 95%;
+  margin: 1em auto;
+
+  text-align: center;
+  font-size: $second-font-size;
+}
+
 //----------------------------------------------------------------
 
 //Media Queries
@@ -1095,6 +1168,18 @@ footer {
     }
   }
   ////Media ShopSection END
+
+  .form-account {
+    border: 2px solid $light-gray;
+    padding: 1em;
+  }
+
+  .form-input-container {
+    margin: 1em 0;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+  }
 }
 
 ///Media only devices with :hover

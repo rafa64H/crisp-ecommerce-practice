@@ -200,9 +200,11 @@ const FooterSectionTitle = ({
     setIsListOpen(!isListOpen);
 
     function changeIconBtn(boolean) {
-      if (boolean) return setIconBtnFooter('fa-plus');
-
-      return setIconBtnFooter('fa-minus');
+      if (boolean) {
+        setIconBtnFooter('fa-plus');
+      } else {
+        return setIconBtnFooter('fa-minus');
+      }
     }
   }
 
@@ -222,7 +224,7 @@ const FooterSectionTitle = ({
       className="footer-section__btn"
     >
       {footerSectionTitleText}
-      <i className="fa-solid fa-plus footer-section__btn-icon" />
+      <i className={`fa-solid ${iconBtnFooter} footer-section__btn-icon`} />
     </button>
   );
 };

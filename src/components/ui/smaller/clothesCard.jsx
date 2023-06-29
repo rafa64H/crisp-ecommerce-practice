@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 const ClothesCard = ({
+  link,
   productImg,
   category,
   gender,
@@ -41,7 +42,7 @@ const ClothesCard = ({
 
   return (
     <li className="clothes-card-li">
-      <a href="#" className="clothes-card">
+      <a href={link} className="clothes-card">
         <img className="clothes-card__img" src={imageSrc} alt={productName} />
 
         <div className="clothes-card-text">

@@ -6,6 +6,7 @@ function getAllClothesFromJson(returnAsComponents, clothesData) {
   if (returnAsComponents) {
     const clothes = clothesData.map((item, index) => (
       <ClothesCard
+      link={`./product.html?productId=${item.productId}`}
         productName={item.productName}
         productColors={item.colors}
         productImg={item.colors[0].imageUrl}

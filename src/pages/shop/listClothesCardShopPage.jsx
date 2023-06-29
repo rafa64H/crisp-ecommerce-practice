@@ -35,6 +35,7 @@ const ListClothesCardShopPage = ({ clothesData, isLargeScreen }) => {
         if (cloth.colors.some((colorObj) => colorObj.name === filterColor))
           return cloth;
       })
+      // Then filter by the maxPrice
       .filter((cloth) => {
         if (filterMaxPrice === null) return cloth;
         if (cloth.price <= filterMaxPrice) return cloth;
@@ -42,6 +43,7 @@ const ListClothesCardShopPage = ({ clothesData, isLargeScreen }) => {
 
     const clothes = filteredClothes.map((item, index) => (
       <ClothesCard
+        link={`./product.html?productId=${item.productId}`}
         productName={item.productName}
         productColors={item.colors}
         productImg={item.colors[0].imageUrl}
@@ -68,18 +70,6 @@ const ListClothesCardShopPage = ({ clothesData, isLargeScreen }) => {
     );
   }, [applyFilters]);
 
-  /*
-  <ClothesCard
-  productName={item.productName}
-  productColors={item.colors}
-  productImg={item.colors[0].imageUrl}
-  gender={item.gender}
-  productPrice={item.price}
-  category={item.category}
-  key={uuidv4()}
-/>
-*/
-  //
   return <ul className="list-clothes-card">{itemsToShow}</ul>;
 };
 
