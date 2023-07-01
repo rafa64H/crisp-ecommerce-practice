@@ -57,6 +57,10 @@ const CreateAccountForm = () => {
     }
   }
 
+  function handleClickInput(e) {
+    e.target.dataset.errorInputTyping = 'false';
+  }
+
   return (
     <>
       <h1 className="create-account-title">Create New Customer Account</h1>
@@ -79,6 +83,7 @@ const CreateAccountForm = () => {
             id="first-name"
             className="form-input-typing"
             ref={firstNameRef}
+            onClick={(e) => handleClickInput(e)}
             placeholder="First name"
           />
         </div>
@@ -92,6 +97,7 @@ const CreateAccountForm = () => {
             id="last-name"
             className="form-input-typing"
             ref={lastNameRef}
+            onClick={(e) => handleClickInput(e)}
             placeholder="Last name"
           />
         </div>
@@ -107,6 +113,7 @@ const CreateAccountForm = () => {
             id="email"
             className="form-input-typing"
             ref={emailRef}
+            onClick={(e) => handleClickInput(e)}
             placeholder="ThisIsExample@example.com"
           />
         </div>
@@ -119,6 +126,7 @@ const CreateAccountForm = () => {
             type="password"
             id="password"
             ref={passwordRef}
+            onClick={(e) => handleClickInput(e)}
             className="form-input-typing"
             placeholder="Password"
           />
@@ -133,6 +141,7 @@ const CreateAccountForm = () => {
             id="confirm-password"
             className="form-input-typing"
             ref={confirmPasswordRef}
+            onClick={(e) => handleClickInput(e)}
             placeholder="Confirm password"
           />
         </div>

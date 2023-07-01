@@ -9,13 +9,36 @@ const LoginForm = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    try {
-      await signIn(emailRef.current.value, passwordRef.current.value);
-      window.location.href = 'index.html';
-    } catch (err) {
-      console.log(err);
-      setErrorMessage(err);
+    const signInValue = await signIn(
+      emailRef.current.value,
+      passwordRef.current.value
+    );
+
+    if (
+      signInValue === 'Firebase: Error (auth/missing-password).' ||
+      signInValue === 'Firebase: Error (auth/wrong-password).' ||
+      signInValue === 'Firebase: Error (auth/invalid-email).' ||
+      signInValue === 'Firebase: Error (auth/user-not-found).'
+    ) {
+      setErrorMessage('* Invalid Email or password.');
+      emailRef.current.dataset.errorInputTyping = 'true';
+      passwordRef.current.dataset.errorInputTyping = 'true';
+      return null;
     }
+    if (signInValue === 'Firebase: Error (auth/too-many-requests).') {
+      setErrorMessage('* Too many requests, try again later');
+      return null;
+    }
+    if (signInValue === 'Firebase: Error (auth/network-error).') {
+      setErrorMessage('* Network error');
+      return null;
+    }
+
+    window.location.href = 'index.html';
+  }
+
+  function handleClickInput(e) {
+    e.target.dataset.errorInputTyping = 'false';
   }
 
   return (
@@ -40,6 +63,7 @@ const LoginForm = () => {
             id="email"
             className="form-input-typing"
             ref={emailRef}
+            onClick={(e) => handleClickInput(e)}
             placeholder="ThisIsExample@example.com"
           />
         </div>
@@ -52,6 +76,7 @@ const LoginForm = () => {
             type="password"
             id="password"
             ref={passwordRef}
+            onClick={(e) => handleClickInput(e)}
             className="form-input-typing"
             placeholder="Password"
           />
