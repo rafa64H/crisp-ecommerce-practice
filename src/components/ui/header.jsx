@@ -72,7 +72,10 @@ const Header = () => {
               userLoggedIn={userLoggedIn}
               shouldShowTabIndex={isLargeScreen || isNavOpen}
             />
-            <ProfileLink userLoggedIn={userLoggedIn} />
+            <ProfileLink
+              shouldShowTabIndex={isLargeScreen || isNavOpen}
+              userLoggedIn={userLoggedIn}
+            />
 
             <ShopBtn desktopOrMobile="desktop" />
           </div>
@@ -193,6 +196,7 @@ const ProfileLink = ({ userLoggedIn, link, shouldShowTabIndex }) => (
       href={link}
       tabIndex={shouldShowTabIndex ? 0 : -1}
       className="nav-link--profile"
+      aria-label="Go to account settings"
     >
       <i className="fa-solid fa-user" />
     </a>

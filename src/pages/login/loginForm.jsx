@@ -20,17 +20,17 @@ const LoginForm = () => {
       signInValue === 'Firebase: Error (auth/invalid-email).' ||
       signInValue === 'Firebase: Error (auth/user-not-found).'
     ) {
-      setErrorMessage('* Invalid Email or password.');
+      setErrorMessage('Error: Invalid Email or password.');
       emailRef.current.dataset.errorInputTyping = 'true';
       passwordRef.current.dataset.errorInputTyping = 'true';
       return null;
     }
     if (signInValue === 'Firebase: Error (auth/too-many-requests).') {
-      setErrorMessage('* Too many requests, try again later');
+      setErrorMessage('Error: Too many requests, try again later');
       return null;
     }
     if (signInValue === 'Firebase: Error (auth/network-error).') {
-      setErrorMessage('* Network error');
+      setErrorMessage('Error: Network error');
       return null;
     }
 
@@ -39,6 +39,7 @@ const LoginForm = () => {
 
   function handleClickInput(e) {
     e.target.dataset.errorInputTyping = 'false';
+    setErrorMessage('');
   }
 
   return (
@@ -50,7 +51,11 @@ const LoginForm = () => {
         className="form-account"
         onSubmit={(e) => handleSubmit(e)}
       >
-        <aside className="error-message-form" role="alert">
+        <aside
+          className="error-message-form"
+          role="alert"
+          aria-live="assertive"
+        >
           {errorMessage}
         </aside>
 
@@ -82,7 +87,12 @@ const LoginForm = () => {
           />
         </div>
 
-        <input type="submit" value="Login" className="black-btn" />
+        <input
+          type="submit"
+          aria-label="Login, after login you will be redirected to home page"
+          value="Login"
+          className="black-btn"
+        />
       </form>
     </>
   );

@@ -34,11 +34,11 @@ const CreateAccountForm = () => {
         (emptyRef) => (emptyRef.current.dataset.errorInputTyping = 'true')
       );
 
-      setErrorMessage('* Complete the required spaces');
+      setErrorMessage('Error: Complete the required spaces');
       return null;
     }
     if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-      setErrorMessage('* Passwords do not match');
+      setErrorMessage('Error: Passwords do not match');
       passwordRef.current.dataset.errorInputTyping = 'true';
       confirmPasswordRef.current.dataset.errorInputTyping = 'true';
       return null;
@@ -59,6 +59,7 @@ const CreateAccountForm = () => {
 
   function handleClickInput(e) {
     e.target.dataset.errorInputTyping = 'false';
+    setErrorMessage('');
   }
 
   return (
@@ -70,7 +71,11 @@ const CreateAccountForm = () => {
         className="form-account"
         onSubmit={(e) => handleSubmit(e)}
       >
-        <aside className="error-message-form" role="alert">
+        <aside
+          className="error-message-form"
+          role="alert"
+          aria-live="assertive"
+        >
           {errorMessage}
         </aside>
         <h2 className="form-account__title">Personal information</h2>
@@ -146,7 +151,12 @@ const CreateAccountForm = () => {
           />
         </div>
 
-        <input type="submit" value="Create account" className="black-btn" />
+        <input
+          type="submit"
+          aria-label="Sign up, after creating account you will be redirected to home page"
+          value="Create account"
+          className="black-btn"
+        />
       </form>
     </>
   );
