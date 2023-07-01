@@ -20,10 +20,6 @@ const ClothesListWithFilters = ({ clothesData }) => {
     handleLargeScreen(setIsLargeScreen);
   }, []);
 
-  useEffect(() => {
-    console.log(activeFilters);
-  }, [activeFilters]);
-
   return (
     <section className="shop-section">
       <FiltersContext.Provider

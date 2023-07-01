@@ -1,4 +1,8 @@
-import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
 import {
   collection,
   addDoc,
@@ -30,5 +34,17 @@ export async function createUser(firstName, lastName, email, password) {
     });
   } catch (err) {
     console.error(err);
+  }
+}
+
+export async function signIn(email, password) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+  } catch (err) {
+    console.log(err);
   }
 }

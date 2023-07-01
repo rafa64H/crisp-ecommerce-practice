@@ -61,6 +61,7 @@ const Header = () => {
 
           <div className="login-sign-cont">
             <NavItemAccount
+              link="./login.html"
               text="Sign in"
               userLoggedIn={userLoggedIn}
               shouldShowTabIndex={isLargeScreen || isNavOpen}
