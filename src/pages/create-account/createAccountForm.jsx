@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { createUser } from '../../components/utils/authFunctions';
+import { createUser } from '../../components/utils/firebaseFunctions';
 import { auth } from '../../config-firebase/firebase';
 
 const CreateAccountForm = () => {
@@ -57,7 +57,7 @@ const CreateAccountForm = () => {
     }
   }
 
-  function handleClickInput(e) {
+  function handleFocusInput(e) {
     e.target.dataset.errorInputTyping = 'false';
     setErrorMessage('');
   }
@@ -88,7 +88,7 @@ const CreateAccountForm = () => {
             id="first-name"
             className="form-input-typing"
             ref={firstNameRef}
-            onClick={(e) => handleClickInput(e)}
+            onFocus={(e) => handleFocusInput(e)}
             placeholder="First name"
           />
         </div>
@@ -102,7 +102,7 @@ const CreateAccountForm = () => {
             id="last-name"
             className="form-input-typing"
             ref={lastNameRef}
-            onClick={(e) => handleClickInput(e)}
+            onFocus={(e) => handleFocusInput(e)}
             placeholder="Last name"
           />
         </div>
@@ -118,7 +118,7 @@ const CreateAccountForm = () => {
             id="email"
             className="form-input-typing"
             ref={emailRef}
-            onClick={(e) => handleClickInput(e)}
+            onFocus={(e) => handleFocusInput(e)}
             placeholder="ThisIsExample@example.com"
           />
         </div>
@@ -131,7 +131,7 @@ const CreateAccountForm = () => {
             type="password"
             id="password"
             ref={passwordRef}
-            onClick={(e) => handleClickInput(e)}
+            onFocus={(e) => handleFocusInput(e)}
             className="form-input-typing"
             placeholder="Password"
           />
@@ -146,7 +146,7 @@ const CreateAccountForm = () => {
             id="confirm-password"
             className="form-input-typing"
             ref={confirmPasswordRef}
-            onClick={(e) => handleClickInput(e)}
+            onFocus={(e) => handleFocusInput(e)}
             placeholder="Confirm password"
           />
         </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { signIn } from '../../components/utils/authFunctions';
+import { signIn } from '../../components/utils/firebaseFunctions';
 
 const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -37,7 +37,7 @@ const LoginForm = () => {
     window.location.href = 'index.html';
   }
 
-  function handleClickInput(e) {
+  function handleFocusInput(e) {
     e.target.dataset.errorInputTyping = 'false';
     setErrorMessage('');
   }
@@ -68,7 +68,7 @@ const LoginForm = () => {
             id="email"
             className="form-input-typing"
             ref={emailRef}
-            onClick={(e) => handleClickInput(e)}
+            onFocus={(e) => handleFocusInput(e)}
             placeholder="ThisIsExample@example.com"
           />
         </div>
@@ -81,7 +81,7 @@ const LoginForm = () => {
             type="password"
             id="password"
             ref={passwordRef}
-            onClick={(e) => handleClickInput(e)}
+            onFocus={(e) => handleFocusInput(e)}
             className="form-input-typing"
             placeholder="Password"
           />

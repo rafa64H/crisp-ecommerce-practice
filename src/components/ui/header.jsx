@@ -10,6 +10,7 @@ const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [userEmailVerified, setUserEmailVerified] = useState(true);
 
   useEffect(() => {
     handleLargeScreen(setIsLargeScreen);
@@ -19,6 +20,9 @@ const Header = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserLoggedIn(true);
+        if (!user.emailVerified) {
+          setUserEmailVerified(false);
+        }
       } else {
         setUserLoggedIn(false);
       }
@@ -73,8 +77,10 @@ const Header = () => {
               shouldShowTabIndex={isLargeScreen || isNavOpen}
             />
             <ProfileLink
+              link="./account.html"
               shouldShowTabIndex={isLargeScreen || isNavOpen}
               userLoggedIn={userLoggedIn}
+              userEmailVerified={userEmailVerified}
             />
 
             <ShopBtn desktopOrMobile="desktop" />
@@ -190,7 +196,12 @@ const NavItemAccount = ({ text, userLoggedIn, link, shouldShowTabIndex }) => (
   </li>
 );
 
-const ProfileLink = ({ userLoggedIn, link, shouldShowTabIndex }) => (
+const ProfileLink = ({
+  userLoggedIn,
+  userEmailVerified,
+  link,
+  shouldShowTabIndex,
+}) => (
   <li className="nav-item" data-user-loggedin-profile-link={`${userLoggedIn}`}>
     <a
       href={link}
@@ -200,5 +211,12 @@ const ProfileLink = ({ userLoggedIn, link, shouldShowTabIndex }) => (
     >
       <i className="fa-solid fa-user" />
     </a>
+
+    <p
+      className="header-not-verified-email"
+      data-user-loggedin-profile-link={`${!userLoggedIn || !userEmailVerified}`}
+    >
+      Email is not verified!
+    </p>
   </li>
 );

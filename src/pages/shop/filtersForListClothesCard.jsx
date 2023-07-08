@@ -91,7 +91,7 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
     <>
       <button
         type="button"
-        className="shop-section-expand-filters"
+        className="button-expand"
         aria-expanded={showShopSectionFilters}
         onClick={handleClickExpandFilters}
       >
