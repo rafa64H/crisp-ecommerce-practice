@@ -17,6 +17,7 @@ import {
   getDoc,
   doc,
   setDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { auth, db } from '../../config-firebase/firebase';
 
@@ -49,6 +50,8 @@ export async function createUser(firstName, lastName, email, password) {
       wishlist: [],
       cart: [],
       ordersHistory: [],
+      address: {},
+      phoneNumber: NaN,
     });
 
     await sendEmailVerification(currentUser);
@@ -101,6 +104,59 @@ export async function changeAccountInformation(
   }
   if (oldPassword !== newPassword)
     await updatePassword(currentUser, newPassword);
+
+  console.log('sent');
+}
+
+export async function changeAccountAddress(
+  firstNameAddress,
+  lastNameAddress,
+  phoneNumber,
+  streetAddress,
+  country,
+  state,
+  postalCode
+) {
+  const currentUser = await auth.currentUser;
+  const { uid } = currentUser;
+
+  // await setDoc(doc(usersCollectionRef, uid), {
+  //   address: {
+  //     firstNameAddress,
+  //     lastNameAddress,
+  //     phoneNumber,
+  //     streetAddress,
+  //     country,
+  //     state,
+  //     postalCode,
+  //   },
+  // });
+
+  console.log(
+    firstNameAddress,
+    lastNameAddress,
+    phoneNumber,
+    streetAddress,
+    country,
+    state,
+    postalCode
+  );
+
+  const addressToUpdate = {
+    firstNameAddress,
+    lastNameAddress,
+    phoneNumber,
+    streetAddress,
+    country,
+    state,
+    postalCode,
+  };
+
+  const userRef = doc(db, 'users', uid);
+
+  await updateDoc(userRef, {
+    address: addressToUpdate,
+  });
 
   console.log('sent');
 }
