@@ -2,13 +2,17 @@ import React, { useEffect, useState, useRef } from 'react';
 import { signIn } from '../../components/utils/firebaseFunctions';
 
 const LoginForm = () => {
-  const [errorMessage, setErrorMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const emailRef = useRef();
   const passwordRef = useRef();
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
+    setAlertMessage('Loading');
+
     const signInValue = await signIn(
       emailRef.current.value,
       passwordRef.current.value
@@ -20,26 +24,30 @@ const LoginForm = () => {
       signInValue === 'Firebase: Error (auth/invalid-email).' ||
       signInValue === 'Firebase: Error (auth/user-not-found).'
     ) {
-      setErrorMessage('Error: Invalid Email or password.');
+      setAlertMessage('Error: Invalid Email or password.');
       emailRef.current.dataset.errorInputTyping = 'true';
       passwordRef.current.dataset.errorInputTyping = 'true';
+      setLoading(false);
       return null;
     }
     if (signInValue === 'Firebase: Error (auth/too-many-requests).') {
-      setErrorMessage('Error: Too many requests, try again later');
+      setAlertMessage('Error: Too many requests, try again later');
+      setLoading(false);
       return null;
     }
     if (signInValue === 'Firebase: Error (auth/network-error).') {
-      setErrorMessage('Error: Network error');
+      setAlertMessage('Error: Network error');
+      setLoading(false);
       return null;
     }
+    setLoading(false);
 
     window.location.href = 'index.html';
   }
 
   function handleFocusInput(e) {
     e.target.dataset.errorInputTyping = 'false';
-    setErrorMessage('');
+    setAlertMessage('');
   }
 
   return (
@@ -56,7 +64,7 @@ const LoginForm = () => {
           role="alert"
           aria-live="assertive"
         >
-          {errorMessage}
+          {alertMessage}
         </aside>
 
         <div className="form-input-container">
@@ -67,6 +75,7 @@ const LoginForm = () => {
             type="email"
             id="email"
             className="form-input-typing"
+            disabled={loading}
             ref={emailRef}
             onFocus={(e) => handleFocusInput(e)}
             placeholder="ThisIsExample@example.com"
@@ -83,16 +92,19 @@ const LoginForm = () => {
             ref={passwordRef}
             onFocus={(e) => handleFocusInput(e)}
             className="form-input-typing"
+            disabled={loading}
             placeholder="Password"
           />
         </div>
 
-        <input
+        <button
           type="submit"
+          disabled={loading}
           aria-label="Login, after login you will be redirected to home page"
-          value="Login"
           className="black-btn"
-        />
+        >
+          Login
+        </button>
       </form>
     </>
   );

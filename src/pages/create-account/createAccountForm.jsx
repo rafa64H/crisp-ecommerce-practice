@@ -3,7 +3,8 @@ import { createUser } from '../../components/utils/firebaseFunctions';
 import { auth } from '../../config-firebase/firebase';
 
 const CreateAccountForm = () => {
-  const [errorMessage, setErrorMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const firstNameRef = useRef();
   const lastNameRef = useRef();
@@ -21,6 +22,9 @@ const CreateAccountForm = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    setLoading(true);
+    setAlertMessage('Loading');
+
     if (
       firstNameRef.current.value === '' ||
       lastNameRef.current.value === '' ||
@@ -34,11 +38,13 @@ const CreateAccountForm = () => {
         (emptyRef) => (emptyRef.current.dataset.errorInputTyping = 'true')
       );
 
-      setErrorMessage('Error: Complete the required spaces');
+      setAlertMessage('Error: Complete the required spaces');
+      setLoading(false);
       return null;
     }
     if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-      setErrorMessage('Error: Passwords do not match');
+      setAlertMessage('Error: Passwords do not match');
+      setLoading(false);
       passwordRef.current.dataset.errorInputTyping = 'true';
       confirmPasswordRef.current.dataset.errorInputTyping = 'true';
       return null;
@@ -53,13 +59,14 @@ const CreateAccountForm = () => {
       );
       window.location.href = 'index.html';
     } catch (err) {
-      console.log(err);
+      setLoading(false);
+      setAlertMessage(err.message);
     }
   }
 
   function handleFocusInput(e) {
     e.target.dataset.errorInputTyping = 'false';
-    setErrorMessage('');
+    setAlertMessage('');
   }
 
   return (
@@ -76,7 +83,7 @@ const CreateAccountForm = () => {
           role="alert"
           aria-live="assertive"
         >
-          {errorMessage}
+          {alertMessage}
         </aside>
         <h2 className="form-account__title">Personal information</h2>
         <div className="form-input-container">
@@ -87,6 +94,7 @@ const CreateAccountForm = () => {
             type="text"
             id="first-name"
             className="form-input-typing"
+            disabled={loading}
             ref={firstNameRef}
             onFocus={(e) => handleFocusInput(e)}
             placeholder="First name"
@@ -101,6 +109,7 @@ const CreateAccountForm = () => {
             type="text"
             id="last-name"
             className="form-input-typing"
+            disabled={loading}
             ref={lastNameRef}
             onFocus={(e) => handleFocusInput(e)}
             placeholder="Last name"
@@ -117,6 +126,7 @@ const CreateAccountForm = () => {
             type="email"
             id="email"
             className="form-input-typing"
+            disabled={loading}
             ref={emailRef}
             onFocus={(e) => handleFocusInput(e)}
             placeholder="ThisIsExample@example.com"
@@ -133,6 +143,7 @@ const CreateAccountForm = () => {
             ref={passwordRef}
             onFocus={(e) => handleFocusInput(e)}
             className="form-input-typing"
+            disabled={loading}
             placeholder="Password"
           />
         </div>
@@ -145,18 +156,21 @@ const CreateAccountForm = () => {
             type="password"
             id="confirm-password"
             className="form-input-typing"
+            disabled={loading}
             ref={confirmPasswordRef}
             onFocus={(e) => handleFocusInput(e)}
             placeholder="Confirm password"
           />
         </div>
 
-        <input
+        <button
           type="submit"
+          disabled={loading}
           aria-label="Sign up, after creating account you will be redirected to home page"
-          value="Create account"
           className="black-btn"
-        />
+        >
+          Create Account
+        </button>
       </form>
     </>
   );
