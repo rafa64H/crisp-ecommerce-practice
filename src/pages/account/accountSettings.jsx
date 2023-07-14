@@ -315,6 +315,9 @@ const AccountSettings = () => {
                 type="button"
                 className="settings-options__btn"
                 aria-pressed={selectedOption === settingOption}
+                data-selected-option-acc-settings={
+                  selectedOption === settingOption
+                }
               >
                 {settingOption}
               </button>
