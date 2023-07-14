@@ -50,7 +50,15 @@ export async function createUser(firstName, lastName, email, password) {
       wishlist: [],
       cart: [],
       ordersHistory: [],
-      address: {},
+      address: {
+        firstNameAddress: '',
+        lastNameAddress: '',
+        phoneNumber: '',
+        streetAddress: '',
+        country: '',
+        state: '',
+        postalCode: '',
+      },
       phoneNumber: NaN,
     });
 
@@ -132,16 +140,6 @@ export async function changeAccountAddress(
   //   },
   // });
 
-  console.log(
-    firstNameAddress,
-    lastNameAddress,
-    phoneNumber,
-    streetAddress,
-    country,
-    state,
-    postalCode
-  );
-
   const addressToUpdate = {
     firstNameAddress,
     lastNameAddress,
@@ -159,4 +157,8 @@ export async function changeAccountAddress(
   });
 
   console.log('sent');
+}
+
+export async function logOutUser() {
+  await signOut(auth);
 }

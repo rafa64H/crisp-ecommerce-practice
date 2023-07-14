@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../../config-firebase/firebase';
 import {
   changeAccountAddress,
   changeAccountInformation,
   getDataOfUser,
+  logOutUser,
 } from '../../components/utils/firebaseFunctions';
 
 const AccountSettings = () => {
@@ -20,6 +20,7 @@ const AccountSettings = () => {
   const [emailVerified, setEmailVerified] = useState(true);
   const [typeOfChange, setTypeOfChange] = useState('');
   const [arrayAllCountriesName, setArrayAllCountriesName] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState('');
 
   const firstNameRef = useRef();
   const lastNameRef = useRef();
@@ -63,7 +64,7 @@ const AccountSettings = () => {
         lastNameAddressRef.current.value = docData.address.lastNameAddress;
         phoneNumberAddressRef.current.value = docData.address.phoneNumber;
         streetAddressRef.current.value = docData.address.streetAddress;
-        countryAddressRef.current.value = docData.address.country;
+        setSelectedCountry(docData.address.country);
         stateAddressRef.current.value = docData.address.state;
         postalCodeAddressRef.current.value = docData.address.postalCode;
         setLoading(false);
@@ -101,8 +102,14 @@ const AccountSettings = () => {
     }
   }
 
-  function handleClickOption(settingOption) {
+  async function handleClickOption(settingOption) {
     if (settingOption === 'Log out') {
+      try {
+        await logOutUser();
+        window.location.href = 'index.html';
+      } catch (error) {
+        setAlertMessage(error.message);
+      }
       return null;
     }
     setSelectedOption(settingOption);
@@ -255,6 +262,10 @@ const AccountSettings = () => {
       setLoading(false);
       setAlertMessageDialog(err.message);
     }
+  }
+
+  function handleCountryChange(e) {
+    setSelectedCountry(e.target.value);
   }
 
   // I don't know, but I add this just in case an user can
@@ -491,11 +502,12 @@ const AccountSettings = () => {
             </label>
             <select
               name="country"
-              disabled={loading}
               id="country"
               ref={countryAddressRef}
+              value={selectedCountry}
               className="form-input-typing"
               onFocus={(e) => handleFocusInput(e)}
+              onChange={(e) => handleCountryChange(e)}
             >
               {arrayAllCountriesName.map((countryName) => (
                 <option key={uuidv4()} value={countryName}>
