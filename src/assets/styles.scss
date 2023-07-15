@@ -135,7 +135,7 @@ input[type='range']::-moz-range-thumb {
 
 //----------------------------------------------------------------
 
-//Very used components
+//common used components
 .link-btn-component {
   display: inline-block;
 
@@ -191,10 +191,6 @@ input[type='range']::-moz-range-thumb {
 
     transition: border 300ms;
 
-    &:hover {
-      border: 2px solid $first-color;
-    }
-
     &-text {
       margin: 0 0.5em;
 
@@ -226,10 +222,6 @@ input[type='range']::-moz-range-thumb {
   margin: 0.25em 0.25em;
 
   transition: all 300ms;
-
-  &:hover {
-    border-color: $first-color;
-  }
 }
 ////Also in clothes-color-btn
 .clothes-00white {
@@ -356,15 +348,29 @@ input[type='range']::-moz-range-thumb {
   font-weight: 600;
 
   transition: all 200ms;
+}
 
-  &:hover {
-    background-color: white;
-    border-color: $first-color;
+.button-expand {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 
+  margin: 0 auto;
+  width: 90%;
+  border: 2px solid $light-gray;
+  padding: 0.25em;
+
+  text-align: left;
+  font-family: $font-oswald;
+  font-size: $third-font-size;
+  font-weight: 600;
+
+  .icon {
     color: $first-color;
+    font-size: $second-font-size;
   }
 }
-//Very used components END
+//common used components END
 
 //----------------------------------------------------------------
 
@@ -426,14 +432,10 @@ header {
         display: inline-block;
 
         padding: 0.5em 0.7em;
-        border: 2px solid transparent;
+        border: 1px solid white;
         border-radius: 50%;
 
         transition: all 200ms;
-        &:hover {
-          background-color: $second-color;
-          border-color: white;
-        }
       }
       [data-user-loggedin-profile-link='false'] {
         display: none;
@@ -447,6 +449,76 @@ header {
   }
 }
 //Header END
+
+//----------------------------------------------------------------
+
+//Footer
+[data-footer-list-expanded='false'] {
+  position: absolute;
+
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+}
+[data-footer-list-expanded='true'] {
+  position: relative;
+
+  transform: scaleY(1);
+  transform-origin: 50% 0%;
+}
+footer {
+  background-color: $first-color;
+  padding: 1em;
+
+  color: #fff;
+
+  p {
+    color: $light-gray;
+  }
+
+  a {
+    color: white;
+  }
+
+  .footer-section {
+    &__btn {
+      display: block;
+
+      width: 100%;
+      margin: 0.5em 0;
+      border-bottom: 1px solid $light-gray;
+
+      color: #fff;
+      text-align: left;
+      font-weight: 700;
+      font-family: $font-oswald;
+      font-size: $third-font-size;
+    }
+    &__title {
+      display: none;
+    }
+
+    &__list {
+      margin: 0.5em 0;
+
+      transition: all 200ms;
+      list-style: none;
+
+      &-item {
+        margin: 0.4em 0;
+      }
+
+      &-item--social {
+        display: grid;
+        grid-template-columns: 4em 4em;
+      }
+    }
+  }
+
+  .footer-copyright {
+    margin: 0.5em 0;
+  }
+}
+//Footer END
 
 //----------------------------------------------------------------
 
@@ -576,10 +648,6 @@ header {
       color: $first-color;
 
       transition: all 200ms;
-
-      &:focus {
-        border-color: $first-color;
-      }
 
       .weight-three-hundred {
         font-weight: 300;
@@ -721,78 +789,6 @@ header {
 }
 //SectionThree END
 
-//----------------------------------------------------------------
-
-//Footer
-[data-footer-list-expanded='false'] {
-  position: absolute;
-
-  transform: scaleY(0);
-  transform-origin: 50% 0%;
-}
-[data-footer-list-expanded='true'] {
-  position: relative;
-
-  transform: scaleY(1);
-  transform-origin: 50% 0%;
-}
-footer {
-  background-color: $first-color;
-  padding: 1em;
-
-  color: #fff;
-
-  p {
-    color: $light-gray;
-  }
-
-  a {
-    color: white;
-  }
-
-  .footer-section {
-    &__btn {
-      display: block;
-
-      width: 100%;
-      margin: 0.5em 0;
-      border-bottom: 1px solid $light-gray;
-
-      color: #fff;
-      text-align: left;
-      font-weight: 700;
-      font-family: $font-oswald;
-      font-size: $third-font-size;
-    }
-    &__title {
-      display: none;
-    }
-
-    &__list {
-      margin: 0.5em 0;
-
-      transition: all 200ms;
-      list-style: none;
-
-      &-item {
-        margin: 0.4em 0;
-      }
-
-      &-item--social {
-        display: grid;
-        grid-template-columns: 4em 4em;
-      }
-    }
-  }
-
-  .footer-copyright {
-    margin: 0.5em 0;
-  }
-}
-//Footer END
-
-//----------------------------------------------------------------
-
 //shopSection
 
 .list-clothes-card {
@@ -829,11 +825,6 @@ footer {
         font-weight: 600;
 
         transition: all 300ms;
-
-        &:hover {
-          background-color: $first-color;
-          color: white;
-        }
       }
       [data-active-filter-gender='true'],
       [data-active-filter-size='true'] {
@@ -858,6 +849,9 @@ footer {
 
 //shopSection END
 
+//----------------------------------------------------------------
+
+//createAccount
 .create-account-title {
   width: 95%;
   margin: 1em auto;
@@ -865,34 +859,17 @@ footer {
   text-align: center;
   font-size: $second-font-size;
 }
+//createAccount END
 
+//----------------------------------------------------------------
+
+//accountSettings
 .account-settings-title {
   text-align: center;
   font-size: $second-font-size;
 }
 .account-settings {
   margin: 2em 0;
-}
-
-.button-expand {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-
-  margin: 0 auto;
-  width: 90%;
-  border: 2px solid $light-gray;
-  padding: 0.25em;
-
-  text-align: left;
-  font-family: $font-oswald;
-  font-size: $third-font-size;
-  font-weight: 600;
-
-  .icon {
-    color: $first-color;
-    font-size: $second-font-size;
-  }
 }
 
 .settings-options {
@@ -971,12 +948,13 @@ footer {
     color: $first-color;
   }
 }
+//accountSettings END
 
 //----------------------------------------------------------------
 
 //Media Queries
 @media screen and (min-width: 1200px) {
-  ////Media Very used components
+  ////Media common used components
   .shop-btn-mobile {
     display: none;
   }
@@ -990,7 +968,23 @@ footer {
   .search-btn-desktop {
     display: flex;
   }
-  ////Media Very used components END
+
+  .form-account {
+    border: 2px solid $light-gray;
+    padding: 1em;
+  }
+
+  .form-input-container {
+    margin: 1em 0;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+  }
+
+  .button-expand {
+    display: none;
+  }
+  ////Media common used components END
 
   ////--------------------
 
@@ -1280,22 +1274,9 @@ footer {
   }
   ////Media ShopSection END
 
-  .form-account {
-    border: 2px solid $light-gray;
-    padding: 1em;
-  }
+  ////--------------------
 
-  .form-input-container {
-    margin: 1em 0;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    align-items: center;
-  }
-
-  .button-expand {
-    display: none;
-  }
-
+  ////Media accountSettings
   .account-settings {
     display: flex;
     padding: 1em;
@@ -1353,14 +1334,22 @@ footer {
   [data-show-form-account-settings='true'] {
     display: block;
   }
+  ////Media accountSettings END
 }
 
-///Media only devices with :hover
+///Only devices with :hover
 @media (hover: hover) {
   .link-btn-component:hover {
-    border-color: $darker-gray;
-    background-color: $darker-gray;
+    border-color: $first-color;
+    background-color: $second-color;
     color: white;
+  }
+
+  .black-btn {
+    background-color: white;
+    border-color: $first-color;
+
+    color: $first-color;
   }
 
   .nav-link {
@@ -1378,6 +1367,22 @@ footer {
     &:hover::after {
       transform: scaleX(1);
     }
+  }
+  .nav-link--profile:hover {
+    background-color: $second-color;
+  }
+
+  .shop-section-filters-list__size:hover {
+    background-color: $first-color;
+    color: white;
+  }
+
+  .clothes-card:hover {
+    border: 2px solid $first-color;
+  }
+
+  .clothes-color-btn:hover {
+    border-color: $first-color;
   }
 
   .arrow:hover {

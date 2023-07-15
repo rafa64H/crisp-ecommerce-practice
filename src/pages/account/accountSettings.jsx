@@ -8,6 +8,7 @@ import {
   getDataOfUser,
   logOutUser,
 } from '../../components/utils/firebaseFunctions';
+import FormInputTyping from '../../components/ui/smaller/formInputTyping';
 
 const AccountSettings = () => {
   const [selectedOption, setSelectedOption] = useState('Account information');
@@ -37,6 +38,14 @@ const AccountSettings = () => {
   const countryAddressRef = useRef();
   const stateAddressRef = useRef();
   const postalCodeAddressRef = useRef();
+
+  const settingsOptions = [
+    'Account information',
+    'Address',
+    'History of orders',
+    'My wishlist',
+    'Log out',
+  ];
 
   async function getAllCountriesName() {
     try {
@@ -83,14 +92,6 @@ const AccountSettings = () => {
       }
     });
   }, []);
-
-  const settingsOptions = [
-    'Account information',
-    'Address',
-    'History of orders',
-    'My wishlist',
-    'Log out',
-  ];
 
   function handleClickExpand() {
     if (showSettingsOptions) {
@@ -162,17 +163,16 @@ const AccountSettings = () => {
   async function handleSubmitAddress(e) {
     e.preventDefault();
 
-    const allRefsAddress = [
+    const allRequiredRefsAddress = [
       firstNameAddressRef,
       lastNameAddressRef,
-      phoneNumberAddressRef,
       streetAddressRef,
       countryAddressRef,
       stateAddressRef,
       postalCodeAddressRef,
     ];
 
-    const emptyRequiredInputs = allRefsAddress.filter(
+    const emptyRequiredInputs = allRequiredRefsAddress.filter(
       (ref) => ref.current.value === ''
     );
 
@@ -270,7 +270,7 @@ const AccountSettings = () => {
 
   // I don't know, but I add this just in case an user can
   // open the <dialog> of confirm password with inspect element
-  function showConfirmBtn() {
+  function showConfirmSubmitBtn() {
     if (notFormYet)
       return (
         <button type="button" className="black-btn">
@@ -343,80 +343,54 @@ const AccountSettings = () => {
           >
             {alertMessage}
           </aside>
-          <div className="form-input-container">
-            <label htmlFor="first-name" className="form-input-label">
-              First name
-            </label>
-            <input
-              type="text"
-              disabled={loading}
-              id="first-name"
-              className="form-input-typing"
-              ref={firstNameRef}
-              onFocus={(e) => handleFocusInput(e)}
-              placeholder="First name"
-            />
-          </div>
+          <FormInputTyping
+            required
+            name="First name"
+            type="text"
+            id="first-name"
+            loading={loading}
+            theRef={firstNameRef}
+            onFocusFunction={handleFocusInput}
+          />
 
-          <div className="form-input-container">
-            <label htmlFor="last-name" className="form-input-label">
-              Last name
-            </label>
-            <input
-              type="text"
-              disabled={loading}
-              id="last-name"
-              className="form-input-typing"
-              ref={lastNameRef}
-              onFocus={(e) => handleFocusInput(e)}
-              placeholder="Last name"
-            />
-          </div>
+          <FormInputTyping
+            required
+            name="Last name"
+            type="text"
+            id="last-name"
+            loading={loading}
+            theRef={lastNameRef}
+            onFocusFunction={handleFocusInput}
+          />
 
-          <div className="form-input-container">
-            <label htmlFor="email" className="form-input-label">
-              Email
-            </label>
-            <input
-              type="email"
-              disabled={loading}
-              id="email"
-              className="form-input-typing"
-              ref={emailRef}
-              onFocus={(e) => handleFocusInput(e)}
-              placeholder="ThisIsExample@example.com"
-            />
-          </div>
+          <FormInputTyping
+            required
+            name="Email"
+            type="email"
+            id="email"
+            loading={loading}
+            theRef={emailRef}
+            onFocusFunction={handleFocusInput}
+            placeholderProp="ThisIsExample@example.com"
+          />
 
-          <div className="form-input-container">
-            <label htmlFor="new-password" className="form-input-label">
-              New password
-            </label>
-            <input
-              type="password"
-              disabled={loading}
-              id="new-password"
-              ref={newPasswordRef}
-              onFocus={(e) => handleFocusInput(e)}
-              className="form-input-typing"
-              placeholder="Password"
-            />
-          </div>
+          <FormInputTyping
+            name="New password"
+            type="password"
+            id="new-password"
+            loading={loading}
+            theRef={newPasswordRef}
+            onFocusFunction={handleFocusInput}
+          />
 
-          <div className="form-input-container">
-            <label htmlFor="confirm-new-password" className="form-input-label">
-              Confirm new password
-            </label>
-            <input
-              type="password"
-              disabled={loading}
-              id="confirm-new-password"
-              className="form-input-typing"
-              ref={confirmNewPasswordRef}
-              onFocus={(e) => handleFocusInput(e)}
-              placeholder="Confirm password"
-            />
-          </div>
+          <FormInputTyping
+            name="Confirm new password"
+            type="password"
+            id="confirm-new-password"
+            loading={loading}
+            theRef={confirmNewPasswordRef}
+            onFocusFunction={handleFocusInput}
+          />
 
           <button type="submit" disabled={loading} className="black-btn">
             Save changes
@@ -439,69 +413,51 @@ const AccountSettings = () => {
           >
             {alertMessage}
           </aside>
-          <div className="form-input-container">
-            <label htmlFor="first-name-address" className="form-input-label">
-              First name
-            </label>
-            <input
-              type="text"
-              disabled={loading}
-              id="first-name-address"
-              className="form-input-typing"
-              ref={firstNameAddressRef}
-              onFocus={(e) => handleFocusInput(e)}
-              placeholder="First name"
-            />
-          </div>
+          <FormInputTyping
+            required
+            name="First name"
+            type="text"
+            id="first-name-address"
+            loading={loading}
+            theRef={firstNameAddressRef}
+            onFocusFunction={handleFocusInput}
+          />
 
-          <div className="form-input-container">
-            <label htmlFor="last-name-address" className="form-input-label">
-              Last name
-            </label>
-            <input
-              type="text"
-              disabled={loading}
-              id="last-name-address"
-              className="form-input-typing"
-              ref={lastNameAddressRef}
-              onFocus={(e) => handleFocusInput(e)}
-              placeholder="Last name"
-            />
-          </div>
+          <FormInputTyping
+            required
+            name="Last name"
+            type="text"
+            id="last-name-address"
+            loading={loading}
+            theRef={lastNameAddressRef}
+            onFocusFunction={handleFocusInput}
+          />
 
-          <div className="form-input-container">
-            <label htmlFor="phone-number" className="form-input-label">
-              Phone number
-            </label>
-            <input
-              type="number"
-              disabled={loading}
-              id="phone-number"
-              className="form-input-typing"
-              ref={phoneNumberAddressRef}
-              onFocus={(e) => handleFocusInput(e)}
-              placeholder="Phone number"
-            />
-          </div>
+          <FormInputTyping
+            name="Phone number"
+            type="number"
+            id="phone-number"
+            loading={loading}
+            theRef={phoneNumberAddressRef}
+            onFocusFunction={handleFocusInput}
+          />
 
-          <div className="form-input-container">
-            <label htmlFor="street-address" className="form-input-label">
-              Street address
-            </label>
-            <input
-              type="text"
-              disabled={loading}
-              id="street-address"
-              ref={streetAddressRef}
-              onFocus={(e) => handleFocusInput(e)}
-              className="form-input-typing"
-              placeholder="Introduce your street address"
-            />
-          </div>
+          <FormInputTyping
+            required
+            name="Street address"
+            type="text"
+            id="street-address"
+            loading={loading}
+            theRef={streetAddressRef}
+            onFocusFunction={handleFocusInput}
+          />
 
           <div className="form-input-container">
             <label htmlFor="country" className="form-input-label">
-              Select your country
+              Select your country{' '}
+              <span className="input-required" aria-label="required">
+                *
+              </span>
             </label>
             <select
               name="country"
@@ -520,35 +476,27 @@ const AccountSettings = () => {
             </select>
           </div>
 
-          <div className="form-input-container">
-            <label htmlFor="state" className="form-input-label">
-              Your state/province
-            </label>
-            <input
-              type="text"
-              disabled={loading}
-              id="state"
-              ref={stateAddressRef}
-              onFocus={(e) => handleFocusInput(e)}
-              className="form-input-typing"
-              placeholder="Introduce your state or province"
-            />
-          </div>
+          <FormInputTyping
+            required
+            name="Your state/province"
+            type="text"
+            id="state"
+            loading={loading}
+            theRef={stateAddressRef}
+            onFocusFunction={handleFocusInput}
+            placeholderProp="Introduce your state or province"
+          />
 
-          <div className="form-input-container">
-            <label htmlFor="postal-code" className="form-input-label">
-              Zip/Postal code
-            </label>
-            <input
-              type="number"
-              disabled={loading}
-              id="postal-code"
-              ref={postalCodeAddressRef}
-              onFocus={(e) => handleFocusInput(e)}
-              className="form-input-typing"
-              placeholder="Introduce your state or province"
-            />
-          </div>
+          <FormInputTyping
+            required
+            name="Zip/Postal code"
+            type="number"
+            id="postal-code"
+            loading={loading}
+            theRef={postalCodeAddressRef}
+            onFocusFunction={handleFocusInput}
+            placeholderProp="Introduce your postal code"
+          />
 
           <button type="submit" disabled={loading} className="black-btn">
             Save changes
@@ -586,24 +534,18 @@ const AccountSettings = () => {
           </aside>
 
           <form onSubmit={handleConfirmSubmit}>
-            <div className="form-input-container">
-              <label
-                htmlFor="confirm-current-password"
-                className="form-input-label"
-              >
-                Introduce your current password
-              </label>
-              <input
-                type="password"
-                id="confirm-current-password"
-                className="form-input-typing"
-                ref={confirmCurrentPasswordRef}
-                onFocus={(e) => handleFocusInput(e)}
-                placeholder="Confirm password"
-              />
-            </div>
+            <FormInputTyping
+              required
+              name="Introduce your current password"
+              type="password"
+              id="confirm-current-password"
+              loading={loading}
+              theRef={confirmCurrentPasswordRef}
+              onFocusFunction={handleFocusInput}
+              placeholderProp="Confirm password"
+            />
 
-            {showConfirmBtn()}
+            {showConfirmSubmitBtn()}
           </form>
         </dialog>
       </section>

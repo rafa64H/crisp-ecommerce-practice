@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createUser } from '../../components/utils/firebaseFunctions';
 import { auth } from '../../config-firebase/firebase';
+import FormInputTyping from '../../components/ui/smaller/formInputTyping';
 
 const CreateAccountForm = () => {
   const [alertMessage, setAlertMessage] = useState('');
@@ -73,11 +74,7 @@ const CreateAccountForm = () => {
     <>
       <h1 className="create-account-title">Create New Customer Account</h1>
 
-      <form
-        action=""
-        className="form-account"
-        onSubmit={(e) => handleSubmit(e)}
-      >
+      <form className="form-account" onSubmit={(e) => handleSubmit(e)}>
         <aside
           className="error-message-form"
           role="alert"
@@ -86,82 +83,59 @@ const CreateAccountForm = () => {
           {alertMessage}
         </aside>
         <h2 className="form-account__title">Personal information</h2>
-        <div className="form-input-container">
-          <label htmlFor="first-name" className="form-input-label">
-            First name <span className="input-required">*</span>
-          </label>
-          <input
-            type="text"
-            id="first-name"
-            className="form-input-typing"
-            disabled={loading}
-            ref={firstNameRef}
-            onFocus={(e) => handleFocusInput(e)}
-            placeholder="First name"
-          />
-        </div>
 
-        <div className="form-input-container">
-          <label htmlFor="last-name" className="form-input-label">
-            Last name <span className="input-required">*</span>
-          </label>
-          <input
-            type="text"
-            id="last-name"
-            className="form-input-typing"
-            disabled={loading}
-            ref={lastNameRef}
-            onFocus={(e) => handleFocusInput(e)}
-            placeholder="Last name"
-          />
-        </div>
+        <FormInputTyping
+          required
+          name="First name"
+          type="text"
+          id="first-name"
+          loading={loading}
+          theRef={firstNameRef}
+          onFocusFunction={handleFocusInput}
+        />
+
+        <FormInputTyping
+          required
+          name="Last name"
+          type="text"
+          id="last-name"
+          loading={loading}
+          theRef={lastNameRef}
+          onFocusFunction={handleFocusInput}
+        />
 
         <h2 className="form-account__title">Email and password</h2>
 
-        <div className="form-input-container">
-          <label htmlFor="email" className="form-input-label">
-            Email <span className="input-required">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="form-input-typing"
-            disabled={loading}
-            ref={emailRef}
-            onFocus={(e) => handleFocusInput(e)}
-            placeholder="ThisIsExample@example.com"
-          />
-        </div>
+        <FormInputTyping
+          required
+          name="Email"
+          type="email"
+          id="email"
+          loading={loading}
+          theRef={emailRef}
+          placeholderProp="ThisIsExample@example.com"
+          onFocusFunction={handleFocusInput}
+        />
 
-        <div className="form-input-container">
-          <label htmlFor="password" className="form-input-label">
-            Password <span className="input-required">*</span>
-          </label>
-          <input
-            type="password"
-            id="password"
-            ref={passwordRef}
-            onFocus={(e) => handleFocusInput(e)}
-            className="form-input-typing"
-            disabled={loading}
-            placeholder="Password"
-          />
-        </div>
+        <FormInputTyping
+          required
+          name="Password"
+          type="password"
+          id="password"
+          loading={loading}
+          theRef={passwordRef}
+          onFocusFunction={handleFocusInput}
+        />
 
-        <div className="form-input-container">
-          <label htmlFor="confirm-password" className="form-input-label">
-            Confirm password <span className="input-required">*</span>
-          </label>
-          <input
-            type="password"
-            id="confirm-password"
-            className="form-input-typing"
-            disabled={loading}
-            ref={confirmPasswordRef}
-            onFocus={(e) => handleFocusInput(e)}
-            placeholder="Confirm password"
-          />
-        </div>
+        <FormInputTyping
+          required
+          name="Confirm assword"
+          type="password"
+          id="confirm-password"
+          loading={loading}
+          theRef={confirmPasswordRef}
+          onFocusFunction={handleFocusInput}
+        />
 
         <button
           type="submit"

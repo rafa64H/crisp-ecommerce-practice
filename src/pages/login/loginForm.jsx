@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { signIn } from '../../components/utils/firebaseFunctions';
+import FormInputTyping from '../../components/ui/smaller/formInputTyping';
 
 const LoginForm = () => {
   const [alertMessage, setAlertMessage] = useState('');
@@ -54,11 +55,7 @@ const LoginForm = () => {
     <>
       <h1 className="create-account-title">Sign in</h1>
 
-      <form
-        action=""
-        className="form-account"
-        onSubmit={(e) => handleSubmit(e)}
-      >
+      <form className="form-account" onSubmit={(e) => handleSubmit(e)}>
         <aside
           className="error-message-form"
           role="alert"
@@ -67,35 +64,26 @@ const LoginForm = () => {
           {alertMessage}
         </aside>
 
-        <div className="form-input-container">
-          <label htmlFor="email" className="form-input-label">
-            Email <span className="input-required">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="form-input-typing"
-            disabled={loading}
-            ref={emailRef}
-            onFocus={(e) => handleFocusInput(e)}
-            placeholder="ThisIsExample@example.com"
-          />
-        </div>
+        <FormInputTyping
+          required
+          name="Email"
+          type="email"
+          id="email"
+          loading={loading}
+          theRef={emailRef}
+          placeholderProp="ThisIsExample@example.com"
+          onFocusFunction={handleFocusInput}
+        />
 
-        <div className="form-input-container">
-          <label htmlFor="password" className="form-input-label">
-            Password <span className="input-required">*</span>
-          </label>
-          <input
-            type="password"
-            id="password"
-            ref={passwordRef}
-            onFocus={(e) => handleFocusInput(e)}
-            className="form-input-typing"
-            disabled={loading}
-            placeholder="Password"
-          />
-        </div>
+        <FormInputTyping
+          required
+          name="Password"
+          type="password"
+          id="password"
+          loading={loading}
+          theRef={passwordRef}
+          onFocusFunction={handleFocusInput}
+        />
 
         <button
           type="submit"
