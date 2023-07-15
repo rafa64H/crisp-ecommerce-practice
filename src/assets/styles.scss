@@ -136,7 +136,7 @@ input[type='range']::-moz-range-thumb {
 //----------------------------------------------------------------
 
 //common used components
-.link-btn-component {
+.transparent-btn {
   display: inline-block;
 
   border: 0.15rem solid $first-color;
@@ -1047,6 +1047,66 @@ footer {
 
   ////--------------------
 
+  ////Media Footer
+  [data-footer-list-expanded='false'] {
+    position: static;
+
+    transform: scaleY(1);
+  }
+  footer {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-row-gap: 1em;
+
+    padding: 2em;
+
+    color: #fff;
+
+    p {
+      color: $light-gray;
+    }
+
+    a {
+      color: white;
+    }
+
+    .footer-section {
+      &__btn {
+        display: none;
+      }
+      &__title {
+        display: block;
+      }
+
+      &__list {
+        margin: 0;
+
+        &-item {
+          margin: 0.25em 0;
+        }
+
+        &-item--social {
+          display: grid;
+          grid-template-columns: 3em 3em;
+        }
+      }
+    }
+
+    .footer-copyright {
+      grid-column: 1/6;
+      grid-row: 2/2;
+
+      &--2 {
+        grid-row: 3/3;
+      }
+
+      margin: 0;
+    }
+  }
+  ////Media Footer END
+
+  ////--------------------
+
   ////Media SectionOne
   .section1 {
     .flex-section1 {
@@ -1187,66 +1247,6 @@ footer {
 
   ////--------------------
 
-  ////Media Footer
-  [data-footer-list-expanded='false'] {
-    position: static;
-
-    transform: scaleY(1);
-  }
-  footer {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-row-gap: 1em;
-
-    padding: 2em;
-
-    color: #fff;
-
-    p {
-      color: $light-gray;
-    }
-
-    a {
-      color: white;
-    }
-
-    .footer-section {
-      &__btn {
-        display: none;
-      }
-      &__title {
-        display: block;
-      }
-
-      &__list {
-        margin: 0;
-
-        &-item {
-          margin: 0.25em 0;
-        }
-
-        &-item--social {
-          display: grid;
-          grid-template-columns: 3em 3em;
-        }
-      }
-    }
-
-    .footer-copyright {
-      grid-column: 1/6;
-      grid-row: 2/2;
-
-      &--2 {
-        grid-row: 3/3;
-      }
-
-      margin: 0;
-    }
-  }
-  ////Media Footer END
-
-  ////--------------------
-
   ////Media ShopSection
   .shop-section {
     display: grid;
@@ -1339,17 +1339,17 @@ footer {
 
 ///Only devices with :hover
 @media (hover: hover) {
-  .link-btn-component:hover {
+  .transparent-btn:hover {
     border-color: $first-color;
     background-color: $second-color;
     color: white;
   }
 
-  .black-btn {
-    background-color: white;
+  .black-btn:hover {
+    background-color: $second-color;
     border-color: $first-color;
 
-    color: $first-color;
+    color: white;
   }
 
   .nav-link {
@@ -1372,7 +1372,8 @@ footer {
     background-color: $second-color;
   }
 
-  .shop-section-filters-list__size:hover {
+  .shop-section-filters-list__size:hover,
+  .shop-section-filters-list__gender:hover {
     background-color: $first-color;
     color: white;
   }

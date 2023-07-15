@@ -210,7 +210,7 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
           type="button"
           aria-label={`Apply filters, current filters are Gender ${activeFilters.gender}. Size ${activeFilters.size}. Color ${activeFilters.color}. Max price ${activeFilters.maxPrice}`}
           tabIndex={showShopSectionFilters || isLargeScreen ? '0' : '-1'}
-          className="link-btn-component"
+          className="transparent-btn"
           onClick={() => setApplyFilters((prev) => prev + 1)}
         >
           Apply filters

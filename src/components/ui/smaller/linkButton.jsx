@@ -1,7 +1,7 @@
 import React from 'react';
 
 const LinkButton = ({ linkText }) => (
-  <a href="#" className="link-btn-component">
+  <a href="#" className="transparent-btn">
     {linkText}
   </a>
 );
