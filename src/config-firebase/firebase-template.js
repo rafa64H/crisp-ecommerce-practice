@@ -1,15 +1,17 @@
+// The filename should be firebase.js and should be like this
+
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyB6VDV6UyLnvQL-k2dsR0DdU0GeD6X3RTY',
-  authDomain: 'crisp-ecommerce-developm-4e4a7.firebaseapp.com',
-  projectId: 'crisp-ecommerce-developm-4e4a7',
-  storageBucket: 'crisp-ecommerce-developm-4e4a7.appspot.com',
-  messagingSenderId: '968865285142',
-  appId: '1:968865285142:web:97eb70e8e45f0b6d3b2137',
+  apiKey: 'Placeholder',
+  authDomain: 'Placeholder',
+  projectId: 'Placeholder',
+  storageBucket: 'Placeholder',
+  messagingSenderId: 'Placeholder',
+  appId: 'Placeholder',
 };
 
 // Initialize Firebase
