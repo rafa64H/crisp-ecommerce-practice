@@ -582,21 +582,20 @@ footer {
 
       width: fit-content;
       margin: 0 auto;
-
-      .square {
-        border: 0.15rem solid $light-gray;
-        margin: 0 0.3em;
-        padding: 0.8em;
-
-        transition: all 200ms;
-      }
-      [data-square-active] {
-        background-color: $first-color;
-        border-color: $first-color;
-        padding: 1em;
-      }
     }
   }
+}
+.square {
+  border: 0.15rem solid $light-gray;
+  margin: 0 0.3em;
+  padding: 0.8em;
+
+  transition: all 200ms;
+}
+[data-square-active='true'] {
+  background-color: $first-color;
+  border-color: $first-color;
+  padding: 1em;
 }
 .section1-background1 {
   background-image: url('./home/hero-img.png');
@@ -1390,7 +1389,7 @@ footer {
     background-color: rgba($color: $first-color, $alpha: 0.8);
   }
 
-  .square:hover:not([data-square-active]) {
+  .square:hover:not([data-square-active='true']) {
     border-color: $first-color;
   }
 
