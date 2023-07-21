@@ -305,15 +305,15 @@ const AccountSettings = () => {
         </button>
 
         <ul
-          className="settings-options"
-          data-show-settings-options={showSettingsOptions}
+          className="button-expand-options"
+          data-show-button-expand-options={showSettingsOptions}
         >
           {settingsOptions.map((settingOption) => (
-            <li key={uuidv4()} className="settings-options__li">
+            <li key={uuidv4()} className="button-expand-options__li">
               <button
                 onClick={() => handleClickOption(settingOption)}
                 type="button"
-                className="settings-options__btn"
+                className="button-expand-options__btn"
                 aria-pressed={selectedOption === settingOption}
                 data-selected-option-acc-settings={
                   selectedOption === settingOption
