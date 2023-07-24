@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import handleLargeScreen from '../../components/utils/handleLargeScreen';
 
 const ProductComponent = ({ clothesData }) => {
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
   const [showSizeOptions, setShowSizeOptions] = useState(false);
   const [changeIcon, setChangeIcon] = useState('fa-plus');
@@ -25,6 +27,8 @@ const ProductComponent = ({ clothesData }) => {
 
   const images = product.otherImages;
   useEffect(() => {
+    handleLargeScreen(setIsLargeScreen);
+
     setSelectedImage(images[0]);
     setSelectedSize(sizes[0][0]);
   }, []);
@@ -106,8 +110,10 @@ const ProductComponent = ({ clothesData }) => {
 
               <input
                 type="number"
+                readOnly
                 style={{ border: 'transparent', textAlign: 'center' }}
                 min={0}
+                max={99}
                 id="quantity"
               />
 
@@ -157,6 +163,7 @@ const ProductComponent = ({ clothesData }) => {
               <li key={uuidv4()} className="button-expand-options__li">
                 <button
                   onClick={() => handleClickOptionSize(sizeElementArr[0])}
+                  tabIndex={isLargeScreen || showSizeOptions ? 0 : -1}
                   type="button"
                   className="button-expand-options__btn"
                   aria-pressed={selectedSize === sizeElementArr[0]}

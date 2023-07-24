@@ -9,8 +9,10 @@ import {
   logOutUser,
 } from '../../components/utils/firebaseFunctions';
 import FormInputTyping from '../../components/ui/smaller/formInputTyping';
+import handleLargeScreen from '../../components/utils/handleLargeScreen';
 
 const AccountSettings = () => {
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Account information');
   const [showSettingsOptions, setShowSettingsOptions] = useState(false);
   const [changeIcon, setChangeIcon] = useState('fa-plus');
@@ -46,6 +48,10 @@ const AccountSettings = () => {
     'My wishlist',
     'Log out',
   ];
+
+  useEffect(() => {
+    handleLargeScreen(setIsLargeScreen);
+  }, []);
 
   async function getAllCountriesName() {
     try {
@@ -305,15 +311,22 @@ const AccountSettings = () => {
         </button>
 
         <ul
-          className="button-expand-options"
+          className={
+            isLargeScreen ? 'account-expand-options' : 'button-expand-options' // I will use button-expand-options in other place so I do this
+          }
           data-show-button-expand-options={showSettingsOptions}
         >
           {settingsOptions.map((settingOption) => (
             <li key={uuidv4()} className="button-expand-options__li">
               <button
                 onClick={() => handleClickOption(settingOption)}
+                tabIndex={isLargeScreen || showSettingsOptions ? 0 : -1}
                 type="button"
-                className="button-expand-options__btn"
+                className={
+                  isLargeScreen
+                    ? 'account-expand-options__btn'
+                    : 'button-expand-options__btn' // Same here
+                }
                 aria-pressed={selectedOption === settingOption}
                 data-selected-option-acc-settings={
                   selectedOption === settingOption
