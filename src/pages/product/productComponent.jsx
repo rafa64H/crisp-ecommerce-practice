@@ -47,10 +47,12 @@ const ProductComponent = ({ clothesData }) => {
         <img className="product-img-section__main-img" src={selectedImage} />
 
         <div className="product-img-section__square-btns">
-          {images.map((image) => (
+          {images.map((image, index) => (
             <button
               key={uuidv4()}
               data-square-active={selectedImage === image}
+              aria-pressed={selectedImage === image}
+              aria-label={`See image ${index + 1}`}
               type="button"
               className="square"
               onClick={(e) => handleChangeSelectedImage(image)}
