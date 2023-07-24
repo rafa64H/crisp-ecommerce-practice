@@ -42,19 +42,11 @@ const ProductComponent = ({ clothesData }) => {
   }
 
   return (
-    <section>
-      <section
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          width: 'min(100%, 25rem)',
-          margin: '0 auto',
-        }}
-      >
-        <img src={selectedImage} />
+    <section className="product">
+      <section className="product-img-section">
+        <img className="product-img-section__main-img" src={selectedImage} />
 
-        <div style={{ margin: '0.5em 0' }}>
+        <div className="product-img-section__square-btns">
           {images.map((image) => (
             <button
               key={uuidv4()}
@@ -67,73 +59,55 @@ const ProductComponent = ({ clothesData }) => {
         </div>
       </section>
 
-      <section
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
+      <section className="product-details-section">
         <h1>{product.productName}</h1>
+        <p>{product.productDescription}</p>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: 'min(95%, 40rem)',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              border: '2px solid gray',
-              maxWidth: '50%',
-              padding: '0.75em',
-            }}
-          >
-            <label style={{ fontWeight: '500' }} htmlFor="quantity">
+        <div className="product-quantity-price-color">
+          <div className="product-quantity">
+            <label className="quantity-label" htmlFor="quantity">
               QUANTITY
             </label>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: '20%',
-              }}
-            >
-              <button type="button" aria-label="Reduce quantity of items">
-                <i style={{ color: 'black' }} className="fa-solid fa-minus" />
+            <div className="select-quantity">
+              <button
+                className="select-quantity__btn"
+                type="button"
+                aria-label="Reduce quantity of items"
+              >
+                <i className="fa-solid fa-minus select-quantity__btn-icon" />
               </button>
 
               <input
                 type="number"
+                className="select-quantity-number"
                 readOnly
-                style={{ border: 'transparent', textAlign: 'center' }}
                 min={0}
                 max={99}
                 id="quantity"
               />
 
-              <button type="button" aria-label="Increase quantity of items">
-                <i style={{ color: 'black' }} className="fa-solid fa-plus" />
+              <button
+                className="select-quantity__btn"
+                type="button"
+                aria-label="Increase quantity of items"
+              >
+                <i className="fa-solid fa-plus select-quantity__btn-icon" />
               </button>
             </div>
           </div>
 
-          <div>
+          <div className="product-color">
             <h2>
               <strong>{product.priceString}$</strong>
             </h2>
 
             <h3>SELECT COLOR</h3>
 
-            <div>
+            <div className="select-color">
               {product.colors.map((colorObj) => (
                 <button
                   type="button"
+                  className="select-color__btn"
                   key={uuidv4()}
                   aria-label={`Select ${colorObj.name}`}
                   className={`clothes-color-btn ${colorObj.class}`}
@@ -145,7 +119,7 @@ const ProductComponent = ({ clothesData }) => {
 
         <h2>Select size</h2>
 
-        <div style={{ width: '100%' }}>
+        <div className="button-expand-container">
           <button
             type="button"
             className="button-expand"
@@ -178,25 +152,14 @@ const ProductComponent = ({ clothesData }) => {
           </ul>
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            margin: '1em',
-          }}
-        >
-          <button
-            style={{ margin: '0 0.5em' }}
-            type="button"
-            className="black-btn"
-          >
+        <div className="product-decision">
+          <button className="black-btn product-decision__btn" type="button">
             Add to bag
           </button>
 
           <button
-            style={{ margin: '0 0.5em' }}
+            className=" transparent-btn product-decision__btn"
             type="button"
-            className="transparent-btn"
           >
             Save
           </button>
