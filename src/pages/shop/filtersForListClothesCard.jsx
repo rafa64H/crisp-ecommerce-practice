@@ -89,15 +89,17 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
 
   return (
     <>
-      <button
-        type="button"
-        className="button-expand"
-        aria-expanded={showShopSectionFilters}
-        onClick={handleClickExpandFilters}
-      >
-        Filters
-        <i className={`fa-solid ${expandFiltersIcon} icon`} />
-      </button>
+      <div className="button-expand-container">
+        <button
+          type="button"
+          className="button-expand"
+          aria-expanded={showShopSectionFilters}
+          onClick={handleClickExpandFilters}
+        >
+          Filters
+          <i className={`fa-solid ${expandFiltersIcon} icon`} />
+        </button>
+      </div>
 
       <div
         className="shop-section-filters"

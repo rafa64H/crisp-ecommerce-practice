@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
 
@@ -7,15 +7,29 @@ const ProductComponent = ({ clothesData }) => {
   const [selectedImage, setSelectedImage] = useState();
   const [showSizeOptions, setShowSizeOptions] = useState(false);
   const [changeIcon, setChangeIcon] = useState('fa-plus');
+  const [changeIcon2, setChangeIcon2] = useState('fa-plus');
   const [selectedSize, setSelectedSize] = useState('');
+  const [showDetails, setShowDetails] = useState(false);
 
-  function handleClickExpand() {
+  const quantityRef = useRef();
+
+  function handleClickExpandSelectSize() {
     if (showSizeOptions) {
       setShowSizeOptions(false);
       setChangeIcon('fa-plus');
     } else {
       setShowSizeOptions(true);
       setChangeIcon('fa-minus');
+    }
+  }
+
+  function handleClickExpandDetails() {
+    if (showDetails) {
+      setShowDetails(false);
+      setChangeIcon2('fa-plus');
+    } else {
+      setShowDetails(true);
+      setChangeIcon2('fa-minus');
     }
   }
 
@@ -27,6 +41,7 @@ const ProductComponent = ({ clothesData }) => {
 
   const images = product.otherImages;
   useEffect(() => {
+    quantityRef.current.value = 0;
     handleLargeScreen(setIsLargeScreen);
 
     setSelectedImage(images[0]);
@@ -35,6 +50,18 @@ const ProductComponent = ({ clothesData }) => {
 
   function handleChangeSelectedImage(image) {
     setSelectedImage(image);
+  }
+
+  function handleChangeQuantity(increaseOrDicrease) {
+    if (increaseOrDicrease) {
+      if (Number(quantityRef.current.value) === 99) return null;
+
+      quantityRef.current.value = Number(quantityRef.current.value) + 1;
+    } else {
+      if (Number(quantityRef.current.value) === 0) return null;
+
+      quantityRef.current.value = Number(quantityRef.current.value) - 1;
+    }
   }
 
   function handleClickOptionSize(clickedSize) {
@@ -61,7 +88,7 @@ const ProductComponent = ({ clothesData }) => {
         </div>
       </section>
 
-      <section className="product-details-section">
+      <section className="product-choices-section">
         <h1>{product.productName}</h1>
         <p>{product.productDescription}</p>
 
@@ -73,6 +100,7 @@ const ProductComponent = ({ clothesData }) => {
             <div className="select-quantity">
               <button
                 className="select-quantity__btn"
+                onClick={() => handleChangeQuantity(false)}
                 type="button"
                 aria-label="Reduce quantity of items"
               >
@@ -81,6 +109,7 @@ const ProductComponent = ({ clothesData }) => {
 
               <input
                 type="number"
+                ref={quantityRef}
                 className="select-quantity-number"
                 readOnly
                 min={0}
@@ -90,6 +119,7 @@ const ProductComponent = ({ clothesData }) => {
 
               <button
                 className="select-quantity__btn"
+                onClick={() => handleChangeQuantity(true)}
                 type="button"
                 aria-label="Increase quantity of items"
               >
@@ -125,7 +155,7 @@ const ProductComponent = ({ clothesData }) => {
           <button
             type="button"
             className="button-expand"
-            onClick={handleClickExpand}
+            onClick={handleClickExpandSelectSize}
           >
             Select Size
             <i className={`fa-solid ${changeIcon} icon`} />
@@ -165,6 +195,54 @@ const ProductComponent = ({ clothesData }) => {
           >
             Save
           </button>
+        </div>
+
+        <div className="product-code-social-media">
+          <div className="product-social-media">
+            <h4>SHARE: </h4>
+            <a href="#" className="product-social-links-atag">
+              <i className="fa-brands fa-twitter" />
+            </a>
+            <a href="#" className="product-social-links-atag">
+              <i className="fa-brands fa-facebook-f" />
+            </a>
+            <a href="#" className="product-social-links-atag">
+              <i className="fa-brands fa-instagram" />
+            </a>
+          </div>
+
+          <p className="product-code">
+            <strong>PRODUCT CODE: </strong>
+            {product.productId}
+          </p>
+        </div>
+      </section>
+
+      <section className="product-details-section">
+        <h2 className="product-details-section__h2">DETAILS</h2>
+
+        <button
+          type="button"
+          className="button-expand2"
+          onClick={handleClickExpandDetails}
+        >
+          Details
+          <i className={`fa-solid ${changeIcon2} icon`} />
+        </button>
+
+        <div
+          className="product-details-section-div"
+          data-show-product-details-div={showDetails}
+        >
+          <h3 className="product-details-section-div__h3">ABOUT PRODUCT</h3>
+          <p>{product.productDescription}</p>
+
+          <h3 className="product-details-section-div__h3">OVERVIEW</h3>
+          <ul className="product-details-section-div-list">
+            {product.productOverview.map((text) => (
+              <li className="product-details-section-div-list__item">{text}</li>
+            ))}
+          </ul>
         </div>
       </section>
     </section>

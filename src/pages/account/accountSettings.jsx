@@ -300,43 +300,45 @@ const AccountSettings = () => {
       <h1 className="account-settings-title">Account settings</h1>
 
       <section className="account-settings">
-        <button
-          type="button"
-          className="button-expand"
-          aria-expanded={showSettingsOptions}
-          onClick={handleClickExpand}
-        >
-          {selectedOption}
-          <i className={`fa-solid ${changeIcon} icon`} />
-        </button>
-
-        <ul
-          className={
-            isLargeScreen ? 'account-expand-options' : 'button-expand-options' // I will use button-expand-options in other place so I do this
-          }
-          data-show-button-expand-options={showSettingsOptions}
-        >
-          {settingsOptions.map((settingOption) => (
-            <li key={uuidv4()} className="button-expand-options__li">
-              <button
-                onClick={() => handleClickOption(settingOption)}
-                tabIndex={isLargeScreen || showSettingsOptions ? 0 : -1}
-                type="button"
-                className={
-                  isLargeScreen
-                    ? 'account-expand-options__btn'
-                    : 'button-expand-options__btn' // Same here
-                }
-                aria-pressed={selectedOption === settingOption}
-                data-selected-option-acc-settings={
-                  selectedOption === settingOption
-                }
-              >
-                {settingOption}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div className="button-expand-container">
+          {' '}
+          <button
+            type="button"
+            className="button-expand"
+            aria-expanded={showSettingsOptions}
+            onClick={handleClickExpand}
+          >
+            {selectedOption}
+            <i className={`fa-solid ${changeIcon} icon`} />
+          </button>
+          <ul
+            className={
+              isLargeScreen ? 'account-expand-options' : 'button-expand-options' // I will use button-expand-options in other place so I do this
+            }
+            data-show-button-expand-options={showSettingsOptions}
+          >
+            {settingsOptions.map((settingOption) => (
+              <li key={uuidv4()} className="button-expand-options__li">
+                <button
+                  onClick={() => handleClickOption(settingOption)}
+                  tabIndex={isLargeScreen || showSettingsOptions ? 0 : -1}
+                  type="button"
+                  className={
+                    isLargeScreen
+                      ? 'account-expand-options__btn'
+                      : 'button-expand-options__btn' // Same here
+                  }
+                  aria-pressed={selectedOption === settingOption}
+                  data-selected-option-acc-settings={
+                    selectedOption === settingOption
+                  }
+                >
+                  {settingOption}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <form
           className="form-account-settings"
