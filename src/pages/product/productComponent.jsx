@@ -69,153 +69,161 @@ const ProductComponent = ({ clothesData }) => {
   }
 
   return (
-    <section className="product">
-      <section className="product-img-section">
-        <img className="product-img-section__main-img" src={selectedImage} />
+    <>
+      <section className="product">
+        <section className="product-img-section">
+          <img className="product-img-section__main-img" src={selectedImage} />
 
-        <div className="product-img-section__square-btns">
-          {images.map((image, index) => (
-            <button
-              key={uuidv4()}
-              data-square-active={selectedImage === image}
-              aria-pressed={selectedImage === image}
-              aria-label={`See image ${index + 1}`}
-              type="button"
-              className="square"
-              onClick={(e) => handleChangeSelectedImage(image)}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className="product-choices-section">
-        <h1>{product.productName}</h1>
-        <p>{product.productDescription}</p>
-
-        <div className="product-quantity-price-color">
-          <div className="product-quantity">
-            <label className="quantity-label" htmlFor="quantity">
-              QUANTITY
-            </label>
-            <div className="select-quantity">
+          <div className="product-img-section__square-btns">
+            {images.map((image, index) => (
               <button
-                className="select-quantity__btn"
-                onClick={() => handleChangeQuantity(false)}
+                key={uuidv4()}
+                data-square-active={selectedImage === image}
+                aria-pressed={selectedImage === image}
+                aria-label={`See image ${index + 1}`}
                 type="button"
-                aria-label="Reduce quantity of items"
-              >
-                <i className="fa-solid fa-minus select-quantity__btn-icon" />
-              </button>
-
-              <input
-                type="number"
-                ref={quantityRef}
-                className="select-quantity-number"
-                readOnly
-                min={0}
-                max={99}
-                id="quantity"
+                className="square"
+                onClick={(e) => handleChangeSelectedImage(image)}
               />
-
-              <button
-                className="select-quantity__btn"
-                onClick={() => handleChangeQuantity(true)}
-                type="button"
-                aria-label="Increase quantity of items"
-              >
-                <i className="fa-solid fa-plus select-quantity__btn-icon" />
-              </button>
-            </div>
-          </div>
-
-          <div className="product-color">
-            <h2>
-              <strong>{product.priceString}$</strong>
-            </h2>
-
-            <h3>SELECT COLOR</h3>
-
-            <div className="select-color">
-              {product.colors.map((colorObj) => (
-                <button
-                  type="button"
-                  className="select-color__btn"
-                  key={uuidv4()}
-                  aria-label={`Select ${colorObj.name}`}
-                  className={`clothes-color-btn ${colorObj.class}`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <h2>Select size</h2>
-
-        <div className="button-expand-container">
-          <button
-            type="button"
-            className="button-expand"
-            onClick={handleClickExpandSelectSize}
-          >
-            Select Size
-            <i className={`fa-solid ${changeIcon} icon`} />
-          </button>
-
-          <ul
-            className="button-expand-options"
-            data-show-button-expand-options={showSizeOptions}
-          >
-            {sizes.map((sizeElementArr) => (
-              <li key={uuidv4()} className="button-expand-options__li">
-                <button
-                  onClick={() => handleClickOptionSize(sizeElementArr[0])}
-                  tabIndex={isLargeScreen || showSizeOptions ? 0 : -1}
-                  type="button"
-                  className="button-expand-options__btn"
-                  aria-pressed={selectedSize === sizeElementArr[0]}
-                  data-selected-option-acc-settings={
-                    selectedSize === sizeElementArr[0]
-                  }
-                >
-                  {sizeElementArr}
-                </button>
-              </li>
             ))}
-          </ul>
-        </div>
+          </div>
+        </section>
 
-        <div className="product-decision">
-          <button className="black-btn product-decision__btn" type="button">
-            Add to bag
-          </button>
+        <section className="product-choices-section">
+          <h1>{product.productName}</h1>
+          <p>{product.productDescription}</p>
 
-          <button
-            className=" transparent-btn product-decision__btn"
-            type="button"
-          >
-            Save
-          </button>
-        </div>
+          <div className="product-quantity-price-color">
+            <div className="product-quantity">
+              <label className="quantity-label" htmlFor="quantity">
+                QUANTITY
+              </label>
+              <div className="select-quantity">
+                <button
+                  className="select-quantity__btn"
+                  onClick={() => handleChangeQuantity(false)}
+                  type="button"
+                  aria-label="Reduce quantity of items"
+                >
+                  <i className="fa-solid fa-minus select-quantity__btn-icon" />
+                </button>
 
-        <div className="product-code-social-media">
-          <div className="product-social-media">
-            <h4>SHARE: </h4>
-            <a href="#" className="product-social-links-atag">
-              <i className="fa-brands fa-twitter" />
-            </a>
-            <a href="#" className="product-social-links-atag">
-              <i className="fa-brands fa-facebook-f" />
-            </a>
-            <a href="#" className="product-social-links-atag">
-              <i className="fa-brands fa-instagram" />
-            </a>
+                <input
+                  type="number"
+                  ref={quantityRef}
+                  className="select-quantity-number"
+                  readOnly
+                  min={0}
+                  max={99}
+                  id="quantity"
+                />
+
+                <button
+                  className="select-quantity__btn"
+                  onClick={() => handleChangeQuantity(true)}
+                  type="button"
+                  aria-label="Increase quantity of items"
+                >
+                  <i className="fa-solid fa-plus select-quantity__btn-icon" />
+                </button>
+              </div>
+            </div>
+
+            <div className="product-color">
+              <h2>
+                <strong>{product.priceString}$</strong>
+              </h2>
+
+              <h3>SELECT COLOR</h3>
+
+              <div className="select-color">
+                {product.colors.map((colorObj) => (
+                  <button
+                    type="button"
+                    className="select-color__btn"
+                    key={uuidv4()}
+                    aria-label={`Select ${colorObj.name}`}
+                    className={`clothes-color-btn ${colorObj.class}`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
 
-          <p className="product-code">
-            <strong>PRODUCT CODE: </strong>
-            {product.productId}
-          </p>
-        </div>
+          <h2>Select size</h2>
+
+          <div className="button-expand-container">
+            <button
+              type="button"
+              className="button-expand"
+              onClick={handleClickExpandSelectSize}
+            >
+              Select Size
+              <i className={`fa-solid ${changeIcon} icon`} />
+            </button>
+
+            <ul
+              className={
+                isLargeScreen ? 'product-size-options' : 'button-expand-options'
+              }
+              data-show-button-expand-options={showSizeOptions}
+            >
+              {sizes.map((sizeElementArr) => (
+                <li key={uuidv4()} className="button-expand-options__li">
+                  <button
+                    onClick={() => handleClickOptionSize(sizeElementArr[0])}
+                    tabIndex={isLargeScreen || showSizeOptions ? 0 : -1}
+                    type="button"
+                    className={
+                      isLargeScreen
+                        ? 'button-product-size-options__btn'
+                        : 'button-expand-options__btn'
+                    }
+                    aria-pressed={selectedSize === sizeElementArr[0]}
+                    data-selected-option-acc-settings={
+                      selectedSize === sizeElementArr[0]
+                    }
+                  >
+                    {sizeElementArr}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="product-decision">
+            <button className="black-btn product-decision__btn" type="button">
+              Add to bag
+            </button>
+
+            <button
+              className=" transparent-btn product-decision__btn"
+              type="button"
+            >
+              Save
+            </button>
+          </div>
+
+          <div className="product-code-social-media">
+            <div className="product-social-media">
+              <h4>SHARE: </h4>
+              <a href="#" className="product-social-links-atag">
+                <i className="fa-brands fa-twitter" />
+              </a>
+              <a href="#" className="product-social-links-atag">
+                <i className="fa-brands fa-facebook-f" />
+              </a>
+              <a href="#" className="product-social-links-atag">
+                <i className="fa-brands fa-instagram" />
+              </a>
+            </div>
+
+            <p className="product-code">
+              <strong>PRODUCT CODE: </strong>
+              {product.productId}
+            </p>
+          </div>
+        </section>
       </section>
 
       <section className="product-details-section">
@@ -245,7 +253,7 @@ const ProductComponent = ({ clothesData }) => {
           </ul>
         </div>
       </section>
-    </section>
+    </>
   );
 };
 
