@@ -301,7 +301,6 @@ const AccountSettings = () => {
 
       <section className="account-settings">
         <div className="button-expand-container">
-          {' '}
           <button
             type="button"
             className="button-expand"

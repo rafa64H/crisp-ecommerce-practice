@@ -8,6 +8,7 @@ import handleLargeScreen from '../utils/handleLargeScreen';
 const Header = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [shoppingBagOpen, setShoppingBagOpen] = useState(false);
 
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [userEmailVerified, setUserEmailVerified] = useState(true);
@@ -83,14 +84,72 @@ const Header = () => {
               userEmailVerified={userEmailVerified}
             />
 
-            <ShopBtn desktopOrMobile="desktop" />
+            <ShopBtn
+              desktopOrMobile="desktop"
+              shoppingBagOpen={shoppingBagOpen}
+              setShoppingBagOpen={setShoppingBagOpen}
+            />
           </div>
         </ul>
       </nav>
 
       <div className="search-shop-btns-cont">
         <SearchBtn desktopOrMobile="mobile" />
-        <ShopBtn desktopOrMobile="mobile" />
+        <ShopBtn
+          desktopOrMobile="mobile"
+          shoppingBagOpen={shoppingBagOpen}
+          setShoppingBagOpen={setShoppingBagOpen}
+        />
+      </div>
+      <div className="shopping-bag" data-open-shopping-bag={shoppingBagOpen}>
+        <button
+          className="shopping-bag__close-btn"
+          onClick={() => setShoppingBagOpen(false)}
+        >
+          <i className="fa-solid fa-xmark" />
+        </button>
+        <ul>
+          <li>
+            <img
+              src="https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
+              alt=""
+            />
+            <p>This is some clothes that is cool</p>
+            <button>
+              <i className="fa-solid fa-trash" />
+            </button>
+          </li>
+          <li>
+            <img
+              src="https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
+              alt=""
+            />
+            <p>This is some clothes that is cool</p>
+            <button>
+              <i className="fa-solid fa-trash" />
+            </button>
+          </li>
+          <li>
+            <img
+              src="https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
+              alt=""
+            />
+            <p>This is some clothes that is cool</p>
+            <button>
+              <i className="fa-solid fa-trash" />
+            </button>
+          </li>
+          <li>
+            <img
+              src="https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
+              alt=""
+            />
+            <p>This is some clothes that is cool</p>
+            <button>
+              <i className="fa-solid fa-trash" />
+            </button>
+          </li>
+        </ul>
       </div>
     </header>
   );
@@ -151,14 +210,19 @@ const SearchBtn = ({ desktopOrMobile }) => {
   );
 };
 
-const ShopBtn = ({ desktopOrMobile }) => {
+const ShopBtn = ({ desktopOrMobile, shoppingBagOpen, setShoppingBagOpen }) => {
+  async function handleClickOpenShoppingBag() {
+    setShoppingBagOpen(!shoppingBagOpen);
+  }
+
   // This will have display:none if window width > 1200px
   if (desktopOrMobile === 'mobile') {
     return (
       <button
         type="button"
         className="shop-btn-mobile"
-        aria-label="Shopping cart"
+        aria-label="Shopping bag"
+        onClick={handleClickOpenShoppingBag}
       >
         <i className="fas fa-shopping-bag" />
       </button>
@@ -167,10 +231,14 @@ const ShopBtn = ({ desktopOrMobile }) => {
 
   // This will have display:none if window width < 1200px
   return (
-    <button type="button" className="shop-btn-desktop">
+    <button
+      type="button"
+      className="shop-btn-desktop"
+      onClick={handleClickOpenShoppingBag}
+    >
       <i className="fas fa-shopping-bag" />
       <div className="shop-btn-text">
-        <p className="shop-btn-text__p">Shopping cart</p>
+        <p className="shop-btn-text__p">Shopping bag</p>
         <p className="shop-btn-text__eur">0.00 EUR</p>
       </div>
     </button>

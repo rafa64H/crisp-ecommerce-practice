@@ -452,6 +452,62 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
+.shopping-bag {
+  position: absolute;
+  right: 5%;
+  top: 25%;
+  z-index: 3;
+
+  background-color: white;
+  padding: 1em;
+  padding-top: 0.25em;
+
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+  transition: all 200ms;
+
+  &__close-btn {
+    position: relative;
+    left: 93%;
+    i {
+      color: black;
+    }
+  }
+
+  ul {
+    border: 1px solid $light-gray;
+    padding: 0 1.5em;
+    overflow-y: scroll;
+    height: 10rem;
+    li {
+      display: flex;
+      align-items: center;
+
+      margin: 0.5em 0;
+      border-bottom: 1px solid $light-gray;
+
+      img {
+        width: 4rem;
+      }
+
+      p {
+        margin: 0 0.25em;
+      }
+
+      button {
+        i {
+          color: black;
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+}
+[data-open-shopping-bag='true'] {
+  transform-origin: 50% 0%;
+  transform: scaleY(1);
+}
+
 //common used components END
 
 //----------------------------------------------------------------
