@@ -1534,19 +1534,28 @@ footer {
   .product {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 
     margin: 0 auto;
 
     .product-img-section {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: flex-start;
       width: 40%;
       margin: 0;
 
+      &__main-img {
+        order: 1;
+      }
+
       &__square-btns {
         margin: 0.5em 0;
+        order: 0;
+
+        [data-square-active='true'] {
+          padding: 0.8em;
+        }
       }
     }
 
@@ -1555,6 +1564,8 @@ footer {
       flex-direction: column;
       align-items: flex-start;
       width: 55%;
+
+      margin: 0 1em;
 
       .product-quantity-price-color {
         display: flex;

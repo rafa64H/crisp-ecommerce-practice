@@ -5,10 +5,12 @@ import handleLargeScreen from '../../components/utils/handleLargeScreen';
 const ProductComponent = ({ clothesData }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
+  const [colorImage, setColorImage] = useState();
   const [showSizeOptions, setShowSizeOptions] = useState(false);
   const [changeIcon, setChangeIcon] = useState('fa-plus');
   const [changeIcon2, setChangeIcon2] = useState('fa-plus');
   const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
   const [showDetails, setShowDetails] = useState(false);
 
   const quantityRef = useRef();
@@ -40,17 +42,6 @@ const ProductComponent = ({ clothesData }) => {
   Object.values(product.sizes).forEach((sizeArr) => sizes.push(sizeArr));
 
   const images = product.otherImages;
-  useEffect(() => {
-    quantityRef.current.value = 0;
-    handleLargeScreen(setIsLargeScreen);
-
-    setSelectedImage(images[0]);
-    setSelectedSize(sizes[0][0]);
-  }, []);
-
-  function handleChangeSelectedImage(image) {
-    setSelectedImage(image);
-  }
 
   function handleChangeQuantity(increaseOrDicrease) {
     if (increaseOrDicrease) {
@@ -68,6 +59,20 @@ const ProductComponent = ({ clothesData }) => {
     setSelectedSize(clickedSize);
   }
 
+  useEffect(() => {
+    quantityRef.current.value = 0;
+    handleLargeScreen(setIsLargeScreen);
+
+    setSelectedColor(product.colors[0].name);
+    setColorImage(product.colors[0].imageUrl);
+    setSelectedImage(product.colors[0].imageUrl);
+    setSelectedSize(sizes[0][0]);
+  }, []);
+
+  function handleChangeSelectedImage(image) {
+    setSelectedImage(image);
+  }
+
   return (
     <>
       <section className="product">
@@ -75,6 +80,14 @@ const ProductComponent = ({ clothesData }) => {
           <img className="product-img-section__main-img" src={selectedImage} />
 
           <div className="product-img-section__square-btns">
+            <button
+              data-square-active={selectedImage === colorImage}
+              aria-pressed={selectedImage === colorImage}
+              aria-label={`See image ${selectedColor}`}
+              type="button"
+              className="square"
+              onClick={(e) => handleChangeSelectedImage(colorImage)}
+            />
             {images.map((image, index) => (
               <button
                 key={uuidv4()}
@@ -140,9 +153,14 @@ const ProductComponent = ({ clothesData }) => {
                 {product.colors.map((colorObj) => (
                   <button
                     type="button"
-                    className="select-color__btn"
+                    data-color-active={selectedColor === colorObj.name}
                     key={uuidv4()}
                     aria-label={`Select ${colorObj.name}`}
+                    onClick={() => {
+                      setSelectedColor(colorObj.name);
+                      setColorImage(colorObj.imageUrl);
+                      setSelectedImage(colorObj.imageUrl);
+                    }}
                     className={`clothes-color-btn ${colorObj.class}`}
                   />
                 ))}
@@ -248,7 +266,12 @@ const ProductComponent = ({ clothesData }) => {
           <h3 className="product-details-section-div__h3">OVERVIEW</h3>
           <ul className="product-details-section-div-list">
             {product.productOverview.map((text) => (
-              <li className="product-details-section-div-list__item">{text}</li>
+              <li
+                key={uuidv4()}
+                className="product-details-section-div-list__item"
+              >
+                {text}
+              </li>
             ))}
           </ul>
         </div>
