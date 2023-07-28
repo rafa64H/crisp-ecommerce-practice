@@ -1,9 +1,12 @@
 import { React, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
+import { v4 as uuidv4 } from 'uuid';
 import { auth } from '../../config-firebase/firebase';
 
 import CompanyLogo from './smaller/companyLogo';
 import handleLargeScreen from '../utils/handleLargeScreen';
+import { getDataOfUser, updateCart } from '../utils/firebaseFunctions';
+import clothesData from '../../data/clothes_data.json';
 
 const Header = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -12,23 +15,87 @@ const Header = () => {
 
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [userEmailVerified, setUserEmailVerified] = useState(true);
+  const [shoppingBagItems, setShoppingBagItems] = useState();
+  const [shoppingBagItemsNotFound, setShoppingBagItemsNotFound] =
+    useState(true);
 
   useEffect(() => {
     handleLargeScreen(setIsLargeScreen);
   }, []);
 
+  async function getAndSetCartItems() {
+    const userData = await getDataOfUser();
+    setShoppingBagItems(userData.cart);
+  }
+
+  function buildAllShoppingBagItems() {
+    if (shoppingBagItems !== undefined) {
+      const allCartItems = shoppingBagItems.map((itemFromShoppingBagState) => {
+        const product = clothesData[0].find(
+          (clothesDataItem) =>
+            clothesDataItem.productId == itemFromShoppingBagState.id
+        );
+
+        const colorImg = product.colors.find(
+          (colorObj) => colorObj.name === itemFromShoppingBagState.color
+        ).imageUrl;
+
+        return (
+          <ShoppingBagListItem
+            key={uuidv4}
+            productImg={colorImg}
+            productColor={itemFromShoppingBagState.color}
+            productSize={itemFromShoppingBagState.size}
+            productName={itemFromShoppingBagState.name}
+            onClickDeleteItemShoppingBagFunction={() =>
+              deleteShoppingItemFromState(itemFromShoppingBagState.id)
+            }
+          />
+        );
+      });
+
+      return allCartItems;
+    }
+  }
+
+  function deleteShoppingItemFromState(productId) {
+    setShoppingBagItems((prevShoppingBagItems) =>
+      prevShoppingBagItems.filter(
+        (itemFromState) => itemFromState.id !== productId
+      )
+    );
+  }
+  async function changeShoppingItemFromFirestore(cartToUpdate) {
+    if (!shoppingBagItems) {
+      return null;
+    }
+    try {
+      await updateCart(cartToUpdate);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUserLoggedIn(true);
         if (!user.emailVerified) {
           setUserEmailVerified(false);
         }
+        await getAndSetCartItems();
       } else {
         setUserLoggedIn(false);
       }
     });
   }, []);
+
+  useEffect(() => {
+    changeShoppingItemFromFirestore(shoppingBagItems);
+    if (shoppingBagItems === undefined) {
+    } else if (shoppingBagItems.length === 0) setShoppingBagItemsNotFound(true);
+    else if (shoppingBagItems.length !== 0) setShoppingBagItemsNotFound(false);
+  }, [shoppingBagItems]);
 
   return (
     <header>
@@ -103,52 +170,18 @@ const Header = () => {
       </div>
       <div className="shopping-bag" data-open-shopping-bag={shoppingBagOpen}>
         <button
+          type="button"
           className="shopping-bag__close-btn"
+          aria-label="Close shopping bag"
           onClick={() => setShoppingBagOpen(false)}
         >
           <i className="fa-solid fa-xmark" />
         </button>
-        <ul>
-          <li>
-            <img
-              src="https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
-              alt=""
-            />
-            <p>This is some clothes that is cool</p>
-            <button>
-              <i className="fa-solid fa-trash" />
-            </button>
-          </li>
-          <li>
-            <img
-              src="https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
-              alt=""
-            />
-            <p>This is some clothes that is cool</p>
-            <button>
-              <i className="fa-solid fa-trash" />
-            </button>
-          </li>
-          <li>
-            <img
-              src="https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
-              alt=""
-            />
-            <p>This is some clothes that is cool</p>
-            <button>
-              <i className="fa-solid fa-trash" />
-            </button>
-          </li>
-          <li>
-            <img
-              src="https://cdn.discordapp.com/attachments/1110960506665193574/1110960617130569788/extra-fine-cotton-short-sleeve-shirt-white.jpg"
-              alt=""
-            />
-            <p>This is some clothes that is cool</p>
-            <button>
-              <i className="fa-solid fa-trash" />
-            </button>
-          </li>
+        <ul className="shopping-bag-list">
+          <p className="not-found" data-not-found={shoppingBagItemsNotFound}>
+            Items not found or you aren't logged in yet
+          </p>
+          {buildAllShoppingBagItems()}
         </ul>
       </div>
     </header>
@@ -286,5 +319,34 @@ const ProfileLink = ({
     >
       Email is not verified!
     </p>
+  </li>
+);
+
+const ShoppingBagListItem = ({
+  productImg,
+  productName,
+  productSize,
+  productColor,
+  onClickDeleteItemShoppingBagFunction,
+}) => (
+  <li className="shopping-bag-list-item">
+    <img src={`${productImg}`} className="shopping-bag-list-item__img" alt="" />
+    <div className="shopping-bag-list-item-text">
+      <p className="shopping-bag-list-item-text__paragraph">
+        <strong>{productName}</strong>
+      </p>
+
+      <p>Size: {productSize}</p>
+      <p>Color: {productColor}</p>
+    </div>
+
+    <button
+      type="button"
+      onClick={onClickDeleteItemShoppingBagFunction}
+      aria-label="Delete item from shopping bag"
+      className="shopping-bag-list-item__delete-btn"
+    >
+      <i className="fa-solid fa-trash" />
+    </button>
   </li>
 );

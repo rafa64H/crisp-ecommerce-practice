@@ -128,18 +128,6 @@ export async function changeAccountAddress(
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
-  // await setDoc(doc(usersCollectionRef, uid), {
-  //   address: {
-  //     firstNameAddress,
-  //     lastNameAddress,
-  //     phoneNumber,
-  //     streetAddress,
-  //     country,
-  //     state,
-  //     postalCode,
-  //   },
-  // });
-
   const addressToUpdate = {
     firstNameAddress,
     lastNameAddress,
@@ -161,4 +149,18 @@ export async function changeAccountAddress(
 
 export async function logOutUser() {
   await signOut(auth);
+}
+
+export async function updateCart(cartToUpdate) {
+  const currentUser = await auth.currentUser;
+  const { uid } = currentUser;
+  console.log(cartToUpdate);
+
+  const userRef = doc(db, 'users', uid);
+
+  await updateDoc(userRef, {
+    cart: cartToUpdate,
+  });
+
+  console.log('sent');
 }
