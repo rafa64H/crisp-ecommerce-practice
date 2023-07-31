@@ -3,19 +3,21 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { auth } from '../../config-firebase/firebase';
 
-import CompanyLogo from './smaller/companyLogo';
-import handleLargeScreen from '../utils/handleLargeScreen';
-import { getDataOfUser, updateCart } from '../utils/firebaseFunctions';
+import CompanyLogo from '../../components/ui/smaller/companyLogo';
+import handleLargeScreen from '../../components/utils/handleLargeScreen';
+import {
+  getDataOfUser,
+  updateCart,
+} from '../../components/utils/firebaseFunctions';
 import clothesData from '../../data/clothes_data.json';
 
-const Header = () => {
+const HeaderProduct = ({ shoppingBagItems, setShoppingBagItems }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [shoppingBagOpen, setShoppingBagOpen] = useState(false);
 
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [userEmailVerified, setUserEmailVerified] = useState(true);
-  const [shoppingBagItems, setShoppingBagItems] = useState();
   const [shoppingBagItemsNotFound, setShoppingBagItemsNotFound] =
     useState(true);
 
@@ -206,7 +208,7 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderProduct;
 
 const OpenNavBtn = ({ isNavOpen, setIsNavOpen }) => {
   const [iconNavBtn, setIconNavBtn] = useState('fa-bars');

@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
 
-const ProductComponent = ({ clothesData }) => {
+const ProductComponent = ({
+  clothesData,
+  shoppingBagItems,
+  setShoppingBagItems,
+}) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
   const [colorImage, setColorImage] = useState();
@@ -60,7 +64,7 @@ const ProductComponent = ({ clothesData }) => {
   }
 
   useEffect(() => {
-    quantityRef.current.value = 0;
+    quantityRef.current.value = 1;
     handleLargeScreen(setIsLargeScreen);
 
     setSelectedColor(product.colors[0].name);
@@ -71,6 +75,29 @@ const ProductComponent = ({ clothesData }) => {
 
   function handleChangeSelectedImage(image) {
     setSelectedImage(image);
+  }
+
+  function handleAddToBag() {
+    const checkThereIsSameItem = shoppingBagItems.find(
+      (itemFromState) =>
+        itemFromState.name === product.productName &&
+        itemFromState.id === product.productId &&
+        itemFromState.color === selectedColor &&
+        itemFromState.size === selectedSize
+    );
+
+    if (checkThereIsSameItem !== undefined) return null;
+
+    setShoppingBagItems([
+      ...shoppingBagItems,
+      {
+        name: product.productName,
+        id: product.productId,
+        size: selectedSize,
+        quantity: quantityRef.current.value,
+        color: selectedColor,
+      },
+    ]);
   }
 
   return (
@@ -210,7 +237,11 @@ const ProductComponent = ({ clothesData }) => {
           </div>
 
           <div className="product-decision">
-            <button className="black-btn product-decision__btn" type="button">
+            <button
+              className="black-btn product-decision__btn"
+              type="button"
+              onClick={handleAddToBag}
+            >
               Add to bag
             </button>
 
