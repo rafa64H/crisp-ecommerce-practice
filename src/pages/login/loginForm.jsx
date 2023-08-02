@@ -41,8 +41,8 @@ const LoginForm = () => {
       setLoading(false);
       return null;
     }
-    setLoading(false);
 
+    setLoading(false);
     window.location.href = 'index.html';
   }
 

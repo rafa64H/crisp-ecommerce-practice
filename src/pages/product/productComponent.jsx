@@ -42,8 +42,7 @@ const ProductComponent = ({
   const params = new URLSearchParams(window.location.search);
   const id = params.get('productId');
   const product = clothesData.find((item) => item.productId === Number(id));
-  const sizes = [];
-  Object.values(product.sizes).forEach((sizeArr) => sizes.push(sizeArr));
+  const sizes = product.sizes.map((size) => size);
 
   const images = product.otherImages;
 
@@ -51,12 +50,13 @@ const ProductComponent = ({
     if (increaseOrDicrease) {
       if (Number(quantityRef.current.value) === 99) return null;
 
-      quantityRef.current.value = Number(quantityRef.current.value) + 1;
-    } else {
-      if (Number(quantityRef.current.value) === 0) return null;
-
-      quantityRef.current.value = Number(quantityRef.current.value) - 1;
+      return (quantityRef.current.value =
+        Number(quantityRef.current.value) + 1);
     }
+
+    if (Number(quantityRef.current.value) === 1) return null;
+
+    return (quantityRef.current.value = Number(quantityRef.current.value) - 1);
   }
 
   function handleClickOptionSize(clickedSize) {
@@ -70,14 +70,14 @@ const ProductComponent = ({
     setSelectedColor(product.colors[0].name);
     setColorImage(product.colors[0].imageUrl);
     setSelectedImage(product.colors[0].imageUrl);
-    setSelectedSize(sizes[0][0]);
+    setSelectedSize(sizes[0]);
   }, []);
 
   function handleChangeSelectedImage(image) {
     setSelectedImage(image);
   }
 
-  function handleAddToBag() {
+  function handleAddToBag(newQuantity) {
     const checkThereIsSameItem = shoppingBagItems.find(
       (itemFromState) =>
         itemFromState.name === product.productName &&
@@ -86,7 +86,23 @@ const ProductComponent = ({
         itemFromState.size === selectedSize
     );
 
-    if (checkThereIsSameItem !== undefined) return null;
+    if (checkThereIsSameItem !== undefined) {
+      setShoppingBagItems((prevShoppingBagItems) =>
+        prevShoppingBagItems.filter(
+          (itemFromState) => itemFromState !== checkThereIsSameItem
+        )
+      );
+
+      checkThereIsSameItem.quantity =
+        Number(checkThereIsSameItem.quantity) + Number(newQuantity);
+
+      setShoppingBagItems((prevShoppingBagItems) => [
+        ...prevShoppingBagItems,
+        checkThereIsSameItem,
+      ]);
+
+      return null;
+    }
 
     setShoppingBagItems([
       ...shoppingBagItems,
@@ -213,10 +229,10 @@ const ProductComponent = ({
               }
               data-show-button-expand-options={showSizeOptions}
             >
-              {sizes.map((sizeElementArr) => (
+              {sizes.map((sizeString) => (
                 <li key={uuidv4()} className="button-expand-options__li">
                   <button
-                    onClick={() => handleClickOptionSize(sizeElementArr[0])}
+                    onClick={() => handleClickOptionSize(sizeString)}
                     tabIndex={isLargeScreen || showSizeOptions ? 0 : -1}
                     type="button"
                     className={
@@ -224,12 +240,12 @@ const ProductComponent = ({
                         ? 'button-product-size-options__btn'
                         : 'button-expand-options__btn'
                     }
-                    aria-pressed={selectedSize === sizeElementArr[0]}
+                    aria-pressed={selectedSize === sizeString}
                     data-selected-option-acc-settings={
-                      selectedSize === sizeElementArr[0]
+                      selectedSize === sizeString
                     }
                   >
-                    {sizeElementArr}
+                    {sizeString}
                   </button>
                 </li>
               ))}
@@ -240,7 +256,7 @@ const ProductComponent = ({
             <button
               className="black-btn product-decision__btn"
               type="button"
-              onClick={handleAddToBag}
+              onClick={() => handleAddToBag(quantityRef.current.value)}
             >
               Add to bag
             </button>

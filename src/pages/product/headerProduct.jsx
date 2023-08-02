@@ -34,29 +34,26 @@ const HeaderProduct = ({ shoppingBagItems, setShoppingBagItems }) => {
     if (shoppingBagItems === undefined) return null;
     if (shoppingBagItems.length !== 0) {
       const allCartItems = shoppingBagItems.map((itemFromShoppingBagState) => {
+        const { name, id, color, size, quantity } = itemFromShoppingBagState;
+
         const product = clothesData[0].find(
-          (clothesDataItem) =>
-            clothesDataItem.productId == itemFromShoppingBagState.id
+          (clothesDataItem) => clothesDataItem.productId === id
         );
 
         const colorImg = product.colors.find(
-          (colorObj) => colorObj.name === itemFromShoppingBagState.color
+          (colorObj) => colorObj.name === color
         ).imageUrl;
 
         return (
           <ShoppingBagListItem
             key={uuidv4()}
             productImg={colorImg}
-            productColor={itemFromShoppingBagState.color}
-            productSize={itemFromShoppingBagState.size}
-            productName={itemFromShoppingBagState.name}
+            productColor={color}
+            productSize={size}
+            productName={name}
+            productQuantity={quantity}
             onClickDeleteItemShoppingBagFunction={() =>
-              deleteShoppingItemFromState(
-                itemFromShoppingBagState.id,
-                itemFromShoppingBagState.name,
-                itemFromShoppingBagState.color,
-                itemFromShoppingBagState.size
-              )
+              deleteShoppingItemFromState(id, name, color, size)
             }
           />
         );
@@ -85,6 +82,7 @@ const HeaderProduct = ({ shoppingBagItems, setShoppingBagItems }) => {
       )
     );
   }
+
   async function changeShoppingItemFromFirestore(cartToUpdate) {
     if (!shoppingBagItems) {
       return null;
@@ -188,6 +186,7 @@ const HeaderProduct = ({ shoppingBagItems, setShoppingBagItems }) => {
           setShoppingBagOpen={setShoppingBagOpen}
         />
       </div>
+
       <div className="shopping-bag" data-open-shopping-bag={shoppingBagOpen}>
         <button
           type="button"
@@ -347,6 +346,7 @@ const ShoppingBagListItem = ({
   productName,
   productSize,
   productColor,
+  productQuantity,
   onClickDeleteItemShoppingBagFunction,
 }) => (
   <li className="shopping-bag-list-item">
@@ -358,6 +358,7 @@ const ShoppingBagListItem = ({
 
       <p>Size: {productSize}</p>
       <p>Color: {productColor}</p>
+      <p>Quantity: {productQuantity}</p>
     </div>
 
     <button

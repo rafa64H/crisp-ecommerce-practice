@@ -466,6 +466,8 @@ input[type='range']::-moz-range-thumb {
   transform-origin: 50% 0%;
   transition: all 200ms;
 
+  box-shadow: 0 0 1rem rgba($color: $first-color, $alpha: 0.8);
+
   &__close-btn {
     position: relative;
     left: 93%;
