@@ -8,14 +8,14 @@ import handleLargeScreen from '../utils/handleLargeScreen';
 import { getDataOfUser, updateCart } from '../utils/firebaseFunctions';
 import clothesData from '../../data/clothes_data.json';
 
-const Header = () => {
+const HeaderProduct = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [shoppingBagOpen, setShoppingBagOpen] = useState(false);
 
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [userEmailVerified, setUserEmailVerified] = useState(true);
-  const [shoppingBagItems, setShoppingBagItems] = useState();
+  const [shoppingBagItems, setShoppingBagItems] = useState([]);
   const [shoppingBagItemsNotFound, setShoppingBagItemsNotFound] =
     useState(true);
 
@@ -28,58 +28,6 @@ const Header = () => {
     setShoppingBagItems(userData.cart);
   }
 
-  function buildAllShoppingBagItems() {
-    if (shoppingBagItems === undefined) return null;
-    if (shoppingBagItems.length !== 0) {
-      const allCartItems = shoppingBagItems.map((itemFromShoppingBagState) => {
-        const { name, id, color, size, quantity } = itemFromShoppingBagState;
-
-        const product = clothesData[0].find(
-          (clothesDataItem) => clothesDataItem.productId === id
-        );
-
-        const colorImg = product.colors.find(
-          (colorObj) => colorObj.name === color
-        ).imageUrl;
-
-        return (
-          <ShoppingBagListItem
-            key={uuidv4()}
-            productImg={colorImg}
-            productColor={color}
-            productSize={size}
-            productName={name}
-            productQuantity={quantity}
-            onClickDeleteItemShoppingBagFunction={() =>
-              deleteShoppingItemFromState(id, name, color, size)
-            }
-          />
-        );
-      });
-
-      return allCartItems;
-    }
-  }
-
-  function deleteShoppingItemFromState(
-    productCartId,
-    productCartName,
-    productCartColor,
-    productCartSize
-  ) {
-    const itemToDelete = shoppingBagItems.find(
-      (itemFromState) =>
-        itemFromState.id === productCartId &&
-        itemFromState.name === productCartName &&
-        itemFromState.color === productCartColor &&
-        itemFromState.size === productCartSize
-    );
-    setShoppingBagItems((prevShoppingBagItems) =>
-      prevShoppingBagItems.filter(
-        (itemFromState) => itemFromState !== itemToDelete
-      )
-    );
-  }
   async function changeShoppingItemFromFirestore(cartToUpdate) {
     if (!shoppingBagItems) {
       return null;
@@ -112,13 +60,30 @@ const Header = () => {
     else if (shoppingBagItems.length !== 0) setShoppingBagItemsNotFound(false);
   }, [shoppingBagItems]);
 
+  function calculatePrice() {
+    const arrayPrices = shoppingBagItems.map(
+      (item) => item.price * item.quantity
+    );
+
+    const price = arrayPrices.reduce(
+      (priceValue, totalPrice) => priceValue + totalPrice,
+      0
+    );
+
+    return price.toFixed(2);
+  }
+
   return (
     <header>
-      <OpenNavBtn isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
+      <OpenNavBtn
+        isNavOpen={isNavOpen}
+        setIsNavOpen={setIsNavOpen}
+        setShoppingBagOpen={setShoppingBagOpen}
+      />
       <CompanyLogo />
 
       <nav
-        data-nav-list-open={isNavOpen.toString()}
+        data-nav-list-open={isNavOpen}
         aria-hidden={!isLargeScreen && !isNavOpen}
       >
         <ul className="nav-list">
@@ -170,7 +135,10 @@ const Header = () => {
               desktopOrMobile="desktop"
               shoppingBagOpen={shoppingBagOpen}
               setShoppingBagOpen={setShoppingBagOpen}
-            />
+              setIsNavOpen={setIsNavOpen}
+            >
+              {calculatePrice()}
+            </ShopBtn>
           </div>
         </ul>
       </nav>
@@ -181,46 +149,35 @@ const Header = () => {
           desktopOrMobile="mobile"
           shoppingBagOpen={shoppingBagOpen}
           setShoppingBagOpen={setShoppingBagOpen}
+          setIsNavOpen={setIsNavOpen}
         />
       </div>
 
-      <div className="shopping-bag" data-open-shopping-bag={shoppingBagOpen}>
-        <button
-          type="button"
-          className="shopping-bag__close-btn"
-          aria-label="Close shopping bag"
-          onClick={() => setShoppingBagOpen(false)}
-        >
-          <i className="fa-solid fa-xmark" />
-        </button>
-        <ul className="shopping-bag-list">
-          <p className="not-found" data-not-found={shoppingBagItemsNotFound}>
-            Items not found or you aren't logged in yet
-          </p>
-          {buildAllShoppingBagItems()}
-        </ul>
-      </div>
+      <ShoppingBag
+        shoppingBagItems={shoppingBagItems}
+        setShoppingBagItems={setShoppingBagItems}
+        shoppingBagOpen={shoppingBagOpen}
+        setShoppingBagOpen={setShoppingBagOpen}
+        shoppingBagItemsNotFound={shoppingBagItemsNotFound}
+        calculatePrice={calculatePrice}
+      />
     </header>
   );
 };
 
-export default Header;
+export default HeaderProduct;
 
-const OpenNavBtn = ({ isNavOpen, setIsNavOpen }) => {
+const OpenNavBtn = ({ isNavOpen, setIsNavOpen, setShoppingBagOpen }) => {
   const [iconNavBtn, setIconNavBtn] = useState('fa-bars');
 
   function handleOpenNav(e) {
-    changeNavBtnIcon(isNavOpen);
     setIsNavOpen(!isNavOpen);
+    setShoppingBagOpen(false);
   }
 
-  function changeNavBtnIcon(isNavOpen) {
-    if (isNavOpen) {
-      setIconNavBtn('fa-bars');
-    } else {
-      setIconNavBtn('fa-xmark');
-    }
-  }
+  useEffect(() => {
+    setIconNavBtn(isNavOpen ? 'fa-xmark' : 'fa-bars');
+  }, [isNavOpen]);
 
   return (
     <button
@@ -259,9 +216,16 @@ const SearchBtn = ({ desktopOrMobile }) => {
   );
 };
 
-const ShopBtn = ({ desktopOrMobile, shoppingBagOpen, setShoppingBagOpen }) => {
+const ShopBtn = ({
+  desktopOrMobile,
+  shoppingBagOpen,
+  setShoppingBagOpen,
+  setIsNavOpen,
+  children,
+}) => {
   async function handleClickOpenShoppingBag() {
     setShoppingBagOpen(!shoppingBagOpen);
+    setIsNavOpen(false);
   }
 
   // This will have display:none if window width > 1200px
@@ -288,7 +252,7 @@ const ShopBtn = ({ desktopOrMobile, shoppingBagOpen, setShoppingBagOpen }) => {
       <i className="fas fa-shopping-bag" />
       <div className="shop-btn-text">
         <p className="shop-btn-text__p">Shopping bag</p>
-        <p className="shop-btn-text__eur">0.00 EUR</p>
+        <p className="shop-btn-text__usd">{children} USD</p>
       </div>
     </button>
   );
@@ -344,6 +308,7 @@ const ShoppingBagListItem = ({
   productSize,
   productColor,
   productQuantity,
+  productPrice,
   onClickDeleteItemShoppingBagFunction,
 }) => (
   <li className="shopping-bag-list-item">
@@ -353,9 +318,17 @@ const ShoppingBagListItem = ({
         <strong>{productName}</strong>
       </p>
 
-      <p>Size: {productSize}</p>
-      <p>Color: {productColor}</p>
-      <p>Quantity: {productQuantity}</p>
+      <div className="shopping-bag-list-item-text-details">
+        <p>Size: {productSize}</p>
+        <p>Color: {productColor}</p>
+        <p>Quantity: {productQuantity}</p>
+      </div>
+
+      <p>
+        <strong>
+          Price: {` ${(productPrice * productQuantity).toFixed(2)}$`}
+        </strong>
+      </p>
     </div>
 
     <button
@@ -368,3 +341,90 @@ const ShoppingBagListItem = ({
     </button>
   </li>
 );
+
+const ShoppingBag = ({
+  shoppingBagItems,
+  setShoppingBagItems,
+  shoppingBagOpen,
+  setShoppingBagOpen,
+  shoppingBagItemsNotFound,
+  calculatePrice,
+}) => {
+  function buildAllShoppingBagItems() {
+    if (shoppingBagItems === undefined) return null;
+    if (shoppingBagItems.length !== 0) {
+      const allCartItems = shoppingBagItems.map((itemFromShoppingBagState) => {
+        const { name, id, color, size, quantity, price } =
+          itemFromShoppingBagState;
+
+        const product = clothesData[0].find(
+          (clothesDataItem) => clothesDataItem.productId === id
+        );
+
+        const colorImg = product.colors.find(
+          (colorObj) => colorObj.name === color
+        ).imageUrl;
+
+        return (
+          <ShoppingBagListItem
+            key={uuidv4()}
+            productImg={colorImg}
+            productColor={color}
+            productSize={size}
+            productName={name}
+            productQuantity={quantity}
+            productPrice={price}
+            onClickDeleteItemShoppingBagFunction={() =>
+              deleteShoppingItemFromState(id, name, color, size)
+            }
+          />
+        );
+      });
+
+      return allCartItems;
+    }
+  }
+
+  function deleteShoppingItemFromState(
+    productCartId,
+    productCartName,
+    productCartColor,
+    productCartSize
+  ) {
+    const itemToDelete = shoppingBagItems.find(
+      (itemFromState) =>
+        itemFromState.id === productCartId &&
+        itemFromState.name === productCartName &&
+        itemFromState.color === productCartColor &&
+        itemFromState.size === productCartSize
+    );
+    setShoppingBagItems((prevShoppingBagItems) =>
+      prevShoppingBagItems.filter(
+        (itemFromState) => itemFromState !== itemToDelete
+      )
+    );
+  }
+
+  return (
+    <div className="shopping-bag" data-open-shopping-bag={shoppingBagOpen}>
+      <button
+        type="button"
+        className="shopping-bag__close-btn"
+        aria-label="Close shopping bag"
+        onClick={() => setShoppingBagOpen(false)}
+      >
+        <i className="fa-solid fa-xmark" />
+      </button>
+      <ul className="shopping-bag-list">
+        <p className="not-found" data-not-found={shoppingBagItemsNotFound}>
+          Items not found or you aren't logged in yet
+        </p>
+        {buildAllShoppingBagItems()}
+      </ul>
+      <p className="total-price">Total price is: {calculatePrice()}$</p>
+      <a href="#" className="black-btn">
+        Buy clothes
+      </a>
+    </div>
+  );
+};

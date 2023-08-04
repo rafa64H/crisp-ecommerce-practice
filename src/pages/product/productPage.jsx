@@ -7,6 +7,7 @@ import clothesData from '../../data/clothes_data.json';
 import ProductComponent from './productComponent';
 import HeaderProduct from './headerProduct';
 import Footer from '../../components/ui/footer';
+import SectionThree from '../../components/ui/section3';
 
 const ProductPage = () => {
   const [shoppingBagItems, setShoppingBagItems] = useState([]);
@@ -21,6 +22,7 @@ const ProductPage = () => {
         shoppingBagItems={shoppingBagItems}
         setShoppingBagItems={setShoppingBagItems}
       />
+      <SectionThree />
       <Footer />
     </>
   );
