@@ -497,7 +497,10 @@ input[type='range']::-moz-range-thumb {
 
     &-item {
       display: grid;
-      grid-template-columns: 7rem 15rem 4rem;
+      grid-template-columns: minmax(20%, 10rem) minmax(60%, 20rem) minmax(
+          5%,
+          5rem
+        );
 
       border-bottom: 1px solid $light-gray;
       max-width: 100%;

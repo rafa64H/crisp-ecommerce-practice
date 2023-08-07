@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../config-firebase/firebase';
+
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
 
 const ProductComponent = ({
@@ -8,6 +11,8 @@ const ProductComponent = ({
   setShoppingBagItems,
 }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+
   const [selectedImage, setSelectedImage] = useState();
   const [colorImage, setColorImage] = useState();
   const [showSizeOptions, setShowSizeOptions] = useState(false);
@@ -20,6 +25,16 @@ const ProductComponent = ({
   const params = new URLSearchParams(window.location.search);
   const id = params.get('productId');
   const product = clothesData.find((item) => item.productId === Number(id));
+
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUserLoggedIn(true);
+      } else {
+        setUserLoggedIn(false);
+      }
+    });
+  }, []);
 
   if (!product) {
     return <h1 className="product-not-found"> Prodcut not found</h1>;
@@ -57,6 +72,8 @@ const ProductComponent = ({
         itemFromState.color === selectedColor &&
         itemFromState.size === selectedSize
     );
+
+    if (!userLoggedIn) return null;
 
     if (checkThereIsSameItem !== undefined) {
       setShoppingBagItems((prevShoppingBagItems) =>
