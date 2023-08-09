@@ -561,9 +561,9 @@ input[type='range']::-moz-range-thumb {
   overflow: hidden;
 
   .title-and-arrows-container {
-    margin: 0 1em;
-
     .title {
+      width: 80%;
+      margin: 0 auto;
     }
 
     .arrows-container {
@@ -1335,11 +1335,11 @@ footer {
   .product-slider {
     .title-and-arrows-container {
       display: flex;
-
       width: 80%;
       margin: 0 auto;
 
       .title {
+        width: 100%;
       }
 
       .arrows-container {

@@ -417,7 +417,7 @@ const ProductDetailsSection = ({ product }) => {
         </ul>
       </div>
 
-      <ProductSlider />
+      <ProductSlider title="See also:" />
     </section>
   );
 };
