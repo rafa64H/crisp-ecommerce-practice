@@ -9,6 +9,7 @@ const ClothesCard = ({
   productName,
   productPrice,
   productColors,
+  extraClassNames,
 }) => {
   const [imageSrc, setImageSrc] = useState(`${productImg}`);
   const [activeBtn, setActiveBtn] = useState(0);
@@ -41,7 +42,7 @@ const ClothesCard = ({
   ));
 
   return (
-    <li className="clothes-card-li">
+    <li className={`clothes-card-li ${extraClassNames}`}>
       <a href={link} className="clothes-card">
         <img className="clothes-card__img" src={imageSrc} alt={productName} />
 

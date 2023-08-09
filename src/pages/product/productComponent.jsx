@@ -4,6 +4,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../config-firebase/firebase';
 
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
+import ProductSlider from '../../components/ui/productSlider';
 
 const ProductComponent = ({
   clothesData,
@@ -415,6 +416,8 @@ const ProductDetailsSection = ({ product }) => {
           ))}
         </ul>
       </div>
+
+      <ProductSlider />
     </section>
   );
 };

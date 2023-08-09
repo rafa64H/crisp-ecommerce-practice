@@ -11,7 +11,10 @@ import {
 } from '../../components/utils/firebaseFunctions';
 import clothesData from '../../data/clothes_data.json';
 
-const HeaderProduct = ({ shoppingBagItems, setShoppingBagItems }) => {
+const HeaderProduct = ({
+  shoppingBagItems,
+  setShoppingBagItems /* This is the only difference between HeaderProduct.jsx and Header.jsx */,
+}) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [shoppingBagOpen, setShoppingBagOpen] = useState(false);

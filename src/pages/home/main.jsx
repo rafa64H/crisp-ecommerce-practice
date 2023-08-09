@@ -17,6 +17,7 @@ import womanHomeTwo from '../../assets/home/woman-home1.png';
 
 // Data
 import brandsData from '../../data/brands.json';
+import ProductSlider from '../../components/ui/productSlider';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -63,6 +64,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       linkText="SHOW NOW"
       classesSection2="section2-home5 section2-background-center"
     />
+
+    <ProductSlider title="Our products:" />
     <SectionThree />
     <Footer />
   </React.StrictMode>

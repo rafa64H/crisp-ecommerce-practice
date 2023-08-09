@@ -550,6 +550,66 @@ input[type='range']::-moz-range-thumb {
   transform-origin: 50% 0%;
   transform: scaleY(1);
 }
+
+.arrow {
+  padding: 0.8em;
+  background-color: rgba($color: $first-color, $alpha: 0.6);
+}
+
+.product-slider {
+  position: relative;
+  overflow: hidden;
+
+  .title-and-arrows-container {
+    margin: 0 1em;
+
+    .title {
+    }
+
+    .arrows-container {
+      display: flex;
+      align-items: center;
+
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      transform: translateY(-50%);
+
+      width: 100%;
+
+      .arrow {
+        position: absolute;
+        &-left {
+        }
+
+        &-right {
+          right: 0;
+        }
+      }
+    }
+  }
+
+  &-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+
+    width: 80%;
+    margin: 0 auto;
+    border-top: 2px solid $second-color;
+    border-bottom: 2px solid $second-color;
+
+    .item-product-slider {
+      min-width: 12rem;
+      max-width: 12rem;
+      min-height: 25rem;
+    }
+  }
+}
+
 //common used components END
 
 //----------------------------------------------------------------
@@ -741,19 +801,11 @@ footer {
     padding: 0 10%;
 
     .arrow {
-      padding: 0.8em;
-      background-color: rgba($color: $first-color, $alpha: 0.6);
-      transition: all 200ms;
-
       &-left {
         order: 1;
-        .fa-arrow-left {
-        }
       }
       &-right {
         order: 3;
-        .fa-arrow-right {
-        }
       }
     }
 
@@ -1280,6 +1332,39 @@ footer {
     }
   }
 
+  .product-slider {
+    .title-and-arrows-container {
+      display: flex;
+
+      width: 80%;
+      margin: 0 auto;
+
+      .title {
+      }
+
+      .arrows-container {
+        display: flex;
+        align-items: center;
+
+        position: static;
+        z-index: 0;
+        transform: translateY(0);
+
+        width: min-content;
+        margin-left: auto;
+
+        .arrow {
+          position: static;
+          &-left {
+            margin-right: 1em;
+          }
+
+          &-right {
+          }
+        }
+      }
+    }
+  }
   ////Media common used components END
 
   ////--------------------
