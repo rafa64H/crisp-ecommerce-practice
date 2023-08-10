@@ -127,85 +127,6 @@ const AccountSettings = () => {
     setSelectedOption(settingOption);
   }
 
-  async function handleSubmitAccountInformation(e) {
-    e.preventDefault();
-
-    const allRefsAccountInformation = [firstNameRef, lastNameRef, emailRef];
-
-    const emptyRequiredInputs = allRefsAccountInformation.filter(
-      (ref) => ref.current.value === ''
-    );
-
-    if (!emailVerified) {
-      setAlertMessage(
-        'Error: Please verify your Email Address first, if you want to change information'
-      );
-      return null;
-    }
-    if (emptyRequiredInputs.length !== 0) {
-      setAlertMessage('Error: Complete the required spaces');
-      emptyRequiredInputs.map((ref) => {
-        ref.current.dataset.errorInputTyping = 'true';
-      });
-      return null;
-    }
-
-    if (newPasswordRef.current.value !== confirmNewPasswordRef.current.value) {
-      setAlertMessage('Error: new password does not match with the confirm');
-      newPasswordRef.current.dataset.errorInputTyping = 'true';
-      confirmNewPasswordRef.current.dataset.errorInputTyping = 'true';
-      return null;
-    }
-    if (
-      newPasswordRef.current.value.length < 6 &&
-      newPasswordRef.current.value.length !== 0
-    ) {
-      setAlertMessage('Error: New password should be 6 characters length');
-      newPasswordRef.current.dataset.errorInputTyping = 'true';
-      confirmNewPasswordRef.current.dataset.errorInputTyping = 'true';
-      return null;
-    }
-
-    setNotFormYet(false);
-    setTypeOfChange('accountInformation');
-    dialogPasswordRef.current.showModal();
-  }
-
-  async function handleSubmitAddress(e) {
-    e.preventDefault();
-
-    const allRequiredRefsAddress = [
-      firstNameAddressRef,
-      lastNameAddressRef,
-      streetAddressRef,
-      countryAddressRef,
-      stateAddressRef,
-      postalCodeAddressRef,
-    ];
-
-    const emptyRequiredInputs = allRequiredRefsAddress.filter(
-      (ref) => ref.current.value === ''
-    );
-
-    if (!emailVerified) {
-      setAlertMessage(
-        'Error: Please verify your Email Address first, if you want to change information'
-      );
-      return null;
-    }
-    if (emptyRequiredInputs.length !== 0) {
-      setAlertMessage('Error: Complete the required spaces');
-      emptyRequiredInputs.map((ref) => {
-        ref.current.dataset.errorInputTyping = 'true';
-      });
-      return null;
-    }
-
-    setNotFormYet(false);
-    setTypeOfChange('address');
-    dialogPasswordRef.current.showModal();
-  }
-
   function handleCloseModal() {
     dialogPasswordRef.current.close();
     setNotFormYet(true);
@@ -275,10 +196,6 @@ const AccountSettings = () => {
     }
   }
 
-  function handleCountryChange(e) {
-    setSelectedCountry(e.target.value);
-  }
-
   // I don't know, but I add this just in case an user can
   // open the <dialog> of confirm password with inspect element
   function showConfirmSubmitBtn() {
@@ -344,183 +261,44 @@ const AccountSettings = () => {
           </ul>
         </div>
 
-        <form
-          className="form-account-settings"
-          data-show-form-account-settings={
-            selectedOption === 'Account information'
-          }
-          onSubmit={(e) => handleSubmitAccountInformation(e)}
-        >
-          <h2 className="form-account-settings__title">
-            Edit - Account information
-          </h2>
+        <FormAccountInformation
+          selectedOption={selectedOption}
+          alertMessage={alertMessage}
+          setAlertMessage={setAlertMessage}
+          emailVerified={emailVerified}
+          setNotFormYet={setNotFormYet}
+          setTypeOfChange={setTypeOfChange}
+          dialogPasswordRef={dialogPasswordRef}
+          loading={loading}
+          handleFocusInput={handleFocusInput}
+          firstNameRef={firstNameRef}
+          lastNameRef={lastNameRef}
+          emailRef={emailRef}
+          newPasswordRef={newPasswordRef}
+          confirmNewPasswordRef={confirmNewPasswordRef}
+        />
 
-          <aside
-            className="error-message-form"
-            role="alert"
-            aria-live="assertive"
-          >
-            {alertMessage}
-          </aside>
-          <FormInputTyping
-            required
-            name="First name"
-            type="text"
-            id="first-name"
-            loading={loading}
-            theRef={firstNameRef}
-            onFocusFunction={handleFocusInput}
-          />
-
-          <FormInputTyping
-            required
-            name="Last name"
-            type="text"
-            id="last-name"
-            loading={loading}
-            theRef={lastNameRef}
-            onFocusFunction={handleFocusInput}
-          />
-
-          <FormInputTyping
-            required
-            name="Email"
-            type="email"
-            id="email"
-            loading={loading}
-            theRef={emailRef}
-            onFocusFunction={handleFocusInput}
-            placeholderProp="ThisIsExample@example.com"
-          />
-
-          <FormInputTyping
-            name="New password"
-            type="password"
-            id="new-password"
-            loading={loading}
-            theRef={newPasswordRef}
-            onFocusFunction={handleFocusInput}
-          />
-
-          <FormInputTyping
-            name="Confirm new password"
-            type="password"
-            id="confirm-new-password"
-            loading={loading}
-            theRef={confirmNewPasswordRef}
-            onFocusFunction={handleFocusInput}
-          />
-
-          <button type="submit" disabled={loading} className="black-btn">
-            Save changes
-          </button>
-        </form>
-
-        <form
-          className="form-account-settings"
-          data-show-form-account-settings={selectedOption === 'Address'}
-          onSubmit={(e) => handleSubmitAddress(e)}
-        >
-          <h2 className="form-account-settings__title">
-            Edit - Address and contact information
-          </h2>
-
-          <aside
-            className="error-message-form"
-            role="alert"
-            aria-live="assertive"
-          >
-            {alertMessage}
-          </aside>
-          <FormInputTyping
-            required
-            name="First name"
-            type="text"
-            id="first-name-address"
-            loading={loading}
-            theRef={firstNameAddressRef}
-            onFocusFunction={handleFocusInput}
-          />
-
-          <FormInputTyping
-            required
-            name="Last name"
-            type="text"
-            id="last-name-address"
-            loading={loading}
-            theRef={lastNameAddressRef}
-            onFocusFunction={handleFocusInput}
-          />
-
-          <FormInputTyping
-            name="Phone number"
-            type="number"
-            id="phone-number"
-            loading={loading}
-            theRef={phoneNumberAddressRef}
-            onFocusFunction={handleFocusInput}
-          />
-
-          <FormInputTyping
-            required
-            name="Street address"
-            type="text"
-            id="street-address"
-            loading={loading}
-            theRef={streetAddressRef}
-            onFocusFunction={handleFocusInput}
-          />
-
-          <div className="form-input-container">
-            <label htmlFor="country" className="form-input-label">
-              Select your country{' '}
-              <span className="input-required" aria-label="required">
-                *
-              </span>
-            </label>
-            <select
-              name="country"
-              id="country"
-              ref={countryAddressRef}
-              value={selectedCountry}
-              className="form-input-typing"
-              onFocus={(e) => handleFocusInput(e)}
-              onChange={(e) => handleCountryChange(e)}
-            >
-              {arrayAllCountriesName.map((countryName) => (
-                <option key={uuidv4()} value={countryName}>
-                  {countryName}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <FormInputTyping
-            required
-            name="Your state/province"
-            type="text"
-            id="state"
-            loading={loading}
-            theRef={stateAddressRef}
-            onFocusFunction={handleFocusInput}
-            placeholderProp="Introduce your state or province"
-          />
-
-          <FormInputTyping
-            required
-            name="Zip/Postal code"
-            type="number"
-            id="postal-code"
-            loading={loading}
-            theRef={postalCodeAddressRef}
-            onFocusFunction={handleFocusInput}
-            placeholderProp="Introduce your postal code"
-          />
-
-          <button type="submit" disabled={loading} className="black-btn">
-            Save changes
-          </button>
-        </form>
+        <FormAddress
+          firstNameAddressRef={firstNameAddressRef}
+          lastNameAddressRef={lastNameAddressRef}
+          streetAddressRef={streetAddressRef}
+          countryAddressRef={countryAddressRef}
+          stateAddressRef={stateAddressRef}
+          postalCodeAddressRef={postalCodeAddressRef}
+          dialogPasswordRef={dialogPasswordRef}
+          emailVerified={emailVerified}
+          phoneNumberAddressRef={phoneNumberAddressRef}
+          alertMessage={alertMessage}
+          setAlertMessage={setAlertMessage}
+          setNotFormYet={setNotFormYet}
+          setTypeOfChange={setTypeOfChange}
+          selectedOption={selectedOption}
+          loading={loading}
+          handleFocusInput={handleFocusInput}
+          selectedCountry={selectedCountry}
+          setSelectedCountry={setSelectedCountry}
+          arrayAllCountriesName={arrayAllCountriesName}
+        />
 
         <dialog
           className="account-settings-modal"
@@ -573,3 +351,296 @@ const AccountSettings = () => {
 };
 
 export default AccountSettings;
+
+const FormAccountInformation = ({
+  firstNameRef,
+  lastNameRef,
+  emailRef,
+  newPasswordRef,
+  confirmNewPasswordRef,
+  dialogPasswordRef,
+  selectedOption,
+  alertMessage,
+  setAlertMessage,
+  setNotFormYet,
+  setTypeOfChange,
+  loading,
+  emailVerified,
+  handleFocusInput,
+}) => {
+  async function handleSubmitAccountInformation(e) {
+    e.preventDefault();
+
+    const allRefsAccountInformation = [firstNameRef, lastNameRef, emailRef];
+
+    const emptyRequiredInputs = allRefsAccountInformation.filter(
+      (ref) => ref.current.value === ''
+    );
+
+    if (!emailVerified) {
+      setAlertMessage(
+        'Error: Please verify your Email Address first, if you want to change information'
+      );
+      return null;
+    }
+    if (emptyRequiredInputs.length !== 0) {
+      setAlertMessage('Error: Complete the required spaces');
+      emptyRequiredInputs.map((ref) => {
+        ref.current.dataset.errorInputTyping = 'true';
+      });
+      return null;
+    }
+
+    if (newPasswordRef.current.value !== confirmNewPasswordRef.current.value) {
+      setAlertMessage('Error: new password does not match with the confirm');
+      newPasswordRef.current.dataset.errorInputTyping = 'true';
+      confirmNewPasswordRef.current.dataset.errorInputTyping = 'true';
+      return null;
+    }
+    if (
+      newPasswordRef.current.value.length < 6 &&
+      newPasswordRef.current.value.length !== 0
+    ) {
+      setAlertMessage('Error: New password should be 6 characters length');
+      newPasswordRef.current.dataset.errorInputTyping = 'true';
+      confirmNewPasswordRef.current.dataset.errorInputTyping = 'true';
+      return null;
+    }
+
+    setNotFormYet(false);
+    setTypeOfChange('accountInformation');
+    dialogPasswordRef.current.showModal();
+  }
+
+  return (
+    <form
+      className="form-account-settings"
+      data-show-form-account-settings={selectedOption === 'Account information'}
+      onSubmit={(e) => handleSubmitAccountInformation(e)}
+    >
+      <h2 className="form-account-settings__title">
+        Edit - Account information
+      </h2>
+
+      <aside className="error-message-form" role="alert" aria-live="assertive">
+        {alertMessage}
+      </aside>
+      <FormInputTyping
+        required
+        name="First name"
+        type="text"
+        id="first-name"
+        loading={loading}
+        theRef={firstNameRef}
+        onFocusFunction={handleFocusInput}
+      />
+
+      <FormInputTyping
+        required
+        name="Last name"
+        type="text"
+        id="last-name"
+        loading={loading}
+        theRef={lastNameRef}
+        onFocusFunction={handleFocusInput}
+      />
+
+      <FormInputTyping
+        required
+        name="Email"
+        type="email"
+        id="email"
+        loading={loading}
+        theRef={emailRef}
+        onFocusFunction={handleFocusInput}
+        placeholderProp="ThisIsExample@example.com"
+      />
+
+      <FormInputTyping
+        name="New password"
+        type="password"
+        id="new-password"
+        loading={loading}
+        theRef={newPasswordRef}
+        onFocusFunction={handleFocusInput}
+      />
+
+      <FormInputTyping
+        name="Confirm new password"
+        type="password"
+        id="confirm-new-password"
+        loading={loading}
+        theRef={confirmNewPasswordRef}
+        onFocusFunction={handleFocusInput}
+      />
+
+      <button type="submit" disabled={loading} className="black-btn">
+        Save changes
+      </button>
+    </form>
+  );
+};
+
+const FormAddress = ({
+  firstNameAddressRef,
+  lastNameAddressRef,
+  streetAddressRef,
+  countryAddressRef,
+  stateAddressRef,
+  postalCodeAddressRef,
+  dialogPasswordRef,
+  emailVerified,
+  phoneNumberAddressRef,
+  alertMessage,
+  setAlertMessage,
+  setNotFormYet,
+  setTypeOfChange,
+  selectedOption,
+  loading,
+  handleFocusInput,
+  selectedCountry,
+  setSelectedCountry,
+  arrayAllCountriesName,
+}) => {
+  function handleCountryChange(e) {
+    setSelectedCountry(e.target.value);
+  }
+  async function handleSubmitAddress(e) {
+    e.preventDefault();
+
+    const allRequiredRefsAddress = [
+      firstNameAddressRef,
+      lastNameAddressRef,
+      streetAddressRef,
+      countryAddressRef,
+      stateAddressRef,
+      postalCodeAddressRef,
+    ];
+
+    const emptyRequiredInputs = allRequiredRefsAddress.filter(
+      (ref) => ref.current.value === ''
+    );
+
+    if (!emailVerified) {
+      setAlertMessage(
+        'Error: Please verify your Email Address first, if you want to change information'
+      );
+      return null;
+    }
+    if (emptyRequiredInputs.length !== 0) {
+      setAlertMessage('Error: Complete the required spaces');
+      emptyRequiredInputs.map((ref) => {
+        ref.current.dataset.errorInputTyping = 'true';
+      });
+      return null;
+    }
+
+    setNotFormYet(false);
+    setTypeOfChange('address');
+    dialogPasswordRef.current.showModal();
+  }
+
+  return (
+    <form
+      className="form-account-settings"
+      data-show-form-account-settings={selectedOption === 'Address'}
+      onSubmit={(e) => handleSubmitAddress(e)}
+    >
+      <h2 className="form-account-settings__title">
+        Edit - Address and contact information
+      </h2>
+
+      <aside className="error-message-form" role="alert" aria-live="assertive">
+        {alertMessage}
+      </aside>
+      <FormInputTyping
+        required
+        name="First name"
+        type="text"
+        id="first-name-address"
+        loading={loading}
+        theRef={firstNameAddressRef}
+        onFocusFunction={handleFocusInput}
+      />
+
+      <FormInputTyping
+        required
+        name="Last name"
+        type="text"
+        id="last-name-address"
+        loading={loading}
+        theRef={lastNameAddressRef}
+        onFocusFunction={handleFocusInput}
+      />
+
+      <FormInputTyping
+        name="Phone number"
+        type="number"
+        id="phone-number"
+        loading={loading}
+        theRef={phoneNumberAddressRef}
+        onFocusFunction={handleFocusInput}
+      />
+
+      <FormInputTyping
+        required
+        name="Street address"
+        type="text"
+        id="street-address"
+        loading={loading}
+        theRef={streetAddressRef}
+        onFocusFunction={handleFocusInput}
+      />
+
+      <div className="form-input-container">
+        <label htmlFor="country" className="form-input-label">
+          Select your country{' '}
+          <span className="input-required" aria-label="required">
+            *
+          </span>
+        </label>
+        <select
+          name="country"
+          id="country"
+          ref={countryAddressRef}
+          value={selectedCountry}
+          className="form-input-typing"
+          onFocus={(e) => handleFocusInput(e)}
+          onChange={(e) => handleCountryChange(e)}
+        >
+          {arrayAllCountriesName.map((countryName) => (
+            <option key={uuidv4()} value={countryName}>
+              {countryName}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <FormInputTyping
+        required
+        name="Your state/province"
+        type="text"
+        id="state"
+        loading={loading}
+        theRef={stateAddressRef}
+        onFocusFunction={handleFocusInput}
+        placeholderProp="Introduce your state or province"
+      />
+
+      <FormInputTyping
+        required
+        name="Zip/Postal code"
+        type="number"
+        id="postal-code"
+        loading={loading}
+        theRef={postalCodeAddressRef}
+        onFocusFunction={handleFocusInput}
+        placeholderProp="Introduce your postal code"
+      />
+
+      <button type="submit" disabled={loading} className="black-btn">
+        Save changes
+      </button>
+    </form>
+  );
+};
