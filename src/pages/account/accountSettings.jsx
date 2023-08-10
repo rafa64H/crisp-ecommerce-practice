@@ -49,9 +49,8 @@ const AccountSettings = () => {
     'Log out',
   ];
 
-  useEffect(() => {
-    handleLargeScreen(setIsLargeScreen);
-  }, []);
+  const params = new URLSearchParams(window.location.search);
+  const selectOptionFromParam = params.get('option');
 
   async function getAllCountriesName() {
     try {
@@ -68,6 +67,8 @@ const AccountSettings = () => {
   }
 
   useEffect(() => {
+    handleLargeScreen(setIsLargeScreen);
+
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const docData = await getDataOfUser();
@@ -97,6 +98,10 @@ const AccountSettings = () => {
         setAlertMessage(`Error: Couldn't get user data`);
       }
     });
+
+    if (selectOptionFromParam) {
+      setSelectedOption(selectOptionFromParam);
+    }
   }, []);
 
   function handleClickExpand() {

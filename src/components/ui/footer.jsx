@@ -80,14 +80,17 @@ const Footer = () => {
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="MY ACCOUNT"
+            footerLink="./account.html"
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="ORDERS HISTORY"
+            footerLink="./account.html?option=History of orders"
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="MY WISHLIST"
+            footerLink="./account.html?option=My wishlist"
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
@@ -231,7 +234,11 @@ const FooterSectionTitle = ({
 
 const FooterListItem = ({ footerLink, footerItemText, shouldShowTabIndex }) => (
   <li className="footer-section__list-item">
-    <a href="#" className="footer-link" tabIndex={shouldShowTabIndex ? 0 : -1}>
+    <a
+      href={footerLink}
+      className="footer-link"
+      tabIndex={shouldShowTabIndex ? 0 : -1}
+    >
       {footerItemText}
     </a>
   </li>

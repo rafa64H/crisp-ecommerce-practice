@@ -53,11 +53,16 @@ h4 {
   font-weight: 900;
 }
 p,
-label,
-aside {
+label {
   font-family: $font-roboto;
   font-size: $fourth-font-size;
   color: $darker-gray;
+}
+
+aside {
+  font-family: $font-roboto;
+  font-size: $fourth-font-size;
+  color: $second-color;
 }
 
 li {
@@ -206,6 +211,26 @@ input[type='range']::-moz-range-thumb {
       &__name {
         margin: 0.5em 0;
         font-weight: 300;
+      }
+    }
+
+    .clothes-card-heart {
+      margin-left: 0.25em;
+
+      .fa-heart {
+        color: $light-gray;
+        transition: all 200ms;
+
+        &:hover {
+          color: $second-color;
+        }
+      }
+      [data-added-to-wishlist='true'] {
+        color: $notify-color;
+
+        &:hover {
+          color: $first-color;
+        }
       }
     }
   }
@@ -1801,6 +1826,10 @@ footer {
               }
             }
           }
+        }
+
+        .product-color {
+          margin-left: 2em;
         }
       }
 

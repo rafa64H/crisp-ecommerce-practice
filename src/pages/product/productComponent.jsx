@@ -20,6 +20,7 @@ const ProductComponent = ({
   const [changeIcon, setChangeIcon] = useState('fa-plus');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
 
   const quantityRef = useRef();
 
@@ -74,7 +75,13 @@ const ProductComponent = ({
         itemFromState.size === selectedSize
     );
 
-    if (!userLoggedIn) return null;
+    if (!userLoggedIn) {
+      setAlertMessage('You are not logged in!');
+      setTimeout(() => {
+        setAlertMessage('');
+      }, 1000);
+      return null;
+    }
 
     if (checkThereIsSameItem !== undefined) {
       setShoppingBagItems((prevShoppingBagItems) =>
@@ -91,6 +98,12 @@ const ProductComponent = ({
         checkThereIsSameItem,
       ]);
 
+      setAlertMessage('Item added to bag');
+
+      setTimeout(() => {
+        setAlertMessage('');
+      }, 1000);
+
       return null;
     }
 
@@ -105,6 +118,11 @@ const ProductComponent = ({
         color: selectedColor,
       },
     ]);
+
+    setAlertMessage('Item added to bag');
+    setTimeout(() => {
+      setAlertMessage('');
+    }, 1000);
   }
 
   return (
@@ -175,6 +193,7 @@ const ProductComponent = ({
               Save
             </button>
           </div>
+          <aside aria-live="polite">{alertMessage}</aside>
 
           <ProductCodeAndSocialMedia product={product} />
         </section>

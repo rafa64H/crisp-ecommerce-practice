@@ -59,6 +59,10 @@ const ClothesCard = ({
         <div className="clothes-card-colors" onClick={(e) => handleDefault(e)}>
           {productColorsButtons}
         </div>
+
+        <button className="clothes-card-heart" aria-label="Add to wishlist">
+          <i className="fa-solid fa-heart" />
+        </button>
       </a>
     </li>
   );
