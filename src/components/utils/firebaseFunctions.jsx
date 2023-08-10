@@ -154,7 +154,6 @@ export async function logOutUser() {
 export async function updateCart(cartToUpdate) {
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
-  console.log(cartToUpdate);
 
   const userRef = doc(db, 'users', uid);
 
@@ -163,4 +162,17 @@ export async function updateCart(cartToUpdate) {
   });
 
   console.log('sent');
+}
+
+export async function updateWishlist(wishlistToUpdate) {
+  const currentUser = await auth.currentUser;
+  const { uid } = currentUser;
+
+  const userRef = doc(db, 'users', uid);
+
+  await updateDoc(userRef, {
+    wishlist: wishlistToUpdate,
+  });
+
+  console.log('sent wishlist');
 }
