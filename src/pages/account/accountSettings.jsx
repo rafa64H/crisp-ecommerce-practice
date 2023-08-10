@@ -10,8 +10,9 @@ import {
 } from '../../components/utils/firebaseFunctions';
 import FormInputTyping from '../../components/ui/smaller/formInputTyping';
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
+import ClothesCard from '../../components/ui/smaller/clothesCard';
 
-const AccountSettings = () => {
+const AccountSettings = ({ clothesData }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Account information');
   const [showSettingsOptions, setShowSettingsOptions] = useState(false);
@@ -299,6 +300,8 @@ const AccountSettings = () => {
           setSelectedCountry={setSelectedCountry}
           arrayAllCountriesName={arrayAllCountriesName}
         />
+
+        <WishList clothesData={clothesData} selectedOption={selectedOption} />
 
         <dialog
           className="account-settings-modal"
@@ -642,5 +645,77 @@ const FormAddress = ({
         Save changes
       </button>
     </form>
+  );
+};
+
+const WishList = ({ clothesData, selectedOption }) => {
+  const [wishListState, setWishListState] = useState([]);
+
+  async function getWishlistFromFirestore() {
+    const userData = await getDataOfUser();
+    const { wishlist } = userData;
+
+    return wishlist;
+  }
+
+  async function changeWishList(id) {
+    setWishListState((prevValue) =>
+      prevValue.filter((itemFromState) => itemFromState.productId !== id)
+    );
+  }
+
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const wishlistFromFirestore = await getWishlistFromFirestore();
+        const wishList = wishlistFromFirestore.map((idFromFirestore) =>
+          clothesData.find((item) => item.productId === idFromFirestore)
+        );
+
+        setWishListState(wishList);
+      }
+    });
+  }, []);
+
+  function elementsToShow() {
+    if (wishListState.length === 0) {
+      return null;
+    }
+
+    return (
+      <>
+        {wishListState.map((item) => (
+          <ClothesCard
+            link={`./product.html?productId=${item.productId}`}
+            productId={item.productId}
+            productName={item.productName}
+            productColors={item.colors}
+            productImg={item.colors[0].imageUrl}
+            gender={item.gender}
+            productPrice={item.price}
+            category={item.category}
+            key={uuidv4()}
+            additionalOnClickWishListFunction={() =>
+              changeWishList(item.productId)
+            }
+          />
+        ))}
+      </>
+    );
+  }
+
+  return (
+    <ul
+      className="form-account-settings wishlist"
+      data-show-wishlist={selectedOption === 'My wishlist'}
+    >
+      <h2
+        data-show-wishlist-not-found={wishListState.length === 0}
+        className="wishlist-not-found"
+      >
+        Loading or nothing found
+      </h2>
+      {elementsToShow()}
+    </ul>
   );
 };

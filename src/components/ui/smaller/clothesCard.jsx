@@ -14,6 +14,7 @@ const ClothesCard = ({
   productPrice,
   productColors,
   extraClassNames,
+  additionalOnClickWishListFunction,
 }) => {
   const [imageSrc, setImageSrc] = useState(`${productImg}`);
   const [activeBtn, setActiveBtn] = useState(0);
@@ -117,6 +118,7 @@ const ClothesCard = ({
             handleDefault(e);
             handleAddOrRemoveOfWishlist();
             setAddedToWishList((prevValue) => !prevValue);
+            additionalOnClickWishListFunction();
           }}
         >
           <i

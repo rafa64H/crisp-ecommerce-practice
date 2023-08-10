@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Header />
 
-    <AccountSettings />
+    <AccountSettings clothesData={clothesData[0]} />
 
     <SectionThree />
     <Footer />

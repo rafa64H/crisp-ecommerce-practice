@@ -1139,8 +1139,26 @@ footer {
     color: $darker-gray;
   }
 }
+.wishlist {
+  margin: 1em;
+  border: 1px solid $first-color;
+
+  .wishlist-not-found {
+    display: none;
+    margin: 5em;
+    text-align: center;
+  }
+}
 [data-show-form-account-settings='true'] {
   display: block;
+}
+[data-show-wishlist='true'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+[data-show-wishlist-not-found='true'] {
+  display: block !important;
 }
 
 .account-settings-modal {
@@ -1745,6 +1763,11 @@ footer {
     }
     [data-show-form-account-settings='true'] {
       display: block;
+    }
+    [data-show-wishlist='true'] {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
     }
   }
 

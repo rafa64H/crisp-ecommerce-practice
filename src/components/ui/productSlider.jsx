@@ -55,6 +55,7 @@ const ProductSlider = ({ title }) => {
           <ClothesCard
             link={`./product.html?productId=${item.productId}`}
             productName={item.productName}
+            productId={item.productId}
             productColors={item.colors}
             productImg={item.colors[0].imageUrl}
             gender={item.gender}
