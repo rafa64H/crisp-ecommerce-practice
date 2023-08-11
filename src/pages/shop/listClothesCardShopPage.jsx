@@ -22,12 +22,7 @@ const ListClothesCardShopPage = ({ clothesData, isLargeScreen }) => {
       // Then filter by the size
       .filter((cloth) => {
         if (filterSize === null) return cloth;
-        if (
-          Object.values(cloth.sizes).some(
-            (size) => size[0] === filterSize && size[1]
-          )
-        )
-          return cloth;
+        if (cloth.sizes.some((size) => size === filterSize)) return cloth;
       })
       // Then filter by the color
       .filter((cloth) => {
@@ -44,6 +39,7 @@ const ListClothesCardShopPage = ({ clothesData, isLargeScreen }) => {
     const clothes = filteredClothes.map((item, index) => (
       <ClothesCard
         link={`./product.html?productId=${item.productId}`}
+        productId={item.productId}
         productName={item.productName}
         productColors={item.colors}
         productImg={item.colors[0].imageUrl}

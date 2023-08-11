@@ -20,16 +20,7 @@
         "The stitching creates a casual style."
       ],
 
-      "sizes": {
-        "xxs": ["XXS", true],
-        "xs": ["XS", true],
-        "s": ["S", true],
-        "m": ["M", true],
-        "l": ["L", true],
-        "xl": ["XL", true],
-        "xxl": ["XXL", false],
-        "3xl": ["3XL", true]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"],
 
       "colors": [
         {
@@ -76,15 +67,7 @@
         "This versatile shirt easily tucks in, sizes up for an oversized look, styles as a light outer layer with the buttons undone, or layers under a jacket, sweater, or sweatshirt"
       ],
 
-      "sizes": {
-        "xs": ["XS", true],
-        "s": ["S", false],
-        "m": ["M", true],
-        "l": ["L", false],
-        "xl": ["XL", false],
-        "xxl": ["XXL", true],
-        "3xl": ["3XL", true]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"],
 
       "colors": [
         {
@@ -122,15 +105,7 @@
         "The moderate wide fit is perfect for business and casual settings."
       ],
 
-      "sizes": {
-        "xxs": ["XXS", true],
-        "xs": ["XS", true],
-        "s": ["S", true],
-        "m": ["M", true],
-        "l": ["L", true],
-        "xl": ["XL", true],
-        "xxl": ["XXL", true]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL"],
 
       "colors": [
         {
@@ -180,16 +155,7 @@
         "Jogger style with elasticated hems."
       ],
 
-      "sizes": {
-        "xxs": ["XXS", true],
-        "xs": ["XS", true],
-        "s": ["S", true],
-        "m": ["M", true],
-        "l": ["L", true],
-        "xl": ["XL", true],
-        "xxl": ["XXL", true],
-        "3xl": ["3XL", true]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"],
 
       "colors": [
         {
@@ -244,15 +210,7 @@
         "Pair with different outfits for a casual, smart, or sporty style."
       ],
 
-      "sizes": {
-        "xxs": ["XXS", true],
-        "xs": ["XS", true],
-        "s": ["S", true],
-        "m": ["M", true],
-        "l": ["L", true],
-        "xl": ["XL", true],
-        "xxl": ["XXL", false]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL"],
 
       "colors": [
         {
@@ -313,15 +271,7 @@
         "Perfect for wearing on its own or in layered looks."
       ],
 
-      "sizes": {
-        "xxs": ["XXS", false],
-        "xs": ["XS", true],
-        "s": ["S", true],
-        "m": ["M", false],
-        "l": ["L", true],
-        "xl": ["XL", true],
-        "xxl": ["XXL", false]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"],
 
       "colors": [
         {
@@ -370,15 +320,7 @@
         "Perfect for wearing on its own or in layered looks."
       ],
 
-      "sizes": {
-        "xxs": ["XXS", false],
-        "xs": ["XS", true],
-        "s": ["S", true],
-        "m": ["M", true],
-        "l": ["L", true],
-        "xl": ["XL", true],
-        "xxl": ["XXL", false]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"],
 
       "colors": [
         {
@@ -452,15 +394,7 @@
         "With belt loops."
       ],
 
-      "sizes": {
-        "xxs": ["XXS", true],
-        "xs": ["XS", true],
-        "s": ["S", true],
-        "m": ["M", true],
-        "l": ["L", true],
-        "xl": ["XL", true],
-        "xxl": ["XXL", true]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL"],
 
       "colors": [
         {
@@ -505,15 +439,7 @@
         "Classic work pant details. Featuring cargo pockets at the sides and a flap pocket at the back."
       ],
 
-      "sizes": {
-        "xxs": ["XXS", false],
-        "xs": ["XS", true],
-        "s": ["S", true],
-        "m": ["M", true],
-        "l": ["L", true],
-        "xl": ["XL", true],
-        "xxl": ["XXL", false]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL"],
 
       "colors": [
         {
@@ -563,16 +489,7 @@
         "The stitching creates a casual style."
       ],
 
-      "sizes": {
-        "xxs": ["XXS", true],
-        "xs": ["XS", true],
-        "s": ["S", true],
-        "m": ["M", true],
-        "l": ["L", true],
-        "xl": ["XL", true],
-        "xxl": ["XXL", true],
-        "3xl": ["3XL", true]
-      },
+      "sizes": ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"],
 
       "colors": [
         {

@@ -21,7 +21,7 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
   }, [maxPrice]);
 
   const allGenders = ['MEN', 'WOMEN', 'UNISEX'];
-  const allSizes = ['xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', '3xl'];
+  const allSizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
   const allColors = [
     ['00 WHITE', 'clothes-00white'],
     ['02 LIGHT GRAY', 'clothes-02light-gray'],
@@ -89,15 +89,17 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
 
   return (
     <>
-      <button
-        type="button"
-        className="button-expand"
-        aria-expanded={showShopSectionFilters}
-        onClick={handleClickExpandFilters}
-      >
-        Filters
-        <i className={`fa-solid ${expandFiltersIcon} icon`} />
-      </button>
+      <div className="button-expand-container">
+        <button
+          type="button"
+          className="button-expand"
+          aria-expanded={showShopSectionFilters}
+          onClick={handleClickExpandFilters}
+        >
+          Filters
+          <i className={`fa-solid ${expandFiltersIcon} icon`} />
+        </button>
+      </div>
 
       <div
         className="shop-section-filters"
@@ -249,7 +251,7 @@ const SizeFilterItem = ({ size, isActiveSize, changeTabIndex, onClick }) => (
     tabIndex={changeTabIndex ? '0' : '-1'}
     onClick={onClick}
   >
-    {size.toUpperCase()}
+    {size}
   </button>
 );
 
