@@ -427,7 +427,7 @@ const ShoppingBag = ({
         {buildAllShoppingBagItems()}
       </ul>
       <p className="total-price">Total price is: {calculatePrice()}$</p>
-      <a href="#" className="black-btn">
+      <a href="./buy-clothes.html" className="black-btn">
         Buy clothes
       </a>
     </div>
