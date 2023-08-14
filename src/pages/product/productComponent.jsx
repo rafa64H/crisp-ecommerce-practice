@@ -17,7 +17,6 @@ const ProductComponent = ({
   const [selectedImage, setSelectedImage] = useState();
   const [colorImage, setColorImage] = useState();
   const [showSizeOptions, setShowSizeOptions] = useState(false);
-  const [changeIcon, setChangeIcon] = useState('fa-plus');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
@@ -49,10 +48,8 @@ const ProductComponent = ({
   function handleClickExpandSelectSize() {
     if (showSizeOptions) {
       setShowSizeOptions(false);
-      setChangeIcon('fa-plus');
     } else {
       setShowSizeOptions(true);
-      setChangeIcon('fa-minus');
     }
   }
 
@@ -116,6 +113,7 @@ const ProductComponent = ({
         quantity: quantityRef.current.value,
         price: product.price,
         color: selectedColor,
+        img: selectedImage,
       },
     ]);
 
@@ -162,10 +160,15 @@ const ProductComponent = ({
             <button
               type="button"
               className="button-expand"
+              aria-expanded={showSizeOptions}
               onClick={handleClickExpandSelectSize}
             >
               Select Size
-              <i className={`fa-solid ${changeIcon} icon`} />
+              <i
+                className={`fa-solid ${
+                  showSizeOptions ? 'fa-minus' : 'fa-plus'
+                } icon`}
+              />
             </button>
 
             <ProductSizeOptions
@@ -391,15 +394,12 @@ const ProductCodeAndSocialMedia = ({ product }) => (
 
 const ProductDetailsSection = ({ product }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const [changeIcon2, setChangeIcon2] = useState('fa-plus');
 
   function handleClickExpandDetails() {
     if (showDetails) {
       setShowDetails(false);
-      setChangeIcon2('fa-plus');
     } else {
       setShowDetails(true);
-      setChangeIcon2('fa-minus');
     }
   }
 
@@ -410,10 +410,13 @@ const ProductDetailsSection = ({ product }) => {
       <button
         type="button"
         className="button-expand2"
+        aria-expanded={showDetails}
         onClick={handleClickExpandDetails}
       >
         Details
-        <i className={`fa-solid ${changeIcon2} icon`} />
+        <i
+          className={`fa-solid ${showDetails ? 'fa-minus' : 'fa-plus'} icon`}
+        />
       </button>
 
       <div

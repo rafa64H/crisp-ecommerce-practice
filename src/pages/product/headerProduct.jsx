@@ -5,6 +5,7 @@ import { auth } from '../../config-firebase/firebase';
 
 import CompanyLogo from '../../components/ui/smaller/companyLogo';
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
+import calculatePriceShoppingBagFromFirestore from '../../components/utils/calculatePriceShoppingBagFromFirestore';
 import {
   getDataOfUser,
   updateCart,
@@ -64,19 +65,6 @@ const HeaderProduct = ({
     } else if (shoppingBagItems.length === 0) setShoppingBagItemsNotFound(true);
     else if (shoppingBagItems.length !== 0) setShoppingBagItemsNotFound(false);
   }, [shoppingBagItems]);
-
-  function calculatePrice() {
-    const arrayPrices = shoppingBagItems.map(
-      (item) => item.price * item.quantity
-    );
-
-    const price = arrayPrices.reduce(
-      (priceValue, totalPrice) => priceValue + totalPrice,
-      0
-    );
-
-    return price.toFixed(2);
-  }
 
   return (
     <header>
@@ -142,7 +130,7 @@ const HeaderProduct = ({
               setShoppingBagOpen={setShoppingBagOpen}
               setIsNavOpen={setIsNavOpen}
             >
-              {calculatePrice()}
+              {calculatePriceShoppingBagFromFirestore(shoppingBagItems)}
             </ShopBtn>
           </div>
         </ul>
@@ -164,7 +152,9 @@ const HeaderProduct = ({
         shoppingBagOpen={shoppingBagOpen}
         setShoppingBagOpen={setShoppingBagOpen}
         shoppingBagItemsNotFound={shoppingBagItemsNotFound}
-        calculatePrice={calculatePrice}
+        calculatePriceShoppingBagFromFirestore={
+          calculatePriceShoppingBagFromFirestore
+        }
       />
     </header>
   );
@@ -353,27 +343,19 @@ const ShoppingBag = ({
   shoppingBagOpen,
   setShoppingBagOpen,
   shoppingBagItemsNotFound,
-  calculatePrice,
+  calculatePriceShoppingBagFromFirestore,
 }) => {
   function buildAllShoppingBagItems() {
     if (shoppingBagItems === undefined) return null;
     if (shoppingBagItems.length !== 0) {
       const allCartItems = shoppingBagItems.map((itemFromShoppingBagState) => {
-        const { name, id, color, size, quantity, price } =
+        const { name, id, color, size, quantity, price, img } =
           itemFromShoppingBagState;
-
-        const product = clothesData[0].find(
-          (clothesDataItem) => clothesDataItem.productId === id
-        );
-
-        const colorImg = product.colors.find(
-          (colorObj) => colorObj.name === color
-        ).imageUrl;
 
         return (
           <ShoppingBagListItem
             key={uuidv4()}
-            productImg={colorImg}
+            productImg={img}
             productColor={color}
             productSize={size}
             productName={name}
@@ -426,7 +408,10 @@ const ShoppingBag = ({
         </p>
         {buildAllShoppingBagItems()}
       </ul>
-      <p className="total-price">Total price is: {calculatePrice()}$</p>
+      <p className="total-price">
+        Total price is:{' '}
+        {calculatePriceShoppingBagFromFirestore(shoppingBagItems)}$
+      </p>
       <a href="./buy-clothes.html" className="black-btn">
         Buy clothes
       </a>
