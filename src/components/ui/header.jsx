@@ -142,6 +142,7 @@ const Header = () => {
       </div>
 
       <ShoppingBag
+        userLoggedIn={userLoggedIn}
         shoppingBagItems={shoppingBagItems}
         setShoppingBagItems={setShoppingBagItems}
         shoppingBagOpen={shoppingBagOpen}
@@ -292,7 +293,7 @@ const ProfileLink = ({
   </li>
 );
 
-const ShoppingBagListItem = ({
+export const ShoppingBagListItem = ({
   productImg,
   productName,
   productSize,
@@ -300,8 +301,9 @@ const ShoppingBagListItem = ({
   productQuantity,
   productPrice,
   onClickDeleteItemShoppingBagFunction,
+  extraClassNames,
 }) => (
-  <li className="shopping-bag-list-item">
+  <li className={`shopping-bag-list-item ${extraClassNames}`}>
     <img src={`${productImg}`} className="shopping-bag-list-item__img" alt="" />
     <div className="shopping-bag-list-item-text">
       <p className="shopping-bag-list-item-text__paragraph">
@@ -333,6 +335,7 @@ const ShoppingBagListItem = ({
 );
 
 const ShoppingBag = ({
+  userLoggedIn,
   shoppingBagItems,
   setShoppingBagItems,
   shoppingBagOpen,
@@ -407,9 +410,13 @@ const ShoppingBag = ({
         Total price is:{' '}
         {calculatePriceShoppingBagFromFirestore(shoppingBagItems)}$
       </p>
-      <a href="./buy-clothes.html" className="black-btn">
-        Buy clothes
-      </a>
+      {userLoggedIn ? (
+        <a href="./buy-clothes.html" className="black-btn">
+          Buy clothes
+        </a>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

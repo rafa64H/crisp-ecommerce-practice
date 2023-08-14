@@ -79,6 +79,7 @@ a {
   font-family: $font-oswald;
   text-decoration: none;
   font-size: $third-font-size;
+  color: $darker-gray;
   cursor: pointer;
 }
 
@@ -1340,9 +1341,37 @@ footer {
 }
 
 //product page END
+
 //----------------------------------------------------------------
 
 //buyClothes Page
+
+.order-placed {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: $notify-color2;
+  border: 2px solid $notify-color;
+  width: min(95%, 50rem);
+  padding: 1em;
+  margin: 2em auto;
+
+  h1 {
+    margin: 1.5em;
+    margin-bottom: 0.5em;
+  }
+
+  i {
+    margin-bottom: 1.5em;
+    padding: 0.5em;
+    background-color: $notify-color;
+    border-radius: 50%;
+
+    font-size: $first-font-size;
+  }
+}
 
 .place-order {
   &__title {
@@ -1357,7 +1386,25 @@ footer {
     .address-and-buy {
       order: 2;
 
+      margin-top: 1.5em;
+
       text-align: center;
+
+      .edit-address {
+        color: $first-color;
+        i {
+          color: $first-color;
+          font-size: $third-font-size;
+        }
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      &__address-tag {
+        margin: 1em 0;
+        line-height: 1.5;
+      }
     }
 
     .order-summary {
@@ -1366,7 +1413,36 @@ footer {
       background-color: lightgray;
       border: 2px solid $light-gray;
       width: min(95%, 50rem);
+      padding: 1em;
       margin: 0 auto;
+
+      .items-not-found {
+        text-align: center;
+        margin-top: 2em;
+        font-size: $second-font-size;
+      }
+
+      .button-expand2 {
+        border-bottom: 0px solid transparent;
+      }
+
+      .order-summary-div {
+        position: absolute;
+        opacity: 0;
+
+        transition: all 200ms;
+        transform-origin: 50% 0;
+        transform: scaleY(0);
+      }
+      [data-show-summary-div='true'] {
+        position: relative;
+        opacity: 1;
+        transform: scaleY(1);
+        transform-origin: 50% 0;
+      }
+      [data-show-btn-expand2='false'] {
+        display: none;
+      }
     }
 
     .shopping-bag-list-item--place-order {
@@ -1374,6 +1450,10 @@ footer {
       grid-template-columns: minmax(20%) minmax(60%) minmax(5%);
 
       width: min(100%, 30rem);
+      margin: 1em auto;
+      &:last-child {
+        border-bottom: 0px solid transparent;
+      }
       &__img {
       }
 
@@ -1393,7 +1473,6 @@ footer {
     }
   }
 }
-
 //buyClothes Page END
 
 //----------------------------------------------------------------
@@ -2016,6 +2095,91 @@ footer {
     }
   }
   ////Media product page END
+
+  //----------------------------------------------------------------
+
+  //buyClothes Page
+  .place-order {
+    &__title {
+      font-size: $second-font-size;
+      text-align: center;
+    }
+
+    &-div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 1em;
+
+      .address-and-buy {
+        order: 1;
+
+        margin-top: 0;
+
+        text-align: left;
+      }
+
+      .order-summary {
+        order: 2;
+
+        background-color: lightgray;
+        border: 2px solid $light-gray;
+        width: min(95%, 50rem);
+        padding: 1em;
+        margin: 0;
+
+        .button-expand2 {
+          border-bottom: 0px solid transparent;
+        }
+
+        .order-summary-div {
+          position: absolute;
+          opacity: 0;
+
+          transition: all 200ms;
+          transform-origin: 50% 0;
+          transform: scaleY(0);
+        }
+        [data-show-summary-div='true'] {
+          position: relative;
+          opacity: 1;
+          transform: scaleY(1);
+          transform-origin: 50% 0;
+        }
+        [data-show-btn-expand2='false'] {
+          display: none;
+        }
+      }
+
+      .shopping-bag-list-item--place-order {
+        display: grid;
+        grid-template-columns: minmax(20%) minmax(60%) minmax(5%);
+
+        width: min(100%, 30rem);
+        margin: 1em 0;
+        &:last-child {
+          border-bottom: 0px solid transparent;
+        }
+        &__img {
+        }
+
+        .shopping-bag-list-item-text {
+          &__paragraph {
+            overflow-x: visible;
+            white-space: normal;
+            text-overflow: clip;
+            width: auto;
+          }
+        }
+
+        &__delete-btn {
+          i {
+          }
+        }
+      }
+    }
+  }
+  //buyClothes Page END
 }
 
 ///Only devices with :hover

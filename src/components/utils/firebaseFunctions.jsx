@@ -176,3 +176,16 @@ export async function updateWishlist(wishlistToUpdate) {
 
   console.log('sent wishlist');
 }
+
+export async function updateOrdersHistory(ordersHistoryToUpdate) {
+  const currentUser = await auth.currentUser;
+  const { uid } = currentUser;
+
+  const userRef = doc(db, 'users', uid);
+
+  await updateDoc(userRef, {
+    ordersHistory: ordersHistoryToUpdate,
+  });
+
+  console.log('sent history of orders');
+}
