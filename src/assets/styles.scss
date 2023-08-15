@@ -1050,7 +1050,6 @@ footer {
 //SectionThree END
 
 //shopSection
-
 .list-clothes-card {
   display: flex;
   flex-wrap: wrap;
@@ -1106,7 +1105,6 @@ footer {
     transform-origin: 50% 0%;
   }
 }
-
 //shopSection END
 
 //----------------------------------------------------------------
@@ -1152,6 +1150,31 @@ footer {
     text-align: center;
   }
 }
+.orders-history {
+  margin-top: 1em;
+  border: 2px solid $darker-gray;
+
+  &-not-found {
+    text-align: center;
+
+    h2 {
+    }
+  }
+
+  .orders-history-item {
+    margin-top: 1em;
+    line-height: 1.5;
+
+    &-text {
+      overflow-x: visible;
+      white-space: normal;
+      text-overflow: clip;
+      p {
+        width: auto;
+      }
+    }
+  }
+}
 [data-show-form-account-settings='true'] {
   display: block;
 }
@@ -1162,6 +1185,9 @@ footer {
 }
 [data-show-wishlist-not-found='true'] {
   display: block !important;
+}
+[data-show-orders-history='true'] {
+  display: block;
 }
 
 .account-settings-modal {
@@ -1191,7 +1217,6 @@ footer {
 //----------------------------------------------------------------
 
 //product page
-
 .product-not-found {
   display: flex;
   justify-content: center;
@@ -1906,14 +1931,15 @@ footer {
       flex-wrap: wrap;
       align-items: baseline;
     }
+    [data-show-orders-history='true'] {
+      display: block;
+    }
   }
-
   ////Media accountSettings END
 
   ////--------------------
 
   ////Media product page
-
   .product {
     display: flex;
     justify-content: space-between;
@@ -2098,7 +2124,7 @@ footer {
 
   //----------------------------------------------------------------
 
-  //buyClothes Page
+  //Media buyClothes Page
   .place-order {
     &__title {
       font-size: $second-font-size;
@@ -2179,7 +2205,7 @@ footer {
       }
     }
   }
-  //buyClothes Page END
+  //Media buyClothes Page END
 }
 
 ///Only devices with :hover

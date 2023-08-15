@@ -63,9 +63,19 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
     try {
       const userData = await getDataOfUser();
       const userPrevOrdersHistory = await userData.ordersHistory;
+
+      const today = new Date();
+
+      const shoppingBagItemsWithAddedDate = shoppingBagItems.map(
+        (itemFromState) => {
+          itemFromState.date = `${today.getMonth()}/${today.getDate()}/${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+          return itemFromState;
+        }
+      );
+
       const ordersHistoryToUpdate = [
         ...userPrevOrdersHistory,
-        ...shoppingBagItems,
+        ...shoppingBagItemsWithAddedDate,
       ];
       await updateOrdersHistory(ordersHistoryToUpdate);
       await setShoppingBagItems([]);
