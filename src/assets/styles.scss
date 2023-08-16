@@ -19,6 +19,10 @@ $light-gray: #828282;
 $darker-gray: #3f3f3f;
 //Variables END
 
+//Mixins
+
+//Mixins END
+
 //----------------------------------------------------------------
 
 //Universal selector and tags
@@ -1156,6 +1160,7 @@ footer {
 
   &-not-found {
     text-align: center;
+    margin: 5em;
 
     h2 {
     }
@@ -1247,12 +1252,14 @@ footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       width: min(95%, 40rem);
 
       .product-quantity {
         display: flex;
         flex-direction: column;
         align-items: center;
+
         border: 2px solid gray;
         max-width: 50%;
         padding: 0.75em;

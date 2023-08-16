@@ -5,6 +5,11 @@ import { auth } from '../../config-firebase/firebase';
 
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
 import ProductSlider from '../../components/ui/productSlider';
+import ButtonExpand from '../../components/ui/smaller/buttonExpand';
+import {
+  getDataOfUser,
+  updateWishlist,
+} from '../../components/utils/firebaseFunctions';
 
 const ProductComponent = ({
   clothesData,
@@ -123,6 +128,36 @@ const ProductComponent = ({
     }, 1000);
   }
 
+  async function handleAddToWishlist() {
+    const { productId } = product;
+
+    try {
+      const userData = await getDataOfUser();
+      const userWishlist = await userData.wishlist;
+
+      const productAlreadyOnWishlist = userWishlist.some(
+        (idFirestoreWishlist) => idFirestoreWishlist == productId
+      );
+
+      if (productAlreadyOnWishlist) {
+        setAlertMessage('Item already on wishlist');
+        setTimeout(() => {
+          setAlertMessage('');
+        }, 1000);
+        return null;
+      }
+
+      const wishlistToUpdate = [...userWishlist, productId];
+      updateWishlist(wishlistToUpdate);
+      setAlertMessage('Item added to wishlist');
+      setTimeout(() => {
+        setAlertMessage('');
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <>
       <section className="product">
@@ -157,19 +192,10 @@ const ProductComponent = ({
           <h2>Select size</h2>
 
           <div className="button-expand-container">
-            <button
-              type="button"
-              className="button-expand"
-              aria-expanded={showSizeOptions}
-              onClick={handleClickExpandSelectSize}
-            >
-              Select Size
-              <i
-                className={`fa-solid ${
-                  showSizeOptions ? 'fa-minus' : 'fa-plus'
-                } icon`}
-              />
-            </button>
+            <ButtonExpand
+              showTheOtherElement={showSizeOptions}
+              handleClickFunction={handleClickExpandSelectSize}
+            />
 
             <ProductSizeOptions
               sizes={sizes}
@@ -192,8 +218,9 @@ const ProductComponent = ({
             <button
               className=" transparent-btn product-decision__btn"
               type="button"
+              onClick={handleAddToWishlist}
             >
-              Save
+              Save on wishlist
             </button>
           </div>
           <aside aria-live="polite">{alertMessage}</aside>

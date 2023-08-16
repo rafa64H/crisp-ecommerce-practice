@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { FiltersContext } from './shopWithFilters';
 
+import ButtonExpand from '../../components/ui/smaller/buttonExpand';
+
 const FiltersForListClothesCard = ({ isLargeScreen }) => {
   const { activeFilters, setActiveFilters, applyFilters, setApplyFilters } =
     useContext(FiltersContext);
@@ -90,15 +92,10 @@ const FiltersForListClothesCard = ({ isLargeScreen }) => {
   return (
     <>
       <div className="button-expand-container">
-        <button
-          type="button"
-          className="button-expand"
-          aria-expanded={showShopSectionFilters}
-          onClick={handleClickExpandFilters}
-        >
-          Filters
-          <i className={`fa-solid ${expandFiltersIcon} icon`} />
-        </button>
+        <ButtonExpand
+          showTheOtherElement={showShopSectionFilters}
+          handleClickFunction={handleClickExpandFilters}
+        />
       </div>
 
       <div
