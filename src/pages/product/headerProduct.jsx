@@ -91,7 +91,8 @@ const HeaderProduct = ({
             shouldShowTabIndex={isLargeScreen || isNavOpen}
           />
           <NavItem
-            text="Blog"
+            text="Community"
+            link="./community.html"
             shouldShowTabIndex={isLargeScreen || isNavOpen}
           />
           <NavItem

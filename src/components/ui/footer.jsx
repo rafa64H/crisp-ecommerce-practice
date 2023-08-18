@@ -94,7 +94,8 @@ const Footer = () => {
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
-            footerItemText="BLOG"
+            footerItemText="COMMUNITY"
+            footerLink="./community.html"
           />
         </ul>
       </section>
