@@ -14,7 +14,7 @@ const FormInputTyping = ({
     return (
       <div className="form-input-container">
         <label htmlFor={id} className="form-input-label">
-          {name}{' '}
+          {name}
           <span className="input-required" aria-label="Required">
             *
           </span>

@@ -1621,6 +1621,50 @@ footer {
 
 //----------------------------------------------------------------
 
+//createPost
+.create-post {
+  .create-post-form {
+    width: min(95%, 55rem);
+    margin: 0 auto;
+
+    .create-post-file {
+      display: block;
+
+      width: min(95%, 20rem);
+      margin: 0 auto;
+    }
+
+    .create-post-textarea {
+      resize: none;
+      min-height: 10rem;
+    }
+
+    input[type='file']::file-selector-button {
+      background-color: transparent;
+      border: transparent;
+
+      color: white;
+      font-weight: 600;
+      font-family: $font-oswald;
+    }
+
+    .black-btn {
+      display: block;
+
+      margin: 0 auto;
+
+      font-size: $third-font-size;
+
+      .fa-sticky-note {
+        margin-right: 0.5em;
+      }
+    }
+  }
+}
+//createPost END
+
+//----------------------------------------------------------------
+
 //Media Queries
 @media screen and (min-width: 1200px) {
   ////Media common used components
