@@ -1511,6 +1511,17 @@ footer {
 
 //Community
 .community {
+  .create-post-btn-desktop {
+    display: block;
+    width: 15em;
+    text-align: center;
+    margin: 1em auto;
+  }
+  .create-post-btn-mobile {
+    position: fixed;
+    bottom: 2%;
+    right: 2%;
+  }
   .community-list {
     &-li {
       width: min(95%, 30rem);
@@ -1570,6 +1581,38 @@ footer {
             }
           }
         }
+      }
+    }
+  }
+
+  .list-indexes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    width: min(95%, 50rem);
+    margin: 1em auto;
+
+    .arrow-btn {
+      margin: 0 0.5em;
+      padding: 0.1em 0.5em;
+      font-weight: 900;
+      font-size: $third-font-size;
+    }
+
+    &-item {
+      margin: 0.5em;
+
+      .list-indexes-btn {
+        font-size: $fourth-font-size;
+      }
+    }
+    [data-active-index='true'] {
+      background-color: $notify-color;
+      color: $first-color;
+      &:hover {
+        background-color: $second-color;
       }
     }
   }
@@ -2286,6 +2329,7 @@ footer {
   //----------------------------------------------------------------
 
   //Community
+
   .community {
     .community-list {
       &-li {
@@ -2319,6 +2363,19 @@ footer {
                 width: min(100%, 40em);
                 margin: 0.5em 0;
               }
+            }
+          }
+
+          .thumbnail-and-not-paragraph {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .community-list-item__img {
+              width: max(15vw, 20rem);
+            }
+            .community-list-item__title {
+              margin-top: 1em;
             }
           }
 
