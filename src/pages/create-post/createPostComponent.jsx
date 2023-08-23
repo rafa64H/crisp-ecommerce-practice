@@ -3,27 +3,80 @@ import FormInputTyping from '../../components/ui/smaller/formInputTyping';
 
 const CreatePostComponent = () => {
   const [loading, setLoading] = useState(false);
+  const [previewImg, setPreviewImg] = useState();
+  const [alertMessage, setAlertMessage] = useState('');
 
   const fileRef = useRef();
   const titleRef = useRef();
   const textRef = useRef();
 
+  function handleUploadFile(e) {
+    const [file] = e.target.files;
+    if (file) {
+      setPreviewImg((prevUrl) => URL.createObjectURL(file));
+    }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!titleRef.current.value) {
+      titleRef.current.dataset.errorInputTyping = true;
+      setAlertMessage('Error: Title is required');
+    }
+  }
+
+  function handleFocusInput(e) {
+    e.target.dataset.errorInputTyping = 'false';
+    setAlertMessage('');
+  }
+
+  function handleUndoImg() {
+    fileRef.current.value = null;
+    setPreviewImg('');
+  }
+
   return (
     <section className="create-post">
       <h1 className="create-post__title">Create post</h1>
-      <form className="create-post-form">
-        <div className="form-input-container">
+      <form className="create-post-form" onSubmit={(e) => handleSubmit(e)}>
+        <aside aria-live="assertive">{alertMessage}</aside>
+        <div className="form-input-container form-input-container--file">
           <label className="form-input-label" htmlFor="the-file">
             Submit image
           </label>
 
-          <input
-            type="file"
-            className="form-input-typing create-post-file black-btn"
-            accept="image/*"
-            htmlFor="the-file"
-            ref={fileRef}
-          />
+          <div className="form-input-typing">
+            <div className="create-post-file-btns-container">
+              <input
+                type="file"
+                className="create-post-file black-btn"
+                accept="image/*"
+                htmlFor="the-file"
+                ref={fileRef}
+                onChange={(e) => handleUploadFile(e)}
+              />
+
+              {previewImg ? (
+                <button
+                  type="button"
+                  aria-label="Undo uploaded image"
+                  className="transparent-btn undo-uploaded-file"
+                  onClick={(e) => handleUndoImg(e)}
+                >
+                  <i className="fa-solid fa-xmark" />
+                </button>
+              ) : (
+                ''
+              )}
+            </div>
+
+            <img
+              src={previewImg}
+              className="create-post-file-preview"
+              alt={previewImg ? 'Preview of the mage to be uploaded' : ''}
+            />
+          </div>
         </div>
 
         <FormInputTyping
@@ -34,6 +87,7 @@ const CreatePostComponent = () => {
           loading={loading}
           theRef={titleRef}
           placeholderProp="Write your title here"
+          onFocusFunction={handleFocusInput}
         />
 
         <div className="form-input-container">
@@ -45,10 +99,9 @@ const CreatePostComponent = () => {
             id="the-text"
             ref={textRef}
           />
-          <p>{textRef.current.value.length}</p>
         </div>
 
-        <button type="button" className="black-btn">
+        <button type="submit" className="black-btn">
           <i className="fa-solid fa-sticky-note" />
           Post
         </button>
