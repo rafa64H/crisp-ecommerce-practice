@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import FormInputTyping from '../../components/ui/smaller/formInputTyping';
+import {
+  createPost,
+  getPostsOfUser,
+} from '../../components/utils/firebaseFunctions';
 
 const CreatePostComponent = () => {
   const [loading, setLoading] = useState(false);
@@ -23,6 +27,15 @@ const CreatePostComponent = () => {
     if (!titleRef.current.value) {
       titleRef.current.dataset.errorInputTyping = true;
       setAlertMessage('Error: Title is required');
+      return null;
+    }
+
+    const [file] = fileRef.current.files;
+
+    try {
+      await createPost(file, titleRef.current.value, textRef.current.value);
+    } catch (err) {
+      console.log(err);
     }
   }
 

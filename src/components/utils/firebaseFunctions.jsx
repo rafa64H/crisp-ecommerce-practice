@@ -19,7 +19,9 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
-import { auth, db } from '../../config-firebase/firebase';
+import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
+import { v4 as uuidv4 } from 'uuid';
+import { auth, db, storage } from '../../config-firebase/firebase';
 
 export async function getDataOfUser() {
   const user = await auth.currentUser;
@@ -28,6 +30,15 @@ export async function getDataOfUser() {
   const docData = docSnap.data();
 
   return docData;
+}
+
+export async function getPostsOfUser() {
+  const user = await auth.currentUser;
+  const docRef = doc(db, 'communityPosts', user.uid);
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.data();
+
+  return docData.posts;
 }
 
 const usersCollectionRef = collection(db, 'users');
@@ -188,4 +199,52 @@ export async function updateOrdersHistory(ordersHistoryToUpdate) {
   });
 
   console.log('sent history of orders');
+}
+
+export async function updateUsersPosts(usersPostsToUpdate) {
+  const currentUser = await auth.currentUser;
+  const { uid } = currentUser;
+
+  const userRef = doc(db, 'communityPosts', uid);
+
+  await updateDoc(userRef, {
+    posts: usersPostsToUpdate,
+  });
+
+  console.log('sent communityPosts');
+}
+
+export async function createPost(postImg, postTitle, postText) {
+  if (postImg) {
+    const imageRef = ref(
+      storage,
+      `communityPostsImgs/${postTitle}/${postImg.name + uuidv4()}`
+    );
+
+    await uploadBytes(imageRef, postImg).then(() => {
+      console.log('uploaded image');
+    });
+
+    const imageListRef = ref(storage, `communityPostsImgs/${postTitle}/`);
+
+    const getImageUrl = listAll(imageListRef)
+      .then((response) => response.items)
+      .then((items) => items.map((something) => something))
+      .then((items) => getDownloadURL(items[0]));
+    const imageUrl = (await getImageUrl).toString();
+
+    const posts = await getPostsOfUser();
+    const newPostsArray = [
+      ...posts,
+      { postImg: imageUrl, postTitle, postText, likes: [], dislikes: [] },
+    ];
+    await updateUsersPosts(newPostsArray);
+  } else {
+    const posts = await getPostsOfUser();
+    const newPostsArray = [
+      ...posts,
+      { postImg: null, postTitle, postText, likes: [], dislikes: [] },
+    ];
+    await updateUsersPosts(newPostsArray);
+  }
 }
