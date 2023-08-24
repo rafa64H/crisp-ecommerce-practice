@@ -30,6 +30,13 @@ const CreatePostComponent = () => {
       return null;
     }
 
+    const regex = /\//;
+    if (titleRef.current.value.match(regex)) {
+      titleRef.current.dataset.errorInputTyping = true;
+      setAlertMessage("Error: Please don't use '/' in the post's name");
+      return null;
+    }
+
     const [file] = fileRef.current.files;
 
     try {
