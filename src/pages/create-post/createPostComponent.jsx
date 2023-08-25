@@ -9,6 +9,7 @@ const CreatePostComponent = () => {
   const [loading, setLoading] = useState(false);
   const [previewImg, setPreviewImg] = useState();
   const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage2, setAlertMessage2] = useState('');
 
   const fileRef = useRef();
   const titleRef = useRef();
@@ -23,10 +24,24 @@ const CreatePostComponent = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
+    setAlertMessage2('Loading...');
+
+    const today = new Date();
+
+    const todaySecond = today.getSeconds();
+    const todayMinute = today.getMinutes();
+    const todayHour = today.getHours();
+    const todaydDate = today.getDate();
+    const todayMonth = today.getMonth() + 1;
+    const todayYear = today.getFullYear();
 
     if (!titleRef.current.value) {
       titleRef.current.dataset.errorInputTyping = true;
       setAlertMessage('Error: Title is required');
+
+      setLoading(false);
+      setAlertMessage2('');
       return null;
     }
 
@@ -34,15 +49,31 @@ const CreatePostComponent = () => {
     if (titleRef.current.value.match(regex)) {
       titleRef.current.dataset.errorInputTyping = true;
       setAlertMessage("Error: Please don't use '/' in the post's name");
+      setLoading(false);
+      setAlertMessage2('');
       return null;
     }
 
     const [file] = fileRef.current.files;
 
     try {
-      await createPost(file, titleRef.current.value, textRef.current.value);
+      await createPost(
+        file,
+        titleRef.current.value,
+        textRef.current.value,
+        todaySecond,
+        todayMinute,
+        todayHour,
+        todaydDate,
+        todayMonth,
+        todayYear
+      );
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
+      setAlertMessage2('');
+      window.location.href = './community.html';
     }
   }
 
@@ -104,7 +135,6 @@ const CreatePostComponent = () => {
           name="Title"
           type="text"
           id="title"
-          loading={loading}
           theRef={titleRef}
           placeholderProp="Write your title here"
           onFocusFunction={handleFocusInput}
@@ -121,10 +151,11 @@ const CreatePostComponent = () => {
           />
         </div>
 
-        <button type="submit" className="black-btn">
+        <button type="submit" className="black-btn" disabled={loading}>
           <i className="fa-solid fa-sticky-note" />
           Post
         </button>
+        <aside aria-live="assertive">{alertMessage2}</aside>
       </form>
     </section>
   );

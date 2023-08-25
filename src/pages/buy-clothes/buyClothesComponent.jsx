@@ -68,7 +68,9 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
 
       const shoppingBagItemsWithAddedDate = shoppingBagItems.map(
         (itemFromState) => {
-          itemFromState.date = `${today.getMonth()}/${today.getDate()}/${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+          itemFromState.date = `${
+            today.getMonth() + 1
+          }/${today.getDate()}/${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
           return itemFromState;
         }
       );

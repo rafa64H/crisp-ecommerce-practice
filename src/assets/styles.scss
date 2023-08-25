@@ -94,7 +94,7 @@ button {
   cursor: pointer;
 }
 button[disabled] {
-  display: none;
+  display: none !important;
 }
 
 input[type='submit'] {
@@ -1564,6 +1564,7 @@ footer {
         &__like-dislike-container {
           display: flex;
           justify-content: center;
+          align-items: center;
 
           .like-dislike {
             display: flex;
@@ -1641,10 +1642,11 @@ footer {
         display: block;
 
         width: min(95%, 20rem);
-        margin: 0 auto;
+        margin: 0;
       }
 
       .undo-uploaded-file {
+        margin-top: 0.5em;
         margin-left: auto;
         i {
         }
@@ -1654,7 +1656,6 @@ footer {
     .create-post-file-preview {
       display: block;
       width: 15rem;
-      margin: 0 auto;
       margin-top: 0.5em;
     }
 
@@ -2420,7 +2421,7 @@ footer {
               display: block;
 
               width: max(15vw, 10rem);
-              margin: 0 auto;
+              margin: 0;
             }
 
             &-text {

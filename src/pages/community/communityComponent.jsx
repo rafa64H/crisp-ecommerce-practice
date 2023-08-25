@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { onAuthStateChanged } from 'firebase/auth';
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
+import { getCommunityPosts } from '../../components/utils/firebaseFunctions';
+import { auth } from '../../config-firebase/firebase';
 
 const arrayOfPosts = [
   [
@@ -475,114 +478,150 @@ const arrayOfPosts = [
 
 const CommunityComponent = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
-  const [listOfPosts, setListOfPosts] = useState([...arrayOfPosts]);
-  const [postsToShow, setPostsToShow] = useState(listOfPosts[0]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [listOfPosts, setListOfPosts] = useState([]);
+  const [postsToShow, setPostsToShow] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState();
+  const [loadingPosts, setLoadingPosts] = useState(false);
+
+  function splitPostsIntoFive(array, size) {
+    const newArray = [];
+
+    for (let i = 0; i < array.length; i += size) {
+      newArray.push(array.slice(i, i + size));
+    }
+    return newArray;
+  }
 
   useEffect(() => {
     handleLargeScreen(setIsLargeScreen);
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const communityPostsFromFirebase = await getCommunityPosts();
+        const communityPostsSplitted = splitPostsIntoFive(
+          communityPostsFromFirebase,
+          5
+        );
+
+        setListOfPosts(communityPostsSplitted);
+        setCurrentIndex(0);
+      } else {
+      }
+    });
   }, []);
 
   useEffect(() => {
     setPostsToShow(listOfPosts[currentIndex]);
   }, [currentIndex]);
 
-  return (
-    <section className="community">
-      {isLargeScreen ? (
-        <a
-          href="./create-post.html"
-          className="create-post-btn-desktop black-btn"
-        >
-          <i className="fa-solid fa-plus" /> Create post
-        </a>
-      ) : (
-        <a
-          href="./create-post.html"
-          className="create-post-btn-mobile black-btn"
-        >
-          <i className="fa-solid fa-plus" /> Create post
-        </a>
-      )}
-
-      <ul className="community-list">
-        {postsToShow.map((post) => (
-          <CommunityPostListItem
-            key={uuidv4()}
-            thumbnail={post.thumbnail}
-            title={post.title}
-            paragraph={post.paragraph}
-            likes={post.likes}
-            dislikes={post.dislikes}
-          />
-        ))}
-      </ul>
-
-      <ul className="list-indexes">
-        <li>
-          {listOfPosts[currentIndex - 1] !== undefined ? (
-            <>
-              <button
-                type="button"
-                className="arrow-btn black-btn"
-                onClick={() => setCurrentIndex(0)}
-              >
-                {'< <'}
-              </button>
-              <button
-                type="button"
-                className="arrow-btn black-btn"
-                onClick={() => setCurrentIndex((prev) => prev - 1)}
-              >
-                {'<'}
-              </button>
-            </>
+  function returningFunction() {
+    if (listOfPosts && postsToShow) {
+      return (
+        <section className="community">
+          {isLargeScreen ? (
+            <a
+              href="./create-post.html"
+              className="create-post-btn-desktop black-btn"
+            >
+              <i className="fa-solid fa-plus" /> Create post
+            </a>
           ) : (
-            ''
+            <a
+              href="./create-post.html"
+              className="create-post-btn-mobile black-btn"
+            >
+              <i className="fa-solid fa-plus" /> Create post
+            </a>
           )}
-        </li>
 
-        {listOfPosts.map((item, index) => {
-          if (index < currentIndex - 2) return null;
-          if (index > currentIndex + 2) return null;
+          <ul className="community-list">
+            {postsToShow.map((post) => (
+              <CommunityPostListItem
+                key={uuidv4()}
+                thumbnail={post.postImg}
+                title={post.postTitle}
+                paragraph={post.postText}
+                likes={post.likes.length}
+                dislikes={post.dislikes.length}
+                seconds={post.postSecond}
+                minutes={post.postMinutes}
+                hours={post.postHour}
+                day={post.postDay}
+                month={post.postMonth}
+                year={post.postYear}
+              />
+            ))}
+          </ul>
 
-          return (
-            <li key={uuidv4()} className="list-indexes-item">
-              <button
-                type="button"
-                className="list-indexes-btn transparent-btn"
-                data-active-index={currentIndex === index}
-                onClick={(e) => setCurrentIndex(index)}
-              >
-                {index + 1}
-              </button>
+          <ul className="list-indexes">
+            <li>
+              {listOfPosts[currentIndex - 1] !== undefined ? (
+                <>
+                  <button
+                    type="button"
+                    className="arrow-btn black-btn"
+                    onClick={() => setCurrentIndex(0)}
+                  >
+                    {'< <'}
+                  </button>
+                  <button
+                    type="button"
+                    className="arrow-btn black-btn"
+                    onClick={() => setCurrentIndex((prev) => prev - 1)}
+                  >
+                    {'<'}
+                  </button>
+                </>
+              ) : (
+                ''
+              )}
             </li>
-          );
-        })}
 
-        {listOfPosts[currentIndex + 1] !== undefined ? (
-          <>
-            <button
-              type="button"
-              className="arrow-btn black-btn"
-              onClick={() => setCurrentIndex((prev) => prev + 1)}
-            >
-              {'>'}
-            </button>
-            <button
-              type="button"
-              className="arrow-btn black-btn"
-              onClick={() => setCurrentIndex(listOfPosts.length - 1)}
-            >
-              {'> >'}
-            </button>
-          </>
-        ) : (
-          ''
-        )}
-      </ul>
-    </section>
-  );
+            {listOfPosts.map((item, index) => {
+              if (index < currentIndex - 2) return null;
+              if (index > currentIndex + 2) return null;
+
+              return (
+                <li key={uuidv4()} className="list-indexes-item">
+                  <button
+                    type="button"
+                    className="list-indexes-btn transparent-btn"
+                    data-active-index={currentIndex === index}
+                    onClick={(e) => setCurrentIndex(index)}
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              );
+            })}
+
+            {listOfPosts[currentIndex + 1] !== undefined ? (
+              <>
+                <button
+                  type="button"
+                  className="arrow-btn black-btn"
+                  onClick={() => setCurrentIndex((prev) => prev + 1)}
+                >
+                  {'>'}
+                </button>
+                <button
+                  type="button"
+                  className="arrow-btn black-btn"
+                  onClick={() => setCurrentIndex(listOfPosts.length - 1)}
+                >
+                  {'> >'}
+                </button>
+              </>
+            ) : (
+              ''
+            )}
+          </ul>
+        </section>
+      );
+    }
+    return <div>hola</div>;
+  }
+
+  return returningFunction();
 };
 
 export default CommunityComponent;
@@ -594,6 +633,12 @@ const CommunityPostListItem = ({
   paragraph,
   likes,
   dislikes,
+  seconds,
+  minutes,
+  hours,
+  day,
+  month,
+  year,
 }) => (
   <li className="community-list-li">
     <a
@@ -646,6 +691,9 @@ const CommunityPostListItem = ({
           <i className="fa-solid fa-arrow-down" />
           <p>{dislikes}</p>
         </button>
+        <p>
+          {day}:0{month}:{year}
+        </p>
       </div>
     </a>
   </li>

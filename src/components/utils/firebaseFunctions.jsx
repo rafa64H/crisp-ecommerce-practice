@@ -12,7 +12,7 @@ import {
 import {
   collection,
   addDoc,
-  Query,
+  query,
   getDocs,
   getDoc,
   doc,
@@ -214,7 +214,19 @@ export async function updateUsersPosts(usersPostsToUpdate) {
   console.log('sent communityPosts');
 }
 
-export async function createPost(postImg, postTitle, postText) {
+export async function createPost(
+  postImg,
+  postTitle,
+  postText,
+  postSecond,
+  postMinute,
+  postHour,
+  postDay,
+  postMonth,
+  postYear
+) {
+  const user = await auth.currentUser;
+
   if (postImg) {
     const imageRef = ref(
       storage,
@@ -236,15 +248,78 @@ export async function createPost(postImg, postTitle, postText) {
     const posts = await getPostsOfUser();
     const newPostsArray = [
       ...posts,
-      { postImg: imageUrl, postTitle, postText, likes: [], dislikes: [] },
+      {
+        postImg: imageUrl,
+        postTitle,
+        postText,
+        likes: [],
+        dislikes: [],
+        uid: user.uid,
+        postSecond,
+        postMinute,
+        postHour,
+        postDay,
+        postMonth,
+        postYear,
+      },
     ];
     await updateUsersPosts(newPostsArray);
   } else {
     const posts = await getPostsOfUser();
     const newPostsArray = [
       ...posts,
-      { postImg: null, postTitle, postText, likes: [], dislikes: [] },
+      {
+        postImg: null,
+        postTitle,
+        postText,
+        likes: [],
+        dislikes: [],
+        uid: user.uid,
+        postSecond,
+        postMinute,
+        postHour,
+        postDay,
+        postMonth,
+        postYear,
+      },
     ];
     await updateUsersPosts(newPostsArray);
   }
+}
+
+export async function getCommunityPosts() {
+  const queryCommunityPosts = query(collection(db, 'communityPosts'));
+  const communityPostsSnapshot = await getDocs(queryCommunityPosts);
+
+  const communityPostsArray = [];
+
+  communityPostsSnapshot.forEach((doc) => {
+    const docPosts = doc.data().posts;
+    communityPostsArray.push(...docPosts);
+  });
+
+  const compareDates = (a, b) => {
+    const dateA = new Date(
+      a.postYear,
+      a.postMonth - 1,
+      a.postDay,
+      a.postHour,
+      a.postMinute,
+      a.postSecond
+    );
+    const dateB = new Date(
+      b.postYear,
+      b.postMonth - 1,
+      b.postDay,
+      b.postHour,
+      b.postMinute,
+      b.postSecond
+    );
+
+    return dateB - dateA;
+  };
+
+  communityPostsArray.sort(compareDates);
+
+  return communityPostsArray;
 }
