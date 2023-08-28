@@ -1515,6 +1515,33 @@ footer {
 //----------------------------------------------------------------
 
 //Community
+.like-dislike-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .like-dislike {
+    display: flex;
+    align-items: center;
+
+    margin: 0 1em;
+
+    & > * {
+      transition: all 200ms;
+    }
+
+    &:hover {
+      & > * {
+        color: $second-color;
+      }
+    }
+
+    i {
+      color: black;
+    }
+  }
+}
+
 .community {
   .create-post-btn-desktop {
     display: block;
@@ -1557,33 +1584,6 @@ footer {
             .community-list-item__paragraph {
               width: min(100%, 30rem);
               margin: 0.5em auto;
-            }
-          }
-        }
-
-        &__like-dislike-container {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-
-          .like-dislike {
-            display: flex;
-            align-items: center;
-
-            margin: 0 1em;
-
-            & > * {
-              transition: all 200ms;
-            }
-
-            &:hover {
-              & > * {
-                color: $second-color;
-              }
-            }
-
-            i {
-              color: black;
             }
           }
         }
@@ -1687,6 +1687,122 @@ footer {
   }
 }
 //createPost END
+
+//----------------------------------------------------------------
+
+//Post
+.post {
+  .post-section {
+    background-color: $notify-color2;
+
+    border-bottom: 2px solid $light-gray;
+    &__title {
+      margin: 0.25em;
+      font-size: $second-font-size;
+    }
+
+    &__paragraph {
+      margin: 1em;
+      white-space: pre-wrap;
+    }
+
+    .like-dislike-container {
+      justify-content: flex-start;
+    }
+  }
+
+  .comments-section {
+    .write-comment {
+      width: 100%;
+      margin: 2.5em 0;
+      padding-left: 0.25em;
+      border-bottom: 2px solid $darker-gray;
+
+      &__label {
+        display: block;
+
+        font-weight: 600;
+        font-size: $third-font-size;
+      }
+      &__textarea {
+        display: block;
+
+        width: min(95%, 70rem);
+        margin: 1em 0;
+        min-height: 10em;
+        resize: none;
+      }
+    }
+
+    .comments {
+      .comment {
+        border: 2px solid $notify-color;
+        width: min(95%, 60em);
+        margin: 1em;
+
+        .comment-user {
+          display: flex;
+          align-items: center;
+          padding-top: 1em;
+
+          &__icon {
+            margin-left: 0.5em;
+
+            color: black;
+          }
+
+          &__paragraph {
+            font-weight: 600;
+          }
+        }
+
+        .comment-text {
+          margin: 0.5em 0;
+          margin-left: 0.5em;
+          white-space: pre-wrap;
+        }
+
+        .like-dislike-container {
+          justify-content: flex-start;
+        }
+
+        .reply-buttons {
+          display: flex;
+          align-items: center;
+          padding: 0 0.25em;
+
+          .transparent-btn {
+            display: flex;
+            align-items: center;
+          }
+
+          .reply-btn {
+            padding: 0.3em;
+
+            font-size: $fourth-font-size;
+          }
+        }
+
+        .comment-show-replies {
+          padding: 0.3em;
+          margin-left: auto;
+
+          font-size: $fourth-font-size;
+        }
+
+        .comment-replies {
+          .comment-reply {
+            width: min(95%, 40em);
+            border-left: 2px solid $light-gray;
+            margin-left: 1em;
+          }
+        }
+      }
+    }
+  }
+}
+
+//Post END
 
 //----------------------------------------------------------------
 
@@ -2399,6 +2515,11 @@ footer {
 
   //Media Community
 
+  .like-dislike-container {
+    display: flex;
+    justify-content: flex-start;
+  }
+
   .community {
     .community-list {
       &-li {
@@ -2445,32 +2566,6 @@ footer {
             }
             .community-list-item__title {
               margin-top: 1em;
-            }
-          }
-
-          &__like-dislike-container {
-            display: flex;
-            justify-content: flex-start;
-
-            .like-dislike {
-              display: flex;
-              align-items: center;
-
-              margin: 1em;
-
-              & > * {
-                transition: all 200ms;
-              }
-
-              &:hover {
-                & > * {
-                  color: $second-color;
-                }
-              }
-
-              i {
-                color: black;
-              }
             }
           }
         }

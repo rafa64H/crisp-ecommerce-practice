@@ -201,7 +201,7 @@ const CommunityPostListItem = ({
         </div>
       </div>
 
-      <div className="community-list-item__like-dislike-container">
+      <div className="like-dislike-container">
         <button
           onClick={(e) => e.preventDefault()}
           type="button"
