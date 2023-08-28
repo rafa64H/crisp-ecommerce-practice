@@ -1,11 +1,17 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { auth } from '../../config-firebase/firebase';
-import { getCommunityPosts } from '../../components/utils/firebaseFunctions';
+import {
+  getCommunityPosts,
+  getDataOfUser,
+  updateSpecifiedPost,
+} from '../../components/utils/firebaseFunctions';
 
 const PostComponent = () => {
   const [post, setPost] = useState();
+
+  const writeCommentRef = useRef('');
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get('postId');
@@ -26,6 +32,42 @@ const PostComponent = () => {
 
   async function handleSubmitComment(e) {
     e.preventDefault();
+
+    if (writeCommentRef.current.value === '') return null;
+
+    const today = new Date();
+
+    const todayDate = today.getDate();
+    const todayMonth = today.getMonth() + 1;
+    const todayYear = today.getFullYear();
+
+    try {
+      const { postComments } = post;
+
+      const userData = await getDataOfUser();
+
+      const newComment = {
+        commentId: uuidv4(),
+        commentUser: `${userData.firstName} ${userData.lastName}`,
+        commentUserUid: userData.uid,
+        commentDay: todayDate,
+        commentMonth: todayMonth,
+        commentYear: todayYear,
+        commentText: writeCommentRef.current.value,
+        commentLikes: [],
+        commentDislikes: [],
+        commentReplies: [],
+      };
+
+      const newPostComments = [...post.postComments, newComment];
+      const newPostInfo = { ...post, postComments: newPostComments };
+
+      await updateSpecifiedPost(newPostInfo);
+
+      setPost(newPostInfo);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function returningFunction() {
@@ -75,6 +117,7 @@ const PostComponent = () => {
               <textarea
                 className="write-comment__textarea"
                 id="write-comment"
+                ref={writeCommentRef}
               />
               <button
                 type="submit"

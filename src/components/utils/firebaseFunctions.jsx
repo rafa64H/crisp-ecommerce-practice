@@ -243,6 +243,7 @@ export async function createPost(
       .then((response) => response.items)
       .then((items) => items.map((something) => something))
       .then((items) => getDownloadURL(items[0]));
+
     const imageUrl = (await getImageUrl).toString();
 
     const posts = await getPostsOfUser();
@@ -326,4 +327,22 @@ export async function getCommunityPosts() {
   communityPostsArray.sort(compareDates);
 
   return communityPostsArray;
+}
+
+export async function updateSpecifiedPost(passedPostData) {
+  const postsOfPosterRef = doc(db, 'communityPosts', passedPostData.uid);
+  const docSnap = await getDoc(postsOfPosterRef);
+  const postsOfPosterData = docSnap.data().posts;
+
+  const editPost = postsOfPosterData.filter(
+    (post) => post.postId !== passedPostData.postId
+  );
+
+  console.log(passedPostData);
+
+  await updateDoc(postsOfPosterRef, {
+    posts: [...editPost, passedPostData],
+  });
+
+  console.log('sent post');
 }
