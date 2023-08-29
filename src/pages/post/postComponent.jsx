@@ -11,6 +11,8 @@ import {
 const PostComponent = () => {
   const [post, setPost] = useState();
   const [user, setUser] = useState();
+  const [likesPostState, setLikesPostState] = useState([]);
+  const [dislikesPostState, setDislikesPostState] = useState([]);
 
   const writeCommentRef = useRef('');
 
@@ -25,8 +27,11 @@ const PostComponent = () => {
         const theIndicatedPost = (await allPostsFromFirestore).find(
           (postFromFirestore) => postFromFirestore.postId === id
         );
+
         setPost(theIndicatedPost);
         setUser(user);
+        setLikesPostState([...theIndicatedPost.likes]);
+        setDislikesPostState([...theIndicatedPost.dislikes]);
       } else {
       }
     });
@@ -72,91 +77,182 @@ const PostComponent = () => {
     }
   }
 
-  function returningFunction() {
-    if (post) {
-      return (
-        <section className="post">
-          <section className="post-section">
-            <h1 className="post-section__title">{post.postTitle}</h1>
-            <p className="post-section__paragraph">{post.postText}</p>
+  // Like post
+  async function handleLikePost() {
+    try {
+      const currentPost = post;
 
-            <div className="like-dislike-container">
-              <button
-                onClick={(e) => e.preventDefault()}
-                type="button"
-                alt="Like"
-                className="like-dislike like"
-              >
-                <i className="fa-solid fa-arrow-up" />
-                <p>{post.likes.length}</p>
-              </button>
-
-              <button
-                onClick={(e) => e.preventDefault()}
-                type="button"
-                alt="Dislike"
-                className="like-dislike dislike"
-              >
-                <i className="fa-solid fa-arrow-down" />
-                <p>{post.dislikes.length}</p>
-              </button>
-              <p>
-                {post.postDay}:0{post.postMonth}:{post.postYear}
-              </p>
-            </div>
-          </section>
-
-          <section className="comments-section">
-            <form
-              className="write-comment"
-              onSubmit={(e) => {
-                handleSubmitComment(e);
-              }}
-            >
-              <label className="write-comment__label" htmlFor="write-comment">
-                Put your comment
-              </label>
-              <textarea
-                className="write-comment__textarea"
-                id="write-comment"
-                ref={writeCommentRef}
-              />
-              <button
-                type="submit"
-                className="write-comment__btn"
-                className="black-btn"
-              >
-                Submit
-              </button>
-            </form>
-
-            <ul className="comments">
-              {post.postComments.map((comment) => (
-                <CommentItem
-                  key={uuidv4()}
-                  commentDay={comment.commentDay}
-                  commentMonth={comment.commentMonth}
-                  commentYear={comment.commentYear}
-                  commentId={comment.commentId}
-                  commentUser={comment.commentUser}
-                  commentText={comment.commentText}
-                  commentLikes={comment.commentLikes}
-                  commentDislikes={comment.commentDislikes}
-                  commentReplies={comment.commentReplies}
-                  post={post}
-                  setPost={setPost}
-                  user={user}
-                />
-              ))}
-            </ul>
-          </section>
-        </section>
+      const alreadyLikedPost = currentPost.likes.some(
+        (likeUid) => likeUid === user.uid
       );
+
+      const alreadyDislikedPost = currentPost.dislikes.some(
+        (dislikeUid) => dislikeUid === user.uid
+      );
+
+      if (alreadyLikedPost) {
+        const indexOfLikeUser = currentPost.likes.indexOf(user.uid);
+
+        currentPost.likes.splice(indexOfLikeUser, 1);
+
+        setLikesPostState([...currentPost.likes]);
+
+        await updateSpecifiedPost(currentPost);
+
+        setPost(currentPost);
+        return null;
+      }
+
+      if (alreadyDislikedPost) {
+        const indexOfDislikeUser = currentPost.dislikes.indexOf(user.uid);
+
+        currentPost.dislikes.splice(indexOfDislikeUser, 1);
+      }
+
+      currentPost.likes.push(user.uid);
+
+      setLikesPostState([...currentPost.likes]);
+
+      await updateSpecifiedPost(currentPost);
+
+      setPost(currentPost);
+    } catch (err) {
+      console.log(err);
     }
-    return <div>Null</div>;
   }
 
-  return returningFunction();
+  // Dislike post
+  async function handleDislikePost() {
+    try {
+      const currentPost = post;
+
+      const alreadyLikedPost = currentPost.likes.some(
+        (likeUid) => likeUid === user.uid
+      );
+
+      const alreadyDislikedPost = currentPost.dislikes.some(
+        (dislikeUid) => dislikeUid === user.uid
+      );
+
+      if (alreadyDislikedPost) {
+        const indexOfDislikeUser = currentPost.dislikes.indexOf(user.uid);
+
+        currentPost.dislikes.splice(indexOfDislikeUser, 1);
+
+        setDislikesPostState([...currentPost.dislikes]);
+
+        await updateSpecifiedPost(currentPost);
+
+        setPost(currentPost);
+        return null;
+      }
+
+      if (alreadyLikedPost) {
+        const indexOfLikeUser = currentPost.likes.indexOf(user.uid);
+
+        currentPost.likes.splice(indexOfLikeUser, 1);
+
+        setLikesPostState([...currentPost.likes]);
+      }
+
+      currentPost.dislikes.push(user.uid);
+
+      setDislikesPostState([...currentPost.dislikes]);
+
+      await updateSpecifiedPost(currentPost);
+
+      setPost(currentPost);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  return post ? (
+    <section className="post">
+      <section className="post-section">
+        <h1 className="post-section__title">{post.postTitle}</h1>
+        <p className="post-section__paragraph">{post.postText}</p>
+
+        <div className="like-dislike-container">
+          <button
+            onClick={(e) => handleLikePost()}
+            type="button"
+            alt="Like"
+            className="like-dislike like"
+            data-already-liked-disliked={likesPostState.some(
+              (likeUid) => likeUid === user.uid
+            )}
+          >
+            <i className="fa-solid fa-arrow-up" />
+            <p>{likesPostState.length}</p>
+          </button>
+
+          <button
+            onClick={(e) => handleDislikePost()}
+            type="button"
+            alt="Dislike"
+            className="like-dislike dislike"
+            data-already-liked-disliked={post.dislikes.some(
+              (dislikeUid) => dislikeUid === user.uid
+            )}
+          >
+            <i className="fa-solid fa-arrow-down" />
+            <p>{post.dislikes.length}</p>
+          </button>
+          <p>
+            {post.postDay}:0{post.postMonth}:{post.postYear}
+          </p>
+        </div>
+      </section>
+
+      <section className="comments-section">
+        <form
+          className="write-comment"
+          onSubmit={(e) => {
+            handleSubmitComment(e);
+          }}
+        >
+          <label className="write-comment__label" htmlFor="write-comment">
+            Put your comment
+          </label>
+          <textarea
+            className="write-comment__textarea"
+            id="write-comment"
+            ref={writeCommentRef}
+          />
+          <button
+            type="submit"
+            className="write-comment__btn"
+            className="black-btn"
+          >
+            Submit
+          </button>
+        </form>
+
+        <ul className="comments">
+          {post.postComments.map((comment) => (
+            <CommentItem
+              key={uuidv4()}
+              commentDay={comment.commentDay}
+              commentMonth={comment.commentMonth}
+              commentYear={comment.commentYear}
+              commentId={comment.commentId}
+              commentUser={comment.commentUser}
+              commentText={comment.commentText}
+              commentLikes={comment.commentLikes}
+              commentDislikes={comment.commentDislikes}
+              commentReplies={comment.commentReplies}
+              post={post}
+              setPost={setPost}
+              user={user}
+            />
+          ))}
+        </ul>
+      </section>
+    </section>
+  ) : (
+    <div>null</div>
+  );
 };
 
 export default PostComponent;
