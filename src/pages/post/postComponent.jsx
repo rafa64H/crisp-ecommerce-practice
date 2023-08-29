@@ -10,6 +10,7 @@ import {
 
 const PostComponent = () => {
   const [post, setPost] = useState();
+  const [user, setUser] = useState();
 
   const writeCommentRef = useRef('');
 
@@ -25,6 +26,7 @@ const PostComponent = () => {
           (postFromFirestore) => postFromFirestore.postId === id
         );
         setPost(theIndicatedPost);
+        setUser(user);
       } else {
       }
     });
@@ -143,6 +145,7 @@ const PostComponent = () => {
                   commentReplies={comment.commentReplies}
                   post={post}
                   setPost={setPost}
+                  user={user}
                 />
               ))}
             </ul>
@@ -171,11 +174,17 @@ const CommentItem = ({
   commentReplies,
   post,
   setPost,
+  user,
 }) => {
   const [showWriteReply, setShowWriteReply] = useState(false);
 
   const [commentRepliesState, setCommentRepliesState] =
     useState(commentReplies);
+
+  const [commentLikesState, setCommentLikesState] = useState([...commentLikes]);
+  const [commentDislikesState, setCommentDislikesState] = useState([
+    ...commentDislikes,
+  ]);
 
   const [showReplies, setShowReplies] = useState([]);
 
@@ -231,6 +240,119 @@ const CommentItem = ({
     }
   }
 
+  // Dislike comment
+  async function handleClickLikeComment() {
+    try {
+      const { postComments } = post;
+
+      const userData = await getDataOfUser();
+
+      const theComment = postComments.find(
+        (comment) => comment.commentId === commentId
+      );
+
+      const alreadyLikedComment = theComment.commentLikes.some(
+        (uidLike) => uidLike === userData.uid
+      );
+      const alreadyDislikedComment = theComment.commentDislikes.some(
+        (uidDislike) => uidDislike === userData.uid
+      );
+
+      if (alreadyLikedComment) {
+        const indexOfLikeUser = theComment.commentLikes.indexOf(userData.uid);
+
+        theComment.commentLikes.splice(indexOfLikeUser, 1);
+
+        const newPostInfo = post;
+
+        setCommentLikesState([...theComment.commentLikes]);
+
+        await updateSpecifiedPost(newPostInfo);
+
+        setPost(newPostInfo);
+
+        return null;
+      }
+
+      if (alreadyDislikedComment) {
+        const indexOfDislikeUser = theComment.commentDislikes.indexOf(
+          userData.uid
+        );
+
+        theComment.commentDislikes.splice(indexOfDislikeUser, 1);
+        setCommentDislikesState([...theComment.commentDislikes]);
+      }
+
+      theComment.commentLikes.push(userData.uid);
+
+      const newPostInfo = post;
+
+      setCommentLikesState([...theComment.commentLikes]);
+
+      await updateSpecifiedPost(newPostInfo);
+
+      setPost(newPostInfo);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // Dislike comment
+  async function handleClickDislikeComment() {
+    try {
+      const { postComments } = post;
+
+      const userData = await getDataOfUser();
+
+      const theComment = postComments.find(
+        (comment) => comment.commentId === commentId
+      );
+
+      const alreadyLikedComment = theComment.commentLikes.some(
+        (uidLike) => uidLike === userData.uid
+      );
+      const alreadyDislikedComment = theComment.commentDislikes.some(
+        (uidDislike) => uidDislike === userData.uid
+      );
+
+      if (alreadyDislikedComment) {
+        const indexOfDislikeUser = theComment.commentDislikes.indexOf(
+          userData.uid
+        );
+
+        theComment.commentDislikes.splice(indexOfDislikeUser, 1);
+
+        const newPostInfo = post;
+
+        setCommentDislikesState([...theComment.commentDislikes]);
+
+        await updateSpecifiedPost(newPostInfo);
+
+        setPost(newPostInfo);
+        return null;
+      }
+
+      if (alreadyLikedComment) {
+        const indexOfLikeUser = theComment.commentLikes.indexOf(userData.uid);
+        theComment.commentLikes.splice(indexOfLikeUser, 1);
+
+        setCommentLikesState([...theComment.commentLikes]);
+      }
+
+      theComment.commentDislikes.push(userData.uid);
+
+      const newPostInfo = post;
+
+      setCommentDislikesState([...theComment.commentDislikes]);
+
+      await updateSpecifiedPost(newPostInfo);
+
+      setPost(newPostInfo);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   function handleShowReplies() {
     const numberOfItemsToShow = [...showReplies];
 
@@ -260,20 +382,28 @@ const CommentItem = ({
           onClick={(e) => e.preventDefault()}
           type="button"
           alt="Like"
+          onClick={handleClickLikeComment}
           className="like-dislike like"
+          data-already-liked-disliked={commentLikesState.some(
+            (likeUid) => likeUid === user.uid
+          )}
         >
           <i className="fa-solid fa-arrow-up" />
-          <p>{commentLikes.length}</p>
+          <p>{commentLikesState.length}</p>
         </button>
 
         <button
           onClick={(e) => e.preventDefault()}
           type="button"
           alt="Dislike"
+          onClick={handleClickDislikeComment}
+          data-already-liked-disliked={commentDislikesState.some(
+            (dislikeUid) => dislikeUid === user.uid
+          )}
           className="like-dislike dislike"
         >
           <i className="fa-solid fa-arrow-down" />
-          <p>{commentDislikes.length}</p>
+          <p>{commentDislikesState.length}</p>
         </button>
       </div>
 

@@ -1839,6 +1839,12 @@ footer {
   }
 }
 
+[data-already-liked-disliked='true'] {
+  & > * {
+    color: $second-color !important;
+  }
+}
+
 //Post END
 
 //----------------------------------------------------------------
