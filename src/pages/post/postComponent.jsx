@@ -225,6 +225,7 @@ const CommentItem = ({
       await updateSpecifiedPost(newPostInfo);
 
       setPost(newPostInfo);
+      setShowWriteReply(false);
     } catch (err) {
       console.log(err);
     }
@@ -251,7 +252,9 @@ const CommentItem = ({
           {commentUser} {commentDay}/0{commentMonth}/{commentYear}
         </p>
       </div>
+
       <p className="comment-text">{commentText}</p>
+
       <div className="like-dislike-container">
         <button
           onClick={(e) => e.preventDefault()}
@@ -260,7 +263,7 @@ const CommentItem = ({
           className="like-dislike like"
         >
           <i className="fa-solid fa-arrow-up" />
-          <p>{commentLikes}</p>
+          <p>{commentLikes.length}</p>
         </button>
 
         <button
@@ -270,7 +273,7 @@ const CommentItem = ({
           className="like-dislike dislike"
         >
           <i className="fa-solid fa-arrow-down" />
-          <p>{commentDislikes}</p>
+          <p>{commentDislikes.length}</p>
         </button>
       </div>
 
@@ -286,6 +289,7 @@ const CommentItem = ({
         <button
           type="button"
           className="transparent-btn comment-show-replies"
+          data-comment-show-replies-button={showReplies.length === 0}
           onClick={(e) => handleShowReplies(e)}
         >
           Show replies <i className="fa-solid fa-plus" />
@@ -300,6 +304,7 @@ const CommentItem = ({
         }}
       >
         <textarea className="write-reply__textarea" ref={replyRef} />
+
         <button type="submit" className="black-btn write-reply__btn">
           Submit
         </button>
@@ -321,7 +326,9 @@ const CommentItem = ({
                 {reply.replyYear}
               </p>
             </div>
+
             <p className="comment-text">{reply.replyText}</p>
+
             <div className="like-dislike-container">
               <button
                 onClick={(e) => e.preventDefault()}
@@ -345,9 +352,26 @@ const CommentItem = ({
             </div>
           </li>
         ))}
-        <div>
-          There are {commentRepliesState.length - showReplies.length} left
-        </div>
+
+        <button
+          type="button"
+          className="transparent-btn comment-show-replies comment-show-replies--inside-reply"
+          data-comment-show-replies-button={
+            commentRepliesState.length - showReplies.length !== 0 &&
+            showReplies.length !== 0
+          }
+          onClick={(e) => handleShowReplies(e)}
+        >
+          Show replies <i className="fa-solid fa-plus" />
+        </button>
+
+        <aside>
+          {commentRepliesState.length - showReplies.length === 0
+            ? ''
+            : `There are ${
+                commentRepliesState.length - showReplies.length
+              } replies`}
+        </aside>
       </ul>
     </li>
   );

@@ -1784,10 +1784,15 @@ footer {
         }
 
         .comment-show-replies {
+          display: none !important;
           padding: 0.3em;
           margin-left: auto;
 
           font-size: $fourth-font-size;
+        }
+
+        [data-comment-show-replies-button='true'] {
+          display: flex !important;
         }
 
         .write-reply {
@@ -1817,6 +1822,11 @@ footer {
 
             width: min(95%, 40em);
             border-left: 2px solid $light-gray;
+            margin-left: 1em;
+          }
+
+          .comment-show-replies--inside-reply {
+            align-items: center;
             margin-left: 1em;
           }
 
