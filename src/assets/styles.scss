@@ -1790,11 +1790,38 @@ footer {
           font-size: $fourth-font-size;
         }
 
+        .write-reply {
+          display: none;
+
+          margin-left: 1em;
+          .write-reply__textarea {
+            display: block;
+
+            width: min(95%, 25rem);
+            margin: 1em 0;
+            min-height: 4em;
+            resize: none;
+          }
+
+          .write-reply__btn {
+            padding: 0.5em;
+          }
+        }
+        [data-show-write-reply='true'] {
+          display: block;
+        }
+
         .comment-replies {
           .comment-reply {
+            display: none;
+
             width: min(95%, 40em);
             border-left: 2px solid $light-gray;
             margin-left: 1em;
+          }
+
+          [data-show-reply='true'] {
+            display: block;
           }
         }
       }
