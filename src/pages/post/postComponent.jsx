@@ -583,9 +583,11 @@ const CommentItem = ({
             replyLikes={reply.replyLikes}
             replyDislikes={reply.replyDislikes}
             showReplies={showReplies}
+            setShowReplies={setShowReplies}
             index={index}
             post={post}
             setPost={setPost}
+            setCommentRepliesState={setCommentRepliesState}
             user={user}
           />
         ))}
@@ -626,15 +628,19 @@ const ReplyItem = ({
   replyLikes,
   replyDislikes,
   showReplies,
+  setShowReplies,
   index,
   post,
   setPost,
+  setCommentRepliesState,
   user,
 }) => {
   const [replyLikesState, setReplyLikesState] = useState([...replyLikes]);
   const [replyDislikesState, setReplyDislikesState] = useState([
     ...replyDislikes,
   ]);
+
+  const [showReplyOptionsState, setShowReplyOptionsState] = useState(false);
 
   // Like reply
   async function handleClickLikeReply() {
@@ -736,12 +742,55 @@ const ReplyItem = ({
     setPost(currentPost);
   }
 
+  async function handleRemoveReply() {
+    try {
+      const currentPost = post;
+
+      const theComment = currentPost.postComments.find(
+        (comment) => comment.commentId === commentId
+      );
+
+      const filteredReplies = theComment.commentReplies.filter(
+        (replyItem) => replyItem.replyId !== replyId
+      );
+
+      theComment.commentReplies = filteredReplies;
+
+      const removeReplyFromShowRepliesState = theComment.commentReplies.map(
+        (replyItem, indexReply) => indexReply
+      );
+
+      setShowReplies([...removeReplyFromShowRepliesState]);
+      setCommentRepliesState(theComment.commentReplies);
+      await updateSpecifiedPost(currentPost);
+      setPost(currentPost);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <li
       className="comment-reply"
-      data-show-reply={showReplies.some((indexState) => index === indexState)}
+      data-show-reply={showReplies.some(
+        (indexFromShowRepliesState) => index === indexFromShowRepliesState
+      )}
       key={uuidv4()}
     >
+      {replyUserUid === user.uid ? (
+        <PostCommentOptionsBtn
+          onClickBtnFunction={() =>
+            setShowReplyOptionsState((prevValue) => !prevValue)
+          }
+        />
+      ) : null}
+
+      {replyUserUid === user.uid ? (
+        <PostCommentOptions
+          showPostCommentOptions={showReplyOptionsState}
+          handleClickRemove={handleRemoveReply}
+        />
+      ) : null}
       <div className="comment-user">
         <i className="fa-solid fa-user comment-user__icon" />
         <p className="comment-user__paragraph">
