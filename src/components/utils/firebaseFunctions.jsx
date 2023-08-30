@@ -53,6 +53,8 @@ export async function createUser(firstName, lastName, email, password) {
     const { uid } = userCredential.user;
     const currentUser = await auth.currentUser;
 
+    const communityPostsCollectionRef = collection(db, 'communityPosts');
+
     await setDoc(doc(usersCollectionRef, uid), {
       firstName,
       lastName,
@@ -71,6 +73,10 @@ export async function createUser(firstName, lastName, email, password) {
         postalCode: '',
       },
       phoneNumber: NaN,
+    });
+
+    await setDoc(doc(communityPostsCollectionRef, uid), {
+      posts: [],
     });
 
     await sendEmailVerification(currentUser);

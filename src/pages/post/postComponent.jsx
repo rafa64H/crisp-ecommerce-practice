@@ -5,17 +5,19 @@ import { auth } from '../../config-firebase/firebase';
 import {
   getCommunityPosts,
   getDataOfUser,
+  getPostsOfUser,
   updateSpecifiedPost,
+  updateUsersPosts,
 } from '../../components/utils/firebaseFunctions';
+import LikeDislikeComponent from '../../components/ui/smaller/likeDislikeContainer';
 
 const PostComponent = () => {
   const [post, setPost] = useState();
   const [user, setUser] = useState();
   const [likesPostState, setLikesPostState] = useState([]);
   const [dislikesPostState, setDislikesPostState] = useState([]);
-
+  const [showPostOptionsState, setShowPostOptionsState] = useState(false);
   const writeCommentRef = useRef('');
-
   const params = new URLSearchParams(window.location.search);
   const id = params.get('postId');
 
@@ -168,42 +170,82 @@ const PostComponent = () => {
     }
   }
 
+  async function handleClickRemovePost(e) {
+    e.preventDefault();
+
+    try {
+      const allPostsFromFirestore = await getPostsOfUser();
+
+      const filteredPosts = allPostsFromFirestore.filter(
+        (postFromFirestore) => postFromFirestore.postId !== id
+      );
+
+      await updateUsersPosts(filteredPosts);
+      window.location.href = './community.html';
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return post ? (
     <section className="post">
       <section className="post-section">
+        {post.uid === user.uid ? (
+          <button
+            type="button"
+            className="transparent-btn show-post-options"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowPostOptionsState((prevValue) => !prevValue);
+            }}
+          >
+            ...
+          </button>
+        ) : null}
+
+        {post.uid === user.uid ? (
+          <ul
+            className="post-options"
+            data-show-post-options={showPostOptionsState}
+            onClick={(e) => e.preventDefault}
+          >
+            <li className="post-option">
+              <button type="button" className="post-option-btn">
+                Edit post
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                className="post-option-btn"
+                onClick={(e) => handleClickRemovePost(e)}
+              >
+                Remove post
+              </button>
+            </li>
+          </ul>
+        ) : null}
+
         <h1 className="post-section__title">{post.postTitle}</h1>
         <p className="post-section__paragraph">{post.postText}</p>
 
-        <div className="like-dislike-container">
-          <button
-            onClick={(e) => handleLikePost()}
-            type="button"
-            alt="Like"
-            className="like-dislike like"
-            data-already-liked-disliked={likesPostState.some(
-              (likeUid) => likeUid === user.uid
-            )}
-          >
-            <i className="fa-solid fa-arrow-up" />
-            <p>{likesPostState.length}</p>
-          </button>
-
-          <button
-            onClick={(e) => handleDislikePost()}
-            type="button"
-            alt="Dislike"
-            className="like-dislike dislike"
-            data-already-liked-disliked={dislikesPostState.some(
-              (dislikeUid) => dislikeUid === user.uid
-            )}
-          >
-            <i className="fa-solid fa-arrow-down" />
-            <p>{dislikesPostState.length}</p>
-          </button>
-          <p>
-            {post.postDay}:0{post.postMonth}:{post.postYear}
-          </p>
-        </div>
+        <LikeDislikeComponent
+          handleClickLikeFunction={handleLikePost}
+          handleClickDislikeFunction={handleDislikePost}
+          alreadyLikedLogicExpression={likesPostState.some(
+            (likeUid) => likeUid === user.uid
+          )}
+          alreadyDislikedLogicExpression={dislikesPostState.some(
+            (dislikeUid) => dislikeUid === user.uid
+          )}
+          likesArray={likesPostState}
+          dislikesArray={dislikesPostState}
+          children={
+            <p>
+              {post.postDay}:0{post.postMonth}:{post.postYear}
+            </p>
+          }
+        />
       </section>
 
       <section className="comments-section">
@@ -458,35 +500,18 @@ const CommentItem = ({
 
       <p className="comment-text">{commentText}</p>
 
-      <div className="like-dislike-container">
-        <button
-          onClick={(e) => e.preventDefault()}
-          type="button"
-          alt="Like"
-          onClick={handleClickLikeComment}
-          className="like-dislike like"
-          data-already-liked-disliked={commentLikesState.some(
-            (likeUid) => likeUid === user.uid
-          )}
-        >
-          <i className="fa-solid fa-arrow-up" />
-          <p>{commentLikesState.length}</p>
-        </button>
-
-        <button
-          onClick={(e) => e.preventDefault()}
-          type="button"
-          alt="Dislike"
-          onClick={handleClickDislikeComment}
-          data-already-liked-disliked={commentDislikesState.some(
-            (dislikeUid) => dislikeUid === user.uid
-          )}
-          className="like-dislike dislike"
-        >
-          <i className="fa-solid fa-arrow-down" />
-          <p>{commentDislikesState.length}</p>
-        </button>
-      </div>
+      <LikeDislikeComponent
+        handleClickLikeFunction={handleClickLikeComment}
+        handleClickDislikeFunction={handleClickDislikeComment}
+        alreadyLikedLogicExpression={commentLikesState.some(
+          (likeUid) => likeUid === user.uid
+        )}
+        alreadyDislikedLogicExpression={commentDislikesState.some(
+          (dislikeUid) => dislikeUid === user.uid
+        )}
+        likesArray={commentLikesState}
+        dislikesArray={commentDislikesState}
+      />
 
       <div className="reply-buttons">
         <button
@@ -704,33 +729,18 @@ const ReplyItem = ({
 
       <p className="comment-text">{replyText}</p>
 
-      <div className="like-dislike-container">
-        <button
-          onClick={(e) => handleClickLikeReply()}
-          type="button"
-          alt="Like"
-          className="like-dislike like"
-          data-already-liked-disliked={replyLikesState.some(
-            (likeUid) => likeUid === user.uid
-          )}
-        >
-          <i className="fa-solid fa-arrow-up" />
-          <p>{replyLikesState.length}</p>
-        </button>
-
-        <button
-          onClick={(e) => handleClickDislikeReply()}
-          type="button"
-          alt="Dislike"
-          className="like-dislike dislike"
-          data-already-liked-disliked={replyDislikesState.some(
-            (dislikeUid) => dislikeUid === user.uid
-          )}
-        >
-          <i className="fa-solid fa-arrow-down" />
-          <p>{replyDislikesState.length}</p>
-        </button>
-      </div>
+      <LikeDislikeComponent
+        handleClickLikeFunction={handleClickLikeReply}
+        handleClickDislikeFunction={handleClickDislikeReply}
+        alreadyLikedLogicExpression={replyLikesState.some(
+          (likeUid) => likeUid === user.uid
+        )}
+        alreadyDislikedLogicExpression={replyDislikesState.some(
+          (dislikeUid) => dislikeUid === user.uid
+        )}
+        likesArray={replyLikesState}
+        dislikesArray={replyDislikesState}
+      />
     </li>
   );
 };

@@ -68,12 +68,13 @@ const CreatePostComponent = () => {
         todayMonth,
         todayYear
       );
-    } catch (err) {
-      console.log(err);
-    } finally {
       setLoading(false);
       setAlertMessage2('');
       window.location.href = './community.html';
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+      setAlertMessage2('');
     }
   }
 

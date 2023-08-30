@@ -4,9 +4,12 @@ import { onAuthStateChanged } from 'firebase/auth';
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
 import {
   getCommunityPosts,
+  getPostsOfUser,
   updateSpecifiedPost,
+  updateUsersPosts,
 } from '../../components/utils/firebaseFunctions';
 import { auth } from '../../config-firebase/firebase';
+import LikeDislikeComponent from '../../components/ui/smaller/likeDislikeContainer';
 
 const CommunityComponent = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -73,6 +76,7 @@ const CommunityComponent = () => {
                 key={uuidv4()}
                 post={post}
                 id={post.postId}
+                uid={post.uid}
                 thumbnail={post.postImg}
                 title={post.postTitle}
                 paragraph={post.postText}
@@ -166,6 +170,7 @@ export default CommunityComponent;
 const CommunityPostListItem = ({
   post,
   id,
+  uid,
   thumbnail,
   title,
   paragraph,
@@ -181,6 +186,7 @@ const CommunityPostListItem = ({
 }) => {
   const [likesPostState, setLikesPostState] = useState([...likes]);
   const [dislikesPostState, setDislikesPostState] = useState([...dislikes]);
+  const [showPostOptionsState, setShowPostOptionsState] = useState(false);
 
   // Like post
   async function handleLikePost(e) {
@@ -271,13 +277,67 @@ const CommunityPostListItem = ({
     }
   }
 
+  async function handleClickRemovePost(e) {
+    e.preventDefault();
+
+    try {
+      const allPostsFromFirestore = await getPostsOfUser();
+
+      const filteredPosts = allPostsFromFirestore.filter(
+        (postFromFirestore) => postFromFirestore.postId !== id
+      );
+
+      await updateUsersPosts(filteredPosts);
+      window.location.href = './community.html';
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <li className="community-list-li">
       <a
         className="community-list-item"
         href={`./post.html?postId=${id}`}
         draggable="false"
+        data-your-post={uid === user.uid}
       >
+        {uid === user.uid ? (
+          <button
+            type="button"
+            className="transparent-btn show-post-options"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowPostOptionsState((prevValue) => !prevValue);
+            }}
+          >
+            ...
+          </button>
+        ) : null}
+
+        {uid === user.uid ? (
+          <ul
+            className="post-options"
+            data-show-post-options={showPostOptionsState}
+            onClick={(e) => e.preventDefault()}
+          >
+            <li className="post-option">
+              <button type="button" className="post-option-btn">
+                Edit post
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                className="post-option-btn"
+                onClick={(e) => handleClickRemovePost(e)}
+              >
+                Remove post
+              </button>
+            </li>
+          </ul>
+        ) : null}
+
         <div
           className={`community-list-item-div ${
             !paragraph && thumbnail ? 'thumbnail-and-not-paragraph' : ''
@@ -307,36 +367,23 @@ const CommunityPostListItem = ({
           </div>
         </div>
 
-        <div className="like-dislike-container">
-          <button
-            onClick={(e) => handleLikePost(e)}
-            type="button"
-            alt="Like"
-            className="like-dislike like"
-            data-already-liked-disliked={likesPostState.some(
-              (likeUid) => likeUid === user.uid
-            )}
-          >
-            <i className="fa-solid fa-arrow-up" />
-            <p>{likesPostState.length}</p>
-          </button>
-
-          <button
-            onClick={(e) => handleDislikePost(e)}
-            type="button"
-            alt="Dislike"
-            className="like-dislike dislike"
-            data-already-liked-disliked={dislikesPostState.some(
-              (dislikeUid) => dislikeUid === user.uid
-            )}
-          >
-            <i className="fa-solid fa-arrow-down" />
-            <p>{dislikesPostState.length}</p>
-          </button>
-          <p>
-            {day}:0{month}:{year}
-          </p>
-        </div>
+        <LikeDislikeComponent
+          handleClickLikeFunction={handleLikePost}
+          handleClickDislikeFunction={handleDislikePost}
+          alreadyLikedLogicExpression={likesPostState.some(
+            (likeUid) => likeUid === user.uid
+          )}
+          alreadyDislikedLogicExpression={dislikesPostState.some(
+            (dislikeUid) => dislikeUid === user.uid
+          )}
+          likesArray={likesPostState}
+          dislikesArray={dislikesPostState}
+          children={
+            <p>
+              {day}:0{month}:{year}
+            </p>
+          }
+        />
       </a>
     </li>
   );
