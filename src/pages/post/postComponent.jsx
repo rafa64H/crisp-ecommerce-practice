@@ -21,6 +21,8 @@ const PostComponent = () => {
   const [likesPostState, setLikesPostState] = useState([]);
   const [dislikesPostState, setDislikesPostState] = useState([]);
   const [showPostOptionsState, setShowPostOptionsState] = useState(false);
+  const [commentsState, setCommentsState] = useState([]);
+
   const writeCommentRef = useRef('');
   const params = new URLSearchParams(window.location.search);
   const id = params.get('postId');
@@ -38,6 +40,7 @@ const PostComponent = () => {
         setUser(user);
         setLikesPostState([...theIndicatedPost.likes]);
         setDislikesPostState([...theIndicatedPost.dislikes]);
+        setCommentsState([...theIndicatedPost.postComments]);
       } else {
       }
     });
@@ -55,7 +58,7 @@ const PostComponent = () => {
     const todayYear = today.getFullYear();
 
     try {
-      const { postComments } = post;
+      const currentPost = post;
 
       const userData = await getDataOfUser();
 
@@ -72,12 +75,12 @@ const PostComponent = () => {
         commentReplies: [],
       };
 
-      const newPostComments = [...post.postComments, newComment];
-      const newPostInfo = { ...post, postComments: newPostComments };
+      currentPost.postComments = [...currentPost.postComments, newComment];
 
-      await updateSpecifiedPost(newPostInfo);
+      await updateSpecifiedPost(currentPost);
 
-      setPost(newPostInfo);
+      setPost(currentPost);
+      setCommentsState([...currentPost.postComments]);
     } catch (err) {
       console.log(err);
     }
@@ -256,7 +259,7 @@ const PostComponent = () => {
         </form>
 
         <ul className="comments">
-          {post.postComments.map((comment) => (
+          {commentsState.map((comment) => (
             <CommentItem
               key={uuidv4()}
               commentDay={comment.commentDay}
@@ -264,12 +267,14 @@ const PostComponent = () => {
               commentYear={comment.commentYear}
               commentId={comment.commentId}
               commentUser={comment.commentUser}
+              commentUserUid={comment.commentUserUid}
               commentText={comment.commentText}
               commentLikes={comment.commentLikes}
               commentDislikes={comment.commentDislikes}
               commentReplies={comment.commentReplies}
               post={post}
               setPost={setPost}
+              setCommentsState={setCommentsState}
               user={user}
             />
           ))}
@@ -296,9 +301,12 @@ const CommentItem = ({
   commentReplies,
   post,
   setPost,
+  setCommentsState,
   user,
 }) => {
   const [showWriteReply, setShowWriteReply] = useState(false);
+
+  const [showCommentOptionsState, setShowCommentOptionsState] = useState(false);
 
   const [commentRepliesState, setCommentRepliesState] =
     useState(commentReplies);
@@ -461,6 +469,22 @@ const CommentItem = ({
     }
   }
 
+  async function handleRemoveComment(e) {
+    const currentPost = post;
+
+    const { postComments } = currentPost;
+
+    const filteredComments = postComments.filter(
+      (comment) => comment.commentId !== commentId
+    );
+
+    currentPost.postComments = filteredComments;
+
+    setCommentsState([...currentPost.postComments]);
+    await updateSpecifiedPost(currentPost);
+    setPost(currentPost);
+  }
+
   function handleShowReplies() {
     const numberOfItemsToShow = [...showReplies];
 
@@ -474,6 +498,21 @@ const CommentItem = ({
 
   return (
     <li className="comment">
+      {commentUserUid === user.uid ? (
+        <PostCommentOptionsBtn
+          onClickBtnFunction={() =>
+            setShowCommentOptionsState((prevValue) => !prevValue)
+          }
+        />
+      ) : null}
+
+      {commentUserUid === user.uid ? (
+        <PostCommentOptions
+          showPostCommentOptions={showCommentOptionsState}
+          handleClickRemove={handleRemoveComment}
+        />
+      ) : null}
+
       <div className="comment-user">
         <i className="fa-solid fa-user comment-user__icon" />
         <p className="comment-user__paragraph">
