@@ -209,6 +209,8 @@ const PostComponent = () => {
           <PostCommentOptions
             showPostCommentOptions={showPostOptionsState}
             handleClickRemove={handleClickRemovePost}
+            editText="Edit post"
+            removeText="Remove post"
           />
         ) : null}
 
@@ -510,6 +512,8 @@ const CommentItem = ({
         <PostCommentOptions
           showPostCommentOptions={showCommentOptionsState}
           handleClickRemove={handleRemoveComment}
+          editText="Edit comment"
+          removeText="Remove comment"
         />
       ) : null}
 
@@ -789,6 +793,8 @@ const ReplyItem = ({
         <PostCommentOptions
           showPostCommentOptions={showReplyOptionsState}
           handleClickRemove={handleRemoveReply}
+          editText="Edit reply"
+          removeText="Remove reply"
         />
       ) : null}
       <div className="comment-user">

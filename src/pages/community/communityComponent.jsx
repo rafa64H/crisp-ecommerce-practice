@@ -318,6 +318,8 @@ const CommunityPostListItem = ({
           <PostCommentOptions
             showPostCommentOptions={showPostOptionsState}
             handleClickRemove={handleClickRemovePost}
+            editText="Edit post"
+            removeText="Remove post"
           />
         ) : null}
 

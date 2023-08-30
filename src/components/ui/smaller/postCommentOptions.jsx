@@ -18,6 +18,8 @@ export { PostCommentOptionsBtn };
 export const PostCommentOptions = ({
   showPostCommentOptions,
   handleClickRemove,
+  editText,
+  removeText,
 }) => (
   <ul
     className="post-comment-options"
@@ -26,7 +28,7 @@ export const PostCommentOptions = ({
   >
     <li className="post-comment-option">
       <button type="button" className="post-comment-option-btn">
-        Edit post
+        {editText}
       </button>
     </li>
     <li>
@@ -35,7 +37,7 @@ export const PostCommentOptions = ({
         className="post-comment-option-btn"
         onClick={(e) => handleClickRemove(e)}
       >
-        Remove post
+        {removeText}
       </button>
     </li>
   </ul>
