@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { onAuthStateChanged } from 'firebase/auth';
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
-import { getCommunityPosts } from '../../components/utils/firebaseFunctions';
+import {
+  getCommunityPosts,
+  updateSpecifiedPost,
+} from '../../components/utils/firebaseFunctions';
 import { auth } from '../../config-firebase/firebase';
 
 const CommunityComponent = () => {
@@ -11,6 +14,7 @@ const CommunityComponent = () => {
   const [postsToShow, setPostsToShow] = useState([]);
   const [currentIndex, setCurrentIndex] = useState();
   const [loadingPosts, setLoadingPosts] = useState(false);
+  const [user, setUser] = useState();
 
   function splitPostsIntoFive(array, size) {
     const newArray = [];
@@ -33,6 +37,7 @@ const CommunityComponent = () => {
 
         setListOfPosts(communityPostsSplitted);
         setCurrentIndex(0);
+        setUser(user);
       } else {
       }
     });
@@ -66,18 +71,20 @@ const CommunityComponent = () => {
             {postsToShow.map((post) => (
               <CommunityPostListItem
                 key={uuidv4()}
+                post={post}
                 id={post.postId}
                 thumbnail={post.postImg}
                 title={post.postTitle}
                 paragraph={post.postText}
-                likes={post.likes.length}
-                dislikes={post.dislikes.length}
+                likes={post.likes}
+                dislikes={post.dislikes}
                 seconds={post.postSecond}
                 minutes={post.postMinutes}
                 hours={post.postHour}
                 day={post.postDay}
                 month={post.postMonth}
                 year={post.postYear}
+                user={user}
               />
             ))}
           </ul>
@@ -157,6 +164,7 @@ const CommunityComponent = () => {
 export default CommunityComponent;
 
 const CommunityPostListItem = ({
+  post,
   id,
   thumbnail,
   title,
@@ -169,62 +177,167 @@ const CommunityPostListItem = ({
   day,
   month,
   year,
-}) => (
-  <li className="community-list-li">
-    <a
-      className="community-list-item"
-      href={`./post.html?postId=${id}`}
-      draggable="false"
-    >
-      <div
-        className={`community-list-item-div ${
-          !paragraph && thumbnail ? 'thumbnail-and-not-paragraph' : ''
-        }`}
+  user,
+}) => {
+  const [likesPostState, setLikesPostState] = useState([...likes]);
+  const [dislikesPostState, setDislikesPostState] = useState([...dislikes]);
+
+  // Like post
+  async function handleLikePost(e) {
+    e.preventDefault();
+
+    try {
+      const currentPost = post;
+
+      const alreadyLikedPost = currentPost.likes.some(
+        (likeUid) => likeUid === user.uid
+      );
+
+      const alreadyDislikedPost = currentPost.dislikes.some(
+        (dislikeUid) => dislikeUid === user.uid
+      );
+
+      if (alreadyLikedPost) {
+        const indexOfLikeUser = currentPost.likes.indexOf(user.uid);
+
+        currentPost.likes.splice(indexOfLikeUser, 1);
+
+        setLikesPostState([...currentPost.likes]);
+
+        await updateSpecifiedPost(currentPost);
+
+        return null;
+      }
+
+      if (alreadyDislikedPost) {
+        const indexOfDislikeUser = currentPost.dislikes.indexOf(user.uid);
+
+        currentPost.dislikes.splice(indexOfDislikeUser, 1);
+        setDislikesPostState(currentPost.dislikes);
+      }
+
+      currentPost.likes.push(user.uid);
+
+      setLikesPostState([...currentPost.likes]);
+
+      await updateSpecifiedPost(currentPost);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // Dislike post
+  async function handleDislikePost(e) {
+    e.preventDefault();
+
+    try {
+      const currentPost = post;
+
+      const alreadyLikedPost = currentPost.likes.some(
+        (likeUid) => likeUid === user.uid
+      );
+
+      const alreadyDislikedPost = currentPost.dislikes.some(
+        (dislikeUid) => dislikeUid === user.uid
+      );
+
+      if (alreadyDislikedPost) {
+        const indexOfDislikeUser = currentPost.dislikes.indexOf(user.uid);
+
+        currentPost.dislikes.splice(indexOfDislikeUser, 1);
+
+        setDislikesPostState([...currentPost.dislikes]);
+
+        await updateSpecifiedPost(currentPost);
+
+        return null;
+      }
+
+      if (alreadyLikedPost) {
+        const indexOfLikeUser = currentPost.likes.indexOf(user.uid);
+
+        currentPost.likes.splice(indexOfLikeUser, 1);
+
+        setLikesPostState([...currentPost.likes]);
+      }
+
+      currentPost.dislikes.push(user.uid);
+
+      setDislikesPostState([...currentPost.dislikes]);
+
+      await updateSpecifiedPost(currentPost);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  return (
+    <li className="community-list-li">
+      <a
+        className="community-list-item"
+        href={`./post.html?postId=${id}`}
+        draggable="false"
       >
-        {thumbnail ? (
-          <img src={thumbnail} alt="img" className="community-list-item__img" />
-        ) : (
-          ''
-        )}
-        <div className="community-list-item-div-text">
-          <h2
-            style={{ fontSize: 'clamp(1.3rem, 1.5vw, 3rem)' }}
-            className="community-list-item__title"
-          >
-            {title}
-          </h2>
-          {paragraph ? (
-            <p className="community-list-item__paragraph">{paragraph}</p>
+        <div
+          className={`community-list-item-div ${
+            !paragraph && thumbnail ? 'thumbnail-and-not-paragraph' : ''
+          }`}
+        >
+          {thumbnail ? (
+            <img
+              src={thumbnail}
+              alt="img"
+              className="community-list-item__img"
+            />
           ) : (
             ''
           )}
+          <div className="community-list-item-div-text">
+            <h2
+              style={{ fontSize: 'clamp(1.3rem, 1.5vw, 3rem)' }}
+              className="community-list-item__title"
+            >
+              {title}
+            </h2>
+            {paragraph ? (
+              <p className="community-list-item__paragraph">{paragraph}</p>
+            ) : (
+              ''
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="like-dislike-container">
-        <button
-          onClick={(e) => e.preventDefault()}
-          type="button"
-          alt="Like"
-          className="like-dislike like"
-        >
-          <i className="fa-solid fa-arrow-up" />
-          <p>{likes}</p>
-        </button>
+        <div className="like-dislike-container">
+          <button
+            onClick={(e) => handleLikePost(e)}
+            type="button"
+            alt="Like"
+            className="like-dislike like"
+            data-already-liked-disliked={likesPostState.some(
+              (likeUid) => likeUid === user.uid
+            )}
+          >
+            <i className="fa-solid fa-arrow-up" />
+            <p>{likesPostState.length}</p>
+          </button>
 
-        <button
-          onClick={(e) => e.preventDefault()}
-          type="button"
-          alt="Dislike"
-          className="like-dislike dislike"
-        >
-          <i className="fa-solid fa-arrow-down" />
-          <p>{dislikes}</p>
-        </button>
-        <p>
-          {day}:0{month}:{year}
-        </p>
-      </div>
-    </a>
-  </li>
-);
+          <button
+            onClick={(e) => handleDislikePost(e)}
+            type="button"
+            alt="Dislike"
+            className="like-dislike dislike"
+            data-already-liked-disliked={dislikesPostState.some(
+              (dislikeUid) => dislikeUid === user.uid
+            )}
+          >
+            <i className="fa-solid fa-arrow-down" />
+            <p>{dislikesPostState.length}</p>
+          </button>
+          <p>
+            {day}:0{month}:{year}
+          </p>
+        </div>
+      </a>
+    </li>
+  );
+};

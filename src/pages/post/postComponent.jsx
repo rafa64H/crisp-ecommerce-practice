@@ -107,6 +107,7 @@ const PostComponent = () => {
         const indexOfDislikeUser = currentPost.dislikes.indexOf(user.uid);
 
         currentPost.dislikes.splice(indexOfDislikeUser, 1);
+        setDislikesPostState(currentPost.dislikes);
       }
 
       currentPost.likes.push(user.uid);
@@ -192,12 +193,12 @@ const PostComponent = () => {
             type="button"
             alt="Dislike"
             className="like-dislike dislike"
-            data-already-liked-disliked={post.dislikes.some(
+            data-already-liked-disliked={dislikesPostState.some(
               (dislikeUid) => dislikeUid === user.uid
             )}
           >
             <i className="fa-solid fa-arrow-down" />
-            <p>{post.dislikes.length}</p>
+            <p>{dislikesPostState.length}</p>
           </button>
           <p>
             {post.postDay}:0{post.postMonth}:{post.postYear}
@@ -298,14 +299,15 @@ const CommentItem = ({
     const todayYear = today.getFullYear();
 
     try {
-      const { postComments } = post;
+      const currentPost = post;
+      const { postComments } = currentPost;
 
       const userData = await getDataOfUser();
 
       const newReply = {
         replyId: uuidv4(),
         replyUser: `${userData.firstName} ${userData.lastName}`,
-        replyUserUid: userData.uid,
+        replyUserUid: user.uid,
         replyDay: todayDate,
         replyMonth: todayMonth,
         replyYear: todayYear,
@@ -321,73 +323,65 @@ const CommentItem = ({
 
       theComment.commentReplies = [...theComment.commentReplies, newReply];
 
-      const newPostInfo = post;
-
       setCommentRepliesState(
-        newPostInfo.postComments[indexOfComment].commentReplies
+        currentPost.postComments[indexOfComment].commentReplies
       );
 
-      await updateSpecifiedPost(newPostInfo);
-
-      setPost(newPostInfo);
       setShowWriteReply(false);
+
+      await updateSpecifiedPost(currentPost);
+
+      setPost(currentPost);
     } catch (err) {
       console.log(err);
     }
   }
 
-  // Dislike comment
+  // Like comment
   async function handleClickLikeComment() {
     try {
-      const { postComments } = post;
-
-      const userData = await getDataOfUser();
+      const currentPost = post;
+      const { postComments } = currentPost;
 
       const theComment = postComments.find(
         (comment) => comment.commentId === commentId
       );
 
       const alreadyLikedComment = theComment.commentLikes.some(
-        (uidLike) => uidLike === userData.uid
+        (uidLike) => uidLike === user.uid
       );
       const alreadyDislikedComment = theComment.commentDislikes.some(
-        (uidDislike) => uidDislike === userData.uid
+        (uidDislike) => uidDislike === user.uid
       );
 
       if (alreadyLikedComment) {
-        const indexOfLikeUser = theComment.commentLikes.indexOf(userData.uid);
+        const indexOfLikeUser = theComment.commentLikes.indexOf(user.uid);
 
         theComment.commentLikes.splice(indexOfLikeUser, 1);
 
-        const newPostInfo = post;
-
         setCommentLikesState([...theComment.commentLikes]);
 
-        await updateSpecifiedPost(newPostInfo);
+        await updateSpecifiedPost(currentPost);
 
-        setPost(newPostInfo);
+        setPost(currentPost);
 
         return null;
       }
 
       if (alreadyDislikedComment) {
-        const indexOfDislikeUser = theComment.commentDislikes.indexOf(
-          userData.uid
-        );
+        const indexOfDislikeUser = theComment.commentDislikes.indexOf(user.uid);
 
         theComment.commentDislikes.splice(indexOfDislikeUser, 1);
         setCommentDislikesState([...theComment.commentDislikes]);
       }
 
-      theComment.commentLikes.push(userData.uid);
-
-      const newPostInfo = post;
+      theComment.commentLikes.push(user.uid);
 
       setCommentLikesState([...theComment.commentLikes]);
 
-      await updateSpecifiedPost(newPostInfo);
+      await updateSpecifiedPost(currentPost);
 
-      setPost(newPostInfo);
+      setPost(currentPost);
     } catch (err) {
       console.log(err);
     }
@@ -396,54 +390,47 @@ const CommentItem = ({
   // Dislike comment
   async function handleClickDislikeComment() {
     try {
-      const { postComments } = post;
-
-      const userData = await getDataOfUser();
+      const currentPost = post;
+      const { postComments } = currentPost;
 
       const theComment = postComments.find(
         (comment) => comment.commentId === commentId
       );
 
       const alreadyLikedComment = theComment.commentLikes.some(
-        (uidLike) => uidLike === userData.uid
+        (uidLike) => uidLike === user.uid
       );
       const alreadyDislikedComment = theComment.commentDislikes.some(
-        (uidDislike) => uidDislike === userData.uid
+        (uidDislike) => uidDislike === user.uid
       );
 
       if (alreadyDislikedComment) {
-        const indexOfDislikeUser = theComment.commentDislikes.indexOf(
-          userData.uid
-        );
+        const indexOfDislikeUser = theComment.commentDislikes.indexOf(user.uid);
 
         theComment.commentDislikes.splice(indexOfDislikeUser, 1);
 
-        const newPostInfo = post;
-
         setCommentDislikesState([...theComment.commentDislikes]);
 
-        await updateSpecifiedPost(newPostInfo);
+        await updateSpecifiedPost(currentPost);
 
-        setPost(newPostInfo);
+        setPost(currentPost);
         return null;
       }
 
       if (alreadyLikedComment) {
-        const indexOfLikeUser = theComment.commentLikes.indexOf(userData.uid);
+        const indexOfLikeUser = theComment.commentLikes.indexOf(user.uid);
         theComment.commentLikes.splice(indexOfLikeUser, 1);
 
         setCommentLikesState([...theComment.commentLikes]);
       }
 
-      theComment.commentDislikes.push(userData.uid);
-
-      const newPostInfo = post;
+      theComment.commentDislikes.push(user.uid);
 
       setCommentDislikesState([...theComment.commentDislikes]);
 
-      await updateSpecifiedPost(newPostInfo);
+      await updateSpecifiedPost(currentPost);
 
-      setPost(newPostInfo);
+      setPost(currentPost);
     } catch (err) {
       console.log(err);
     }
@@ -456,8 +443,6 @@ const CommentItem = ({
       if (i >= commentRepliesState.length) break;
       numberOfItemsToShow.push(i);
     }
-
-    console.log(numberOfItemsToShow);
 
     setShowReplies((prevValue) => [...numberOfItemsToShow]);
   }
@@ -538,45 +523,24 @@ const CommentItem = ({
 
       <ul className="comment-replies">
         {commentRepliesState.map((reply, index) => (
-          <li
-            className="comment-reply"
-            data-show-reply={showReplies.some(
-              (indexState) => index === indexState
-            )}
+          <ReplyItem
             key={uuidv4()}
-          >
-            <div className="comment-user">
-              <i className="fa-solid fa-user comment-user__icon" />
-              <p className="comment-user__paragraph">
-                {reply.replyUser} {reply.replyDay}/0{reply.replyMonth}/
-                {reply.replyYear}
-              </p>
-            </div>
-
-            <p className="comment-text">{reply.replyText}</p>
-
-            <div className="like-dislike-container">
-              <button
-                onClick={(e) => e.preventDefault()}
-                type="button"
-                alt="Like"
-                className="like-dislike like"
-              >
-                <i className="fa-solid fa-arrow-up" />
-                <p>{reply.replyLikes.length}</p>
-              </button>
-
-              <button
-                onClick={(e) => e.preventDefault()}
-                type="button"
-                alt="Dislike"
-                className="like-dislike dislike"
-              >
-                <i className="fa-solid fa-arrow-down" />
-                <p>{reply.replyDislikes.length}</p>
-              </button>
-            </div>
-          </li>
+            commentId={commentId}
+            replyUser={reply.replyUser}
+            replyId={reply.replyId}
+            replyUserUid={reply.replyUserUid}
+            replyDay={reply.replyDay}
+            replyMonth={reply.replyMonth}
+            replyYear={reply.replyYear}
+            replyText={reply.replyText}
+            replyLikes={reply.replyLikes}
+            replyDislikes={reply.replyDislikes}
+            showReplies={showReplies}
+            index={index}
+            post={post}
+            setPost={setPost}
+            user={user}
+          />
         ))}
 
         <button
@@ -599,6 +563,174 @@ const CommentItem = ({
               } replies`}
         </aside>
       </ul>
+    </li>
+  );
+};
+
+const ReplyItem = ({
+  commentId,
+  replyUser,
+  replyId,
+  replyUserUid,
+  replyDay,
+  replyMonth,
+  replyYear,
+  replyText,
+  replyLikes,
+  replyDislikes,
+  showReplies,
+  index,
+  post,
+  setPost,
+  user,
+}) => {
+  const [replyLikesState, setReplyLikesState] = useState([...replyLikes]);
+  const [replyDislikesState, setReplyDislikesState] = useState([
+    ...replyDislikes,
+  ]);
+
+  // Like reply
+  async function handleClickLikeReply() {
+    const currentPost = post;
+
+    const theComment = currentPost.postComments.find(
+      (comment) => comment.commentId === commentId
+    );
+
+    const theReply = theComment.commentReplies.find(
+      (replyFromTheComment) => replyFromTheComment.replyId === replyId
+    );
+
+    const alreadyLikedReply = theReply.replyLikes.some(
+      (likeUid) => likeUid === user.uid
+    );
+
+    const alreadyDislikedReply = theReply.replyDislikes.some(
+      (dislikeUid) => dislikeUid === user.uid
+    );
+
+    if (alreadyLikedReply) {
+      const indexOfLikeUser = theReply.replyLikes.indexOf(user.uid);
+
+      theReply.replyLikes.splice(indexOfLikeUser, 1);
+
+      setReplyLikesState([...theReply.replyLikes]);
+
+      await updateSpecifiedPost(currentPost);
+
+      setPost(currentPost);
+
+      return null;
+    }
+
+    if (alreadyDislikedReply) {
+      const indexOfDislikeUser = theReply.replyDislikes.indexOf(user.uid);
+
+      theReply.replyDislikes.splice(indexOfDislikeUser, 1);
+      setReplyDislikesState([...theReply.replyDislikes]);
+    }
+
+    theReply.replyLikes.push(user.uid);
+
+    setReplyLikesState([...theReply.replyLikes]);
+
+    await updateSpecifiedPost(currentPost);
+
+    setPost(currentPost);
+  }
+
+  // Dislike reply
+  async function handleClickDislikeReply() {
+    const currentPost = post;
+
+    const theComment = currentPost.postComments.find(
+      (comment) => comment.commentId === commentId
+    );
+
+    const theReply = theComment.commentReplies.find(
+      (replyFromTheComment) => replyFromTheComment.replyId === replyId
+    );
+
+    const alreadyLikedReply = theReply.replyLikes.some(
+      (likeUid) => likeUid === user.uid
+    );
+
+    const alreadyDislikedReply = theReply.replyDislikes.some(
+      (dislikeUid) => dislikeUid === user.uid
+    );
+
+    if (alreadyDislikedReply) {
+      const indexOfDislikeUser = theReply.replyDislikes.indexOf(user.uid);
+
+      theReply.replyDislikes.splice(indexOfDislikeUser, 1);
+
+      setReplyDislikesState([...theReply.replyDislikes]);
+
+      await updateSpecifiedPost(currentPost);
+
+      setPost(currentPost);
+
+      return null;
+    }
+
+    if (alreadyLikedReply) {
+      const indexOfLikeUser = theReply.replyLikes.indexOf(user.uid);
+
+      theReply.replyLikes.splice(indexOfLikeUser, 1);
+
+      setReplyLikesState([...theReply.replyLikes]);
+    }
+    theReply.replyDislikes.push(user.uid);
+
+    setReplyDislikesState([...theReply.replyDislikes]);
+
+    await updateSpecifiedPost(currentPost);
+
+    setPost(currentPost);
+  }
+
+  return (
+    <li
+      className="comment-reply"
+      data-show-reply={showReplies.some((indexState) => index === indexState)}
+      key={uuidv4()}
+    >
+      <div className="comment-user">
+        <i className="fa-solid fa-user comment-user__icon" />
+        <p className="comment-user__paragraph">
+          {replyUser} {replyDay}/0{replyMonth}/{replyYear}
+        </p>
+      </div>
+
+      <p className="comment-text">{replyText}</p>
+
+      <div className="like-dislike-container">
+        <button
+          onClick={(e) => handleClickLikeReply()}
+          type="button"
+          alt="Like"
+          className="like-dislike like"
+          data-already-liked-disliked={replyLikesState.some(
+            (likeUid) => likeUid === user.uid
+          )}
+        >
+          <i className="fa-solid fa-arrow-up" />
+          <p>{replyLikesState.length}</p>
+        </button>
+
+        <button
+          onClick={(e) => handleClickDislikeReply()}
+          type="button"
+          alt="Dislike"
+          className="like-dislike dislike"
+          data-already-liked-disliked={replyDislikesState.some(
+            (dislikeUid) => dislikeUid === user.uid
+          )}
+        >
+          <i className="fa-solid fa-arrow-down" />
+          <p>{replyDislikesState.length}</p>
+        </button>
+      </div>
     </li>
   );
 };
