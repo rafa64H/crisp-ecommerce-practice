@@ -10,6 +10,10 @@ import {
 } from '../../components/utils/firebaseFunctions';
 import { auth } from '../../config-firebase/firebase';
 import LikeDislikeComponent from '../../components/ui/smaller/likeDislikeContainer';
+import {
+  PostCommentOptionsBtn,
+  PostCommentOptions,
+} from '../../components/ui/smaller/postCommentOptions';
 
 const CommunityComponent = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -303,39 +307,18 @@ const CommunityPostListItem = ({
         data-your-post={uid === user.uid}
       >
         {uid === user.uid ? (
-          <button
-            type="button"
-            className="transparent-btn show-post-options"
-            onClick={(e) => {
-              e.preventDefault();
-              setShowPostOptionsState((prevValue) => !prevValue);
-            }}
-          >
-            ...
-          </button>
+          <PostCommentOptionsBtn
+            onClickBtnFunction={() =>
+              setShowPostOptionsState((prevValue) => !prevValue)
+            }
+          />
         ) : null}
 
         {uid === user.uid ? (
-          <ul
-            className="post-options"
-            data-show-post-options={showPostOptionsState}
-            onClick={(e) => e.preventDefault()}
-          >
-            <li className="post-option">
-              <button type="button" className="post-option-btn">
-                Edit post
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                className="post-option-btn"
-                onClick={(e) => handleClickRemovePost(e)}
-              >
-                Remove post
-              </button>
-            </li>
-          </ul>
+          <PostCommentOptions
+            showPostCommentOptions={showPostOptionsState}
+            handleClickRemove={handleClickRemovePost}
+          />
         ) : null}
 
         <div

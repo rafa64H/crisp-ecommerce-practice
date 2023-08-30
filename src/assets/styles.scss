@@ -1516,11 +1516,11 @@ footer {
 
 //Community
 
-.show-post-options {
+.show-post-comment-options {
   padding: 0.1em 0.3em;
 }
 
-.post-options {
+.post-comment-options {
   position: absolute;
 
   background-color: white;
@@ -1528,13 +1528,14 @@ footer {
   padding: 0.15em;
 
   border-radius: 5px;
+  box-shadow: 0 0.2rem 1rem rgba($color: $first-color, $alpha: 0.6);
   transform-origin: 50% 0;
   transform: scaleY(0);
 
   transition: all 200ms;
   z-index: 1;
 
-  .post-option {
+  .post-comment-option {
     &-btn {
       width: 100%;
       padding: 0.2em;
@@ -1555,7 +1556,7 @@ footer {
     }
   }
 }
-[data-show-post-options='true'] {
+[data-show-post-comment-options='true'] {
   transform-origin: 50% 0;
   transform: scaleY(1);
 }

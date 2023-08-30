@@ -10,6 +10,10 @@ import {
   updateUsersPosts,
 } from '../../components/utils/firebaseFunctions';
 import LikeDislikeComponent from '../../components/ui/smaller/likeDislikeContainer';
+import {
+  PostCommentOptions,
+  PostCommentOptionsBtn,
+} from '../../components/ui/smaller/postCommentOptions';
 
 const PostComponent = () => {
   const [post, setPost] = useState();
@@ -191,39 +195,18 @@ const PostComponent = () => {
     <section className="post">
       <section className="post-section">
         {post.uid === user.uid ? (
-          <button
-            type="button"
-            className="transparent-btn show-post-options"
-            onClick={(e) => {
-              e.preventDefault();
-              setShowPostOptionsState((prevValue) => !prevValue);
-            }}
-          >
-            ...
-          </button>
+          <PostCommentOptionsBtn
+            onClickBtnFunction={() =>
+              setShowPostOptionsState((prevValue) => !prevValue)
+            }
+          />
         ) : null}
 
         {post.uid === user.uid ? (
-          <ul
-            className="post-options"
-            data-show-post-options={showPostOptionsState}
-            onClick={(e) => e.preventDefault}
-          >
-            <li className="post-option">
-              <button type="button" className="post-option-btn">
-                Edit post
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                className="post-option-btn"
-                onClick={(e) => handleClickRemovePost(e)}
-              >
-                Remove post
-              </button>
-            </li>
-          </ul>
+          <PostCommentOptions
+            showPostCommentOptions={showPostOptionsState}
+            handleClickRemove={handleClickRemovePost}
+          />
         ) : null}
 
         <h1 className="post-section__title">{post.postTitle}</h1>
