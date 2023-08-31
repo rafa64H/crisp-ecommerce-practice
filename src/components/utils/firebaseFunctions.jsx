@@ -221,7 +221,7 @@ export async function updateUsersPosts(usersPostsToUpdate) {
 }
 
 export async function createPost(
-  postImg,
+  postImgFile,
   postTitle,
   postText,
   postSecond,
@@ -233,23 +233,18 @@ export async function createPost(
 ) {
   const user = await auth.currentUser;
 
-  if (postImg) {
+  if (postImgFile) {
     const imageStringForRef = `communityPostsImgs/${postTitle}/${
-      postImg.name + uuidv4()
+      postImgFile.name + uuidv4()
     }`;
 
     const imageRef = ref(storage, imageStringForRef);
 
-    await uploadBytes(imageRef, postImg).then(() => {
+    await uploadBytes(imageRef, postImgFile).then(() => {
       console.log('uploaded image');
     });
 
-    const imageListRef = ref(storage, `communityPostsImgs/${postTitle}/`);
-
-    const getImageUrl = listAll(imageListRef)
-      .then((response) => response.items)
-      .then((items) => items.map((something) => something))
-      .then((items) => getDownloadURL(items[0]));
+    const getImageUrl = await getDownloadURL(imageRef);
 
     const imageUrl = (await getImageUrl).toString();
 

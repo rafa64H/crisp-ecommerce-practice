@@ -1,7 +1,12 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { deleteObject, ref } from 'firebase/storage';
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from 'firebase/storage';
 import { auth, storage } from '../../config-firebase/firebase';
 import {
   getCommunityPosts,
@@ -213,6 +218,13 @@ const PostComponent = () => {
     setPreviewImg('');
   }
 
+  function handleUploadFile(e) {
+    const [file] = e.target.files;
+    if (file) {
+      setPreviewImg((prevUrl) => URL.createObjectURL(file));
+    }
+  }
+
   async function handleClickShowEditPost(e) {
     try {
       e.preventDefault();
@@ -220,6 +232,90 @@ const PostComponent = () => {
       titleRef.current.value = post.postTitle;
       textRef.current.value = post.postText;
       setEditPostState((prevValue) => !prevValue);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleEditPostSubmit(e) {
+    e.preventDefault();
+
+    const currentPost = post;
+
+    if (titleRef.current.value === '') {
+      setAlertMessage('There is no title');
+      return null;
+    }
+    if (
+      currentPost.postTitle === titleRef.current.value &&
+      currentPost.postText === textRef.current.value &&
+      previewImg === currentPost.postImg
+    ) {
+      setAlertMessage(`Error: There are no changes`);
+      return null;
+    }
+    if (previewImg === currentPost.postImg) {
+      currentPost.postTitle = titleRef.current.value;
+      currentPost.postText = textRef.current.value;
+
+      await updateSpecifiedPost(currentPost);
+      return null;
+    }
+    if (!previewImg) {
+      const imgRefCurrent = ref(storage, post.postImgRef);
+
+      deleteObject(imgRefCurrent)
+        .then(() => {
+          console.log('Deleted current image');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      currentPost.postImg = null;
+      currentPost.postImgRef = null;
+      currentPost.postTitle = titleRef.current.value;
+      currentPost.postText = textRef.current.value;
+
+      await updateSpecifiedPost(currentPost);
+      return null;
+    }
+
+    const [file] = fileRef.current.files;
+
+    try {
+      if (currentPost.postImg) {
+        const imgRefCurrent = ref(storage, currentPost.postImgRef);
+
+        deleteObject(imgRefCurrent)
+          .then(() => {
+            console.log('Deleted current image');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      const imageStringForRefNew = `communityPostsImgs/${
+        titleRef.current.value
+      }/${file.name + uuidv4()}`;
+
+      const imageRefNew = ref(storage, imageStringForRefNew);
+
+      await uploadBytes(imageRefNew, file).then(() => {
+        console.log('uploaded new image');
+      });
+
+      const getImageUrlNew = await getDownloadURL(imageRefNew);
+
+      const imageUrlNew = (await getImageUrlNew).toString();
+
+      currentPost.postImg = imageUrlNew;
+      currentPost.postImgRef = imageStringForRefNew;
+      currentPost.postTitle = titleRef.current.value;
+      currentPost.postText = textRef.current.value;
+
+      await updateSpecifiedPost(currentPost);
     } catch (err) {
       console.log(err);
     }
@@ -249,6 +345,7 @@ const PostComponent = () => {
         <form
           className="create-post-form create-post-form--edit"
           data-show-edit-post={editPostState}
+          onSubmit={(e) => handleEditPostSubmit(e)}
         >
           <button
             type="button"
