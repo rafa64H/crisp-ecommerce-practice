@@ -234,10 +234,11 @@ export async function createPost(
   const user = await auth.currentUser;
 
   if (postImg) {
-    const imageRef = ref(
-      storage,
-      `communityPostsImgs/${postTitle}/${postImg.name + uuidv4()}`
-    );
+    const imageStringForRef = `communityPostsImgs/${postTitle}/${
+      postImg.name + uuidv4()
+    }`;
+
+    const imageRef = ref(storage, imageStringForRef);
 
     await uploadBytes(imageRef, postImg).then(() => {
       console.log('uploaded image');
@@ -257,6 +258,7 @@ export async function createPost(
       ...posts,
       {
         postImg: imageUrl,
+        postImgRef: imageStringForRef,
         postTitle,
         postText,
         postComments: [],

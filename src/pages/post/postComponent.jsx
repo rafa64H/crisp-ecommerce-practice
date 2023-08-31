@@ -1,7 +1,8 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { auth } from '../../config-firebase/firebase';
+import { deleteObject, ref } from 'firebase/storage';
+import { auth, storage } from '../../config-firebase/firebase';
 import {
   getCommunityPosts,
   getDataOfUser,
@@ -14,6 +15,10 @@ import {
   PostCommentOptions,
   PostCommentOptionsBtn,
 } from '../../components/ui/smaller/postCommentOptions';
+import FormInputTyping from '../../components/ui/smaller/formInputTyping';
+import removePost from '../../components/utils/removePost';
+import removeComment from '../../components/utils/removeComment';
+import removeReply from '../../components/utils/removeReply';
 
 const PostComponent = () => {
   const [post, setPost] = useState();
@@ -22,6 +27,15 @@ const PostComponent = () => {
   const [dislikesPostState, setDislikesPostState] = useState([]);
   const [showPostOptionsState, setShowPostOptionsState] = useState(false);
   const [commentsState, setCommentsState] = useState([]);
+
+  const [editPostState, setEditPostState] = useState(false);
+  const [previewImg, setPreviewImg] = useState();
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage2, setAlertMessage2] = useState('');
+
+  const fileRef = useRef();
+  const titleRef = useRef();
+  const textRef = useRef();
 
   const writeCommentRef = useRef('');
   const params = new URLSearchParams(window.location.search);
@@ -41,6 +55,7 @@ const PostComponent = () => {
         setLikesPostState([...theIndicatedPost.likes]);
         setDislikesPostState([...theIndicatedPost.dislikes]);
         setCommentsState([...theIndicatedPost.postComments]);
+        setPreviewImg(theIndicatedPost.postImg);
       } else {
       }
     });
@@ -181,14 +196,30 @@ const PostComponent = () => {
     e.preventDefault();
 
     try {
-      const allPostsFromFirestore = await getPostsOfUser();
+      await removePost(post);
 
-      const filteredPosts = allPostsFromFirestore.filter(
-        (postFromFirestore) => postFromFirestore.postId !== id
-      );
-
-      await updateUsersPosts(filteredPosts);
       window.location.href = './community.html';
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function handleFocusInput(e) {
+    setAlertMessage('');
+  }
+
+  function handleUndoImg() {
+    fileRef.current.value = null;
+    setPreviewImg('');
+  }
+
+  async function handleClickShowEditPost(e) {
+    try {
+      e.preventDefault();
+
+      titleRef.current.value = post.postTitle;
+      textRef.current.value = post.postText;
+      setEditPostState((prevValue) => !prevValue);
     } catch (err) {
       console.log(err);
     }
@@ -208,32 +239,126 @@ const PostComponent = () => {
         {post.uid === user.uid ? (
           <PostCommentOptions
             showPostCommentOptions={showPostOptionsState}
+            handleClickEdit={handleClickShowEditPost}
             handleClickRemove={handleClickRemovePost}
             editText="Edit post"
             removeText="Remove post"
           />
         ) : null}
 
-        <h1 className="post-section__title">{post.postTitle}</h1>
-        <p className="post-section__paragraph">{post.postText}</p>
+        <form
+          className="create-post-form create-post-form--edit"
+          data-show-edit-post={editPostState}
+        >
+          <button
+            type="button"
+            className="transparent-btn"
+            onClick={(e) => {
+              e.preventDefault();
+              setEditPostState((prevValue) => !prevValue);
+            }}
+          >
+            Go back
+          </button>
+          <aside aria-live="assertive">{alertMessage}</aside>
+          <div className="form-input-container form-input-container--file">
+            <label className="form-input-label" htmlFor="the-file">
+              Submit image
+            </label>
 
-        <LikeDislikeComponent
-          handleClickLikeFunction={handleLikePost}
-          handleClickDislikeFunction={handleDislikePost}
-          alreadyLikedLogicExpression={likesPostState.some(
-            (likeUid) => likeUid === user.uid
-          )}
-          alreadyDislikedLogicExpression={dislikesPostState.some(
-            (dislikeUid) => dislikeUid === user.uid
-          )}
-          likesArray={likesPostState}
-          dislikesArray={dislikesPostState}
-          children={
-            <p>
-              {post.postDay}:0{post.postMonth}:{post.postYear}
-            </p>
-          }
-        />
+            <div className="form-input-typing">
+              <div className="create-post-file-btns-container">
+                <input
+                  type="file"
+                  className="create-post-file black-btn"
+                  accept="image/*"
+                  htmlFor="the-file"
+                  ref={fileRef}
+                  onChange={(e) => handleUploadFile(e)}
+                />
+
+                {previewImg ? (
+                  <button
+                    type="button"
+                    aria-label="Undo uploaded image"
+                    className="transparent-btn undo-uploaded-file"
+                    onClick={(e) => handleUndoImg(e)}
+                  >
+                    <i className="fa-solid fa-xmark" />
+                  </button>
+                ) : (
+                  ''
+                )}
+              </div>
+
+              <img
+                src={previewImg}
+                className="create-post-file-preview"
+                alt={previewImg ? 'Preview of the mage to be uploaded' : ''}
+              />
+            </div>
+          </div>
+
+          <FormInputTyping
+            required
+            name="Title"
+            type="text"
+            id="title"
+            theRef={titleRef}
+            placeholderProp="Write your title here"
+            onFocusFunction={handleFocusInput}
+          />
+
+          <div className="form-input-container">
+            <label className="form-input-label" htmlFor="the-text">
+              Write everything you want about it:
+            </label>
+            <textarea
+              className="form-input-typing create-post-textarea"
+              id="the-text"
+              ref={textRef}
+            />
+          </div>
+
+          <button type="submit" className="black-btn">
+            <i className="fa-solid fa-sticky-note" />
+            Post
+          </button>
+          <aside aria-live="assertive">{alertMessage2}</aside>
+        </form>
+
+        {!editPostState ? (
+          <>
+            {post.postImg ? (
+              <img
+                src={post.postImg}
+                className="post-section__img"
+                alt={post.postTitle}
+              />
+            ) : null}
+
+            <h1 className="post-section__title">{post.postTitle}</h1>
+            <p className="post-section__paragraph">{post.postText}</p>
+
+            <LikeDislikeComponent
+              handleClickLikeFunction={handleLikePost}
+              handleClickDislikeFunction={handleDislikePost}
+              alreadyLikedLogicExpression={likesPostState.some(
+                (likeUid) => likeUid === user.uid
+              )}
+              alreadyDislikedLogicExpression={dislikesPostState.some(
+                (dislikeUid) => dislikeUid === user.uid
+              )}
+              likesArray={likesPostState}
+              dislikesArray={dislikesPostState}
+              children={
+                <p>
+                  {post.postDay}:0{post.postMonth}:{post.postYear}
+                </p>
+              }
+            />
+          </>
+        ) : null}
       </section>
 
       <section className="comments-section">
@@ -472,19 +597,13 @@ const CommentItem = ({
   }
 
   async function handleRemoveComment(e) {
-    const currentPost = post;
-
-    const { postComments } = currentPost;
-
-    const filteredComments = postComments.filter(
-      (comment) => comment.commentId !== commentId
-    );
-
-    currentPost.postComments = filteredComments;
-
-    setCommentsState([...currentPost.postComments]);
-    await updateSpecifiedPost(currentPost);
-    setPost(currentPost);
+    try {
+      const postAfterRemovingComment = await removeComment(post, commentId);
+      setCommentsState([...postAfterRemovingComment.postComments]);
+      setPost(postAfterRemovingComment);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function handleShowReplies() {
@@ -746,19 +865,13 @@ const ReplyItem = ({
     setPost(currentPost);
   }
 
-  async function handleRemoveReply() {
+  async function handleRemoveReply(e) {
     try {
-      const currentPost = post;
+      e.preventDefault();
 
-      const theComment = currentPost.postComments.find(
-        (comment) => comment.commentId === commentId
-      );
+      const objAfterRemovingReply = await removeReply(post, commentId, replyId);
 
-      const filteredReplies = theComment.commentReplies.filter(
-        (replyItem) => replyItem.replyId !== replyId
-      );
-
-      theComment.commentReplies = filteredReplies;
+      const { currentPost, theComment } = objAfterRemovingReply;
 
       const removeReplyFromShowRepliesState = theComment.commentReplies.map(
         (replyItem, indexReply) => indexReply
@@ -766,7 +879,6 @@ const ReplyItem = ({
 
       setShowReplies([...removeReplyFromShowRepliesState]);
       setCommentRepliesState(theComment.commentReplies);
-      await updateSpecifiedPost(currentPost);
       setPost(currentPost);
     } catch (err) {
       console.log(err);

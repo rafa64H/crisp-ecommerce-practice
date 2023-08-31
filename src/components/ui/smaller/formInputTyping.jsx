@@ -25,7 +25,10 @@ const FormInputTyping = ({
           id={id}
           className="form-input-typing"
           ref={theRef}
-          onFocus={(e) => onFocusFunction(e)}
+          onFocus={(e) => {
+            e.target.dataset.errorInputTyping = 'false';
+            onFocusFunction(e);
+          }}
           placeholder={placeholderProp || name}
         />
       </div>

@@ -1678,74 +1678,89 @@ footer {
 //----------------------------------------------------------------
 
 //createPost
-.create-post {
-  .create-post-form {
-    width: min(95%, 55rem);
-    margin: 0 auto;
+.create-post-form {
+  width: min(95%, 55rem);
+  margin: 0 auto;
 
-    .create-post-file-btns-container {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
+  .create-post-file-btns-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 
-      .create-post-file {
-        display: block;
+    .create-post-file {
+      display: block;
 
-        width: min(95%, 20rem);
-        margin: 0;
-      }
-
-      .undo-uploaded-file {
-        margin-top: 0.5em;
-        margin-left: auto;
-        i {
-        }
-      }
+      width: min(95%, 20rem);
+      margin: 0;
     }
 
-    .create-post-file-preview {
-      display: block;
-      width: 15rem;
+    .undo-uploaded-file {
       margin-top: 0.5em;
-    }
-
-    .create-post-textarea {
-      resize: none;
-      min-height: 10rem;
-    }
-
-    input[type='file']::file-selector-button {
-      background-color: transparent;
-      border: transparent;
-
-      color: white;
-      font-weight: 600;
-      font-family: $font-oswald;
-    }
-
-    .black-btn {
-      display: block;
-
-      margin: 0 auto;
-
-      font-size: $third-font-size;
-
-      .fa-sticky-note {
-        margin-right: 0.5em;
+      margin-left: auto;
+      i {
       }
     }
   }
+
+  .create-post-file-preview {
+    display: block;
+    width: 15rem;
+    margin-top: 0.5em;
+  }
+
+  .create-post-textarea {
+    resize: none;
+    min-height: 10rem;
+  }
+
+  input[type='file']::file-selector-button {
+    background-color: transparent;
+    border: transparent;
+
+    color: white;
+    font-weight: 600;
+    font-family: $font-oswald;
+  }
+
+  .black-btn {
+    display: block;
+
+    margin: 0 auto;
+
+    font-size: $third-font-size;
+
+    .fa-sticky-note {
+      margin-right: 0.5em;
+    }
+  }
+}
+
+.create-post {
 }
 //createPost END
 
 //----------------------------------------------------------------
 
 //Post
+.create-post-form--edit {
+  display: none;
+}
+[data-show-edit-post='true'] {
+  display: block;
+}
 .post {
   .post-section {
     background-color: $notify-color2;
 
     border-bottom: 2px solid $light-gray;
+
+    &__img {
+      display: block;
+
+      width: min(75%, 50rem);
+      margin: 0 auto;
+    }
+
     &__title {
       margin: 0.25em;
       font-size: $second-font-size;

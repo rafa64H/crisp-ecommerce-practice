@@ -17,6 +17,7 @@ export { PostCommentOptionsBtn };
 
 export const PostCommentOptions = ({
   showPostCommentOptions,
+  handleClickEdit,
   handleClickRemove,
   editText,
   removeText,
@@ -26,7 +27,7 @@ export const PostCommentOptions = ({
     data-show-post-comment-options={showPostCommentOptions}
     onClick={(e) => e.preventDefault()}
   >
-    <li className="post-comment-option">
+    <li className="post-comment-option" onClick={(e) => handleClickEdit(e)}>
       <button type="button" className="post-comment-option-btn">
         {editText}
       </button>

@@ -14,6 +14,7 @@ import {
   PostCommentOptionsBtn,
   PostCommentOptions,
 } from '../../components/ui/smaller/postCommentOptions';
+import removePost from '../../components/utils/removePost';
 
 const CommunityComponent = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -285,13 +286,7 @@ const CommunityPostListItem = ({
     e.preventDefault();
 
     try {
-      const allPostsFromFirestore = await getPostsOfUser();
-
-      const filteredPosts = allPostsFromFirestore.filter(
-        (postFromFirestore) => postFromFirestore.postId !== id
-      );
-
-      await updateUsersPosts(filteredPosts);
+      await removePost(post);
       window.location.href = './community.html';
     } catch (err) {
       console.log(err);
