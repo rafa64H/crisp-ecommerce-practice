@@ -20,16 +20,11 @@ export async function removeComment(post, commentId) {
 export async function likeComment(
   user,
   currentPost,
-  postComments,
-  commentId,
+  theComment,
   statesAndSetStates
 ) {
   const { setPost, setCommentLikesState, setCommentDislikesState } =
     statesAndSetStates;
-
-  const theComment = postComments.find(
-    (comment) => comment.commentId === commentId
-  );
 
   const alreadyLikedComment = theComment.commentLikes.some(
     (uidLike) => uidLike === user.uid
@@ -71,16 +66,11 @@ export async function likeComment(
 export async function dislikeComment(
   user,
   currentPost,
-  postComments,
-  commentId,
+  theComment,
   statesAndSetStates
 ) {
   const { setPost, setCommentLikesState, setCommentDislikesState } =
     statesAndSetStates;
-
-  const theComment = postComments.find(
-    (comment) => comment.commentId === commentId
-  );
 
   const alreadyLikedComment = theComment.commentLikes.some(
     (uidLike) => uidLike === user.uid
@@ -116,4 +106,24 @@ export async function dislikeComment(
   await updateSpecifiedPost(currentPost);
 
   setPost(currentPost);
+}
+
+export async function editComment(
+  currentPost,
+  theComment,
+  editCommentRef,
+  statesAndSetStates
+) {
+  const { setPost, setCommentTextState, setShowFormEditComment } =
+    statesAndSetStates;
+
+  if (theComment.commentText === editCommentRef.current.value) return null;
+  if (editCommentRef.current.value === '') return null;
+
+  theComment.commentText = editCommentRef.current.value;
+
+  setPost(currentPost);
+  setShowFormEditComment((prevValue) => !prevValue);
+  await updateSpecifiedPost(currentPost);
+  setCommentTextState(editCommentRef.current.value);
 }
