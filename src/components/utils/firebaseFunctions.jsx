@@ -19,7 +19,13 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
-import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
+import {
+  deleteObject,
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytes,
+} from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import { auth, db, storage } from '../../config-firebase/firebase';
 
@@ -348,4 +354,33 @@ export async function updateSpecifiedPost(passedPostData) {
   });
 
   console.log('sent post');
+}
+
+export async function deleteImageOfPost(passedPostData) {
+  const imgRefCurrent = ref(storage, passedPostData.postImgRef);
+
+  deleteObject(imgRefCurrent)
+    .then(() => {
+      console.log('Deleted current image');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+export async function uploadImageOfPostToStorage(
+  file,
+  passedImageStringForRef
+) {
+  const imageRefToUpload = ref(storage, passedImageStringForRef);
+
+  await uploadBytes(imageRefToUpload, file).then(() => {
+    console.log('uploaded new image');
+  });
+
+  const getUploadedImageUrl = await getDownloadURL(imageRefToUpload);
+
+  const uploadedImageUrl = (await getUploadedImageUrl).toString();
+
+  return uploadedImageUrl;
 }

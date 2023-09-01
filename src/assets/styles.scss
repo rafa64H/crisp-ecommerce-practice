@@ -1748,6 +1748,21 @@ footer {
 [data-show-edit-post='true'] {
   display: block;
 }
+
+.flex-post-comment-options-btn {
+  margin-top: 0.5em;
+
+  .post-comment-options-goback {
+    display: none;
+
+    margin-left: 0.5em;
+    padding: 0.3em;
+  }
+  [data-show-edit-post='true'] {
+    display: inline-block;
+  }
+}
+
 .post {
   .post-section {
     background-color: $notify-color2;

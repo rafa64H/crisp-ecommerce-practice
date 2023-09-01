@@ -1,12 +1,6 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from 'firebase/storage';
 import { auth, storage } from '../../config-firebase/firebase';
 import {
   getCommunityPosts,
@@ -21,9 +15,22 @@ import {
   PostCommentOptionsBtn,
 } from '../../components/ui/smaller/postCommentOptions';
 import FormInputTyping from '../../components/ui/smaller/formInputTyping';
-import removePost from '../../components/utils/removePost';
-import removeComment from '../../components/utils/removeComment';
-import removeReply from '../../components/utils/removeReply';
+import {
+  removePost,
+  likePost,
+  dislikePost,
+  editPost,
+} from '../../components/utils/functionsPost';
+import {
+  dislikeComment,
+  likeComment,
+  removeComment,
+} from '../../components/utils/functionsComment';
+import {
+  dislikieReply,
+  likeReply,
+  removeReply,
+} from '../../components/utils/functionsReply';
 
 const PostComponent = () => {
   const [post, setPost] = useState();
@@ -34,7 +41,7 @@ const PostComponent = () => {
   const [commentsState, setCommentsState] = useState([]);
 
   const [editPostState, setEditPostState] = useState(false);
-  const [previewImg, setPreviewImg] = useState();
+  const [previewImg, setPreviewImg] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const [alertMessage2, setAlertMessage2] = useState('');
 
@@ -111,41 +118,11 @@ const PostComponent = () => {
     try {
       const currentPost = post;
 
-      const alreadyLikedPost = currentPost.likes.some(
-        (likeUid) => likeUid === user.uid
-      );
-
-      const alreadyDislikedPost = currentPost.dislikes.some(
-        (dislikeUid) => dislikeUid === user.uid
-      );
-
-      if (alreadyLikedPost) {
-        const indexOfLikeUser = currentPost.likes.indexOf(user.uid);
-
-        currentPost.likes.splice(indexOfLikeUser, 1);
-
-        setLikesPostState([...currentPost.likes]);
-
-        await updateSpecifiedPost(currentPost);
-
-        setPost(currentPost);
-        return null;
-      }
-
-      if (alreadyDislikedPost) {
-        const indexOfDislikeUser = currentPost.dislikes.indexOf(user.uid);
-
-        currentPost.dislikes.splice(indexOfDislikeUser, 1);
-        setDislikesPostState(currentPost.dislikes);
-      }
-
-      currentPost.likes.push(user.uid);
-
-      setLikesPostState([...currentPost.likes]);
-
-      await updateSpecifiedPost(currentPost);
-
-      setPost(currentPost);
+      await likePost(currentPost, user, {
+        setPost,
+        setLikesPostState,
+        setDislikesPostState,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -156,42 +133,11 @@ const PostComponent = () => {
     try {
       const currentPost = post;
 
-      const alreadyLikedPost = currentPost.likes.some(
-        (likeUid) => likeUid === user.uid
-      );
-
-      const alreadyDislikedPost = currentPost.dislikes.some(
-        (dislikeUid) => dislikeUid === user.uid
-      );
-
-      if (alreadyDislikedPost) {
-        const indexOfDislikeUser = currentPost.dislikes.indexOf(user.uid);
-
-        currentPost.dislikes.splice(indexOfDislikeUser, 1);
-
-        setDislikesPostState([...currentPost.dislikes]);
-
-        await updateSpecifiedPost(currentPost);
-
-        setPost(currentPost);
-        return null;
-      }
-
-      if (alreadyLikedPost) {
-        const indexOfLikeUser = currentPost.likes.indexOf(user.uid);
-
-        currentPost.likes.splice(indexOfLikeUser, 1);
-
-        setLikesPostState([...currentPost.likes]);
-      }
-
-      currentPost.dislikes.push(user.uid);
-
-      setDislikesPostState([...currentPost.dislikes]);
-
-      await updateSpecifiedPost(currentPost);
-
-      setPost(currentPost);
+      await dislikePost(currentPost, user, {
+        setPost,
+        setLikesPostState,
+        setDislikesPostState,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -232,6 +178,7 @@ const PostComponent = () => {
       titleRef.current.value = post.postTitle;
       textRef.current.value = post.postText;
       setEditPostState((prevValue) => !prevValue);
+      setShowPostOptionsState((prevValue) => !prevValue);
     } catch (err) {
       console.log(err);
     }
@@ -242,80 +189,13 @@ const PostComponent = () => {
 
     const currentPost = post;
 
-    if (titleRef.current.value === '') {
-      setAlertMessage('There is no title');
-      return null;
-    }
-    if (
-      currentPost.postTitle === titleRef.current.value &&
-      currentPost.postText === textRef.current.value &&
-      previewImg === currentPost.postImg
-    ) {
-      setAlertMessage(`Error: There are no changes`);
-      return null;
-    }
-    if (previewImg === currentPost.postImg) {
-      currentPost.postTitle = titleRef.current.value;
-      currentPost.postText = textRef.current.value;
-
-      await updateSpecifiedPost(currentPost);
-      return null;
-    }
-    if (!previewImg) {
-      const imgRefCurrent = ref(storage, post.postImgRef);
-
-      deleteObject(imgRefCurrent)
-        .then(() => {
-          console.log('Deleted current image');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      currentPost.postImg = null;
-      currentPost.postImgRef = null;
-      currentPost.postTitle = titleRef.current.value;
-      currentPost.postText = textRef.current.value;
-
-      await updateSpecifiedPost(currentPost);
-      return null;
-    }
-
-    const [file] = fileRef.current.files;
-
     try {
-      if (currentPost.postImg) {
-        const imgRefCurrent = ref(storage, currentPost.postImgRef);
-
-        deleteObject(imgRefCurrent)
-          .then(() => {
-            console.log('Deleted current image');
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-
-      const imageStringForRefNew = `communityPostsImgs/${
-        titleRef.current.value
-      }/${file.name + uuidv4()}`;
-
-      const imageRefNew = ref(storage, imageStringForRefNew);
-
-      await uploadBytes(imageRefNew, file).then(() => {
-        console.log('uploaded new image');
+      await editPost(currentPost, fileRef, titleRef, textRef, {
+        previewImg,
+        setAlertMessage,
+        setPost,
+        setEditPostState,
       });
-
-      const getImageUrlNew = await getDownloadURL(imageRefNew);
-
-      const imageUrlNew = (await getImageUrlNew).toString();
-
-      currentPost.postImg = imageUrlNew;
-      currentPost.postImgRef = imageStringForRefNew;
-      currentPost.postTitle = titleRef.current.value;
-      currentPost.postText = textRef.current.value;
-
-      await updateSpecifiedPost(currentPost);
     } catch (err) {
       console.log(err);
     }
@@ -324,32 +204,29 @@ const PostComponent = () => {
   return post ? (
     <section className="post">
       <section className="post-section">
-        {post.uid === user.uid ? (
-          <PostCommentOptionsBtn
-            onClickBtnFunction={() =>
-              setShowPostOptionsState((prevValue) => !prevValue)
-            }
-          />
-        ) : null}
+        <div className="flex-post-comment-options-btn">
+          {post.uid === user.uid ? (
+            <PostCommentOptionsBtn
+              onClickBtnFunction={() =>
+                setShowPostOptionsState((prevValue) => !prevValue)
+              }
+            />
+          ) : null}
 
-        {post.uid === user.uid ? (
-          <PostCommentOptions
-            showPostCommentOptions={showPostOptionsState}
-            handleClickEdit={handleClickShowEditPost}
-            handleClickRemove={handleClickRemovePost}
-            editText="Edit post"
-            removeText="Remove post"
-          />
-        ) : null}
+          {post.uid === user.uid ? (
+            <PostCommentOptions
+              showPostCommentOptions={showPostOptionsState}
+              handleClickEdit={handleClickShowEditPost}
+              handleClickRemove={handleClickRemovePost}
+              editText="Edit post"
+              removeText="Remove post"
+            />
+          ) : null}
 
-        <form
-          className="create-post-form create-post-form--edit"
-          data-show-edit-post={editPostState}
-          onSubmit={(e) => handleEditPostSubmit(e)}
-        >
           <button
             type="button"
-            className="transparent-btn"
+            className="transparent-btn post-comment-options-goback"
+            data-show-edit-post={editPostState}
             onClick={(e) => {
               e.preventDefault();
               setEditPostState((prevValue) => !prevValue);
@@ -357,6 +234,13 @@ const PostComponent = () => {
           >
             Go back
           </button>
+        </div>
+
+        <form
+          className="create-post-form create-post-form--edit"
+          data-show-edit-post={editPostState}
+          onSubmit={(e) => handleEditPostSubmit(e)}
+        >
           <aside aria-live="assertive">{alertMessage}</aside>
           <div className="form-input-container form-input-container--file">
             <label className="form-input-label" htmlFor="the-file">
@@ -414,6 +298,7 @@ const PostComponent = () => {
               className="form-input-typing create-post-textarea"
               id="the-text"
               ref={textRef}
+              onFocus={handleFocusInput}
             />
           </div>
 
@@ -600,45 +485,11 @@ const CommentItem = ({
       const currentPost = post;
       const { postComments } = currentPost;
 
-      const theComment = postComments.find(
-        (comment) => comment.commentId === commentId
-      );
-
-      const alreadyLikedComment = theComment.commentLikes.some(
-        (uidLike) => uidLike === user.uid
-      );
-      const alreadyDislikedComment = theComment.commentDislikes.some(
-        (uidDislike) => uidDislike === user.uid
-      );
-
-      if (alreadyLikedComment) {
-        const indexOfLikeUser = theComment.commentLikes.indexOf(user.uid);
-
-        theComment.commentLikes.splice(indexOfLikeUser, 1);
-
-        setCommentLikesState([...theComment.commentLikes]);
-
-        await updateSpecifiedPost(currentPost);
-
-        setPost(currentPost);
-
-        return null;
-      }
-
-      if (alreadyDislikedComment) {
-        const indexOfDislikeUser = theComment.commentDislikes.indexOf(user.uid);
-
-        theComment.commentDislikes.splice(indexOfDislikeUser, 1);
-        setCommentDislikesState([...theComment.commentDislikes]);
-      }
-
-      theComment.commentLikes.push(user.uid);
-
-      setCommentLikesState([...theComment.commentLikes]);
-
-      await updateSpecifiedPost(currentPost);
-
-      setPost(currentPost);
+      await likeComment(user, currentPost, postComments, commentId, {
+        setPost,
+        setCommentLikesState,
+        setCommentDislikesState,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -650,44 +501,11 @@ const CommentItem = ({
       const currentPost = post;
       const { postComments } = currentPost;
 
-      const theComment = postComments.find(
-        (comment) => comment.commentId === commentId
-      );
-
-      const alreadyLikedComment = theComment.commentLikes.some(
-        (uidLike) => uidLike === user.uid
-      );
-      const alreadyDislikedComment = theComment.commentDislikes.some(
-        (uidDislike) => uidDislike === user.uid
-      );
-
-      if (alreadyDislikedComment) {
-        const indexOfDislikeUser = theComment.commentDislikes.indexOf(user.uid);
-
-        theComment.commentDislikes.splice(indexOfDislikeUser, 1);
-
-        setCommentDislikesState([...theComment.commentDislikes]);
-
-        await updateSpecifiedPost(currentPost);
-
-        setPost(currentPost);
-        return null;
-      }
-
-      if (alreadyLikedComment) {
-        const indexOfLikeUser = theComment.commentLikes.indexOf(user.uid);
-        theComment.commentLikes.splice(indexOfLikeUser, 1);
-
-        setCommentLikesState([...theComment.commentLikes]);
-      }
-
-      theComment.commentDislikes.push(user.uid);
-
-      setCommentDislikesState([...theComment.commentDislikes]);
-
-      await updateSpecifiedPost(currentPost);
-
-      setPost(currentPost);
+      await dislikeComment(user, currentPost, postComments, commentId, {
+        setPost,
+        setCommentLikesState,
+        setCommentDislikesState,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -874,42 +692,15 @@ const ReplyItem = ({
       (replyFromTheComment) => replyFromTheComment.replyId === replyId
     );
 
-    const alreadyLikedReply = theReply.replyLikes.some(
-      (likeUid) => likeUid === user.uid
-    );
-
-    const alreadyDislikedReply = theReply.replyDislikes.some(
-      (dislikeUid) => dislikeUid === user.uid
-    );
-
-    if (alreadyLikedReply) {
-      const indexOfLikeUser = theReply.replyLikes.indexOf(user.uid);
-
-      theReply.replyLikes.splice(indexOfLikeUser, 1);
-
-      setReplyLikesState([...theReply.replyLikes]);
-
-      await updateSpecifiedPost(currentPost);
-
-      setPost(currentPost);
-
-      return null;
+    try {
+      await likeReply(user, currentPost, theReply, {
+        setPost,
+        setReplyLikesState,
+        setReplyDislikesState,
+      });
+    } catch (err) {
+      console.log(err);
     }
-
-    if (alreadyDislikedReply) {
-      const indexOfDislikeUser = theReply.replyDislikes.indexOf(user.uid);
-
-      theReply.replyDislikes.splice(indexOfDislikeUser, 1);
-      setReplyDislikesState([...theReply.replyDislikes]);
-    }
-
-    theReply.replyLikes.push(user.uid);
-
-    setReplyLikesState([...theReply.replyLikes]);
-
-    await updateSpecifiedPost(currentPost);
-
-    setPost(currentPost);
   }
 
   // Dislike reply
@@ -924,42 +715,15 @@ const ReplyItem = ({
       (replyFromTheComment) => replyFromTheComment.replyId === replyId
     );
 
-    const alreadyLikedReply = theReply.replyLikes.some(
-      (likeUid) => likeUid === user.uid
-    );
-
-    const alreadyDislikedReply = theReply.replyDislikes.some(
-      (dislikeUid) => dislikeUid === user.uid
-    );
-
-    if (alreadyDislikedReply) {
-      const indexOfDislikeUser = theReply.replyDislikes.indexOf(user.uid);
-
-      theReply.replyDislikes.splice(indexOfDislikeUser, 1);
-
-      setReplyDislikesState([...theReply.replyDislikes]);
-
-      await updateSpecifiedPost(currentPost);
-
-      setPost(currentPost);
-
-      return null;
+    try {
+      await dislikieReply(user, currentPost, theReply, {
+        setPost,
+        setReplyLikesState,
+        setReplyDislikesState,
+      });
+    } catch (err) {
+      console.log(err);
     }
-
-    if (alreadyLikedReply) {
-      const indexOfLikeUser = theReply.replyLikes.indexOf(user.uid);
-
-      theReply.replyLikes.splice(indexOfLikeUser, 1);
-
-      setReplyLikesState([...theReply.replyLikes]);
-    }
-    theReply.replyDislikes.push(user.uid);
-
-    setReplyDislikesState([...theReply.replyDislikes]);
-
-    await updateSpecifiedPost(currentPost);
-
-    setPost(currentPost);
   }
 
   async function handleRemoveReply(e) {

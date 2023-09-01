@@ -14,7 +14,7 @@ import {
   PostCommentOptionsBtn,
   PostCommentOptions,
 } from '../../components/ui/smaller/postCommentOptions';
-import removePost from '../../components/utils/removePost';
+import { removePost } from '../../components/utils/functionsPost';
 
 const CommunityComponent = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
