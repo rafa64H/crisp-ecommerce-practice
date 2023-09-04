@@ -647,6 +647,98 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
+.flex-post-comment-options-btn {
+  margin-top: 0.5em;
+
+  .post-comment-options-goback {
+    display: none;
+
+    margin-left: 0.5em;
+    padding: 0.3em;
+  }
+  [data-show-edit-post='true'] {
+    display: inline-block;
+  }
+}
+.show-post-comment-options {
+  padding: 0.1em 0.3em;
+}
+
+.post-comment-options {
+  position: absolute;
+
+  background-color: white;
+
+  padding: 0.15em;
+
+  border-radius: 5px;
+  box-shadow: 0 0.2rem 1rem rgba($color: $first-color, $alpha: 0.6);
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+
+  transition: all 200ms;
+  z-index: 1;
+
+  .post-comment-option {
+    &-btn {
+      width: 100%;
+      padding: 0.35em;
+
+      text-align: left;
+      font-size: $third-font-size;
+      font-family: $font-oswald;
+
+      border-radius: 5px;
+      transition: all;
+
+      transition: all 200ms;
+
+      &:hover {
+        background-color: $second-color;
+        color: white;
+      }
+    }
+  }
+}
+[data-show-post-comment-options='true'] {
+  transform-origin: 50% 0;
+  transform: scaleY(1);
+}
+
+.like-dislike-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .like-dislike {
+    display: flex;
+    align-items: center;
+
+    margin: 0 1em;
+
+    & > * {
+      transition: all 200ms;
+    }
+
+    &:hover {
+      & > * {
+        color: $second-color;
+      }
+    }
+
+    i {
+      color: black;
+    }
+  }
+}
+
+.post-form--edit {
+  display: none;
+}
+[data-show-edit-post='true'] {
+  display: block;
+}
+
 //common used components END
 
 //----------------------------------------------------------------
@@ -1516,78 +1608,6 @@ footer {
 
 //Community
 
-.show-post-comment-options {
-  padding: 0.1em 0.3em;
-}
-
-.post-comment-options {
-  position: absolute;
-
-  background-color: white;
-
-  padding: 0.15em;
-
-  border-radius: 5px;
-  box-shadow: 0 0.2rem 1rem rgba($color: $first-color, $alpha: 0.6);
-  transform-origin: 50% 0;
-  transform: scaleY(0);
-
-  transition: all 200ms;
-  z-index: 1;
-
-  .post-comment-option {
-    &-btn {
-      width: 100%;
-      padding: 0.35em;
-
-      text-align: left;
-      font-size: $third-font-size;
-      font-family: $font-oswald;
-
-      border-radius: 5px;
-      transition: all;
-
-      transition: all 200ms;
-
-      &:hover {
-        background-color: $second-color;
-        color: white;
-      }
-    }
-  }
-}
-[data-show-post-comment-options='true'] {
-  transform-origin: 50% 0;
-  transform: scaleY(1);
-}
-
-.like-dislike-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .like-dislike {
-    display: flex;
-    align-items: center;
-
-    margin: 0 1em;
-
-    & > * {
-      transition: all 200ms;
-    }
-
-    &:hover {
-      & > * {
-        color: $second-color;
-      }
-    }
-
-    i {
-      color: black;
-    }
-  }
-}
-
 .community {
   .create-post-btn-desktop {
     display: block;
@@ -1678,16 +1698,16 @@ footer {
 //----------------------------------------------------------------
 
 //createPost
-.create-post-form {
+.post-form {
   width: min(95%, 55rem);
   margin: 0 auto;
 
-  .create-post-file-btns-container {
+  .post-form-file-btns-container {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 
-    .create-post-file {
+    .post-form-file {
       display: block;
 
       width: min(95%, 20rem);
@@ -1702,13 +1722,13 @@ footer {
     }
   }
 
-  .create-post-file-preview {
+  .post-form-file-preview {
     display: block;
     width: 15rem;
     margin-top: 0.5em;
   }
 
-  .create-post-textarea {
+  .post-form-textarea {
     resize: none;
     min-height: 10rem;
   }
@@ -1734,34 +1754,11 @@ footer {
     }
   }
 }
-
-.create-post {
-}
 //createPost END
 
 //----------------------------------------------------------------
 
 //Post
-.create-post-form--edit {
-  display: none;
-}
-[data-show-edit-post='true'] {
-  display: block;
-}
-
-.flex-post-comment-options-btn {
-  margin-top: 0.5em;
-
-  .post-comment-options-goback {
-    display: none;
-
-    margin-left: 0.5em;
-    padding: 0.3em;
-  }
-  [data-show-edit-post='true'] {
-    display: inline-block;
-  }
-}
 
 .post {
   .post-section {
@@ -1789,6 +1786,10 @@ footer {
     .like-dislike-container {
       justify-content: flex-start;
     }
+  }
+  [data-your-post='true'] {
+    background-color: #acfccd;
+    border: 2px solid $success-color;
   }
 
   .comments-section {
@@ -2549,9 +2550,9 @@ footer {
   }
   ////Media product page END
 
-  //----------------------------------------------------------------
+  ////--------------------
 
-  //Media buyClothes Page
+  ////Media buyClothes Page
   .place-order {
     &__title {
       font-size: $second-font-size;
@@ -2632,11 +2633,11 @@ footer {
       }
     }
   }
-  //Media buyClothes Page END
+  ////Media buyClothes Page END
 
-  //----------------------------------------------------------------
+  ////--------------------
 
-  //Media Community
+  ////Media Community
 
   .like-dislike-container {
     display: flex;
@@ -2692,10 +2693,18 @@ footer {
             }
           }
         }
+        [data-your-post='true'] {
+          background-color: #acfccd;
+          border: 2px solid $success-color;
+        }
       }
     }
   }
-  //Media Community END
+  ////Media Community END
+
+  ////--------------------
+
+  ////Media
 }
 
 ///Only devices with :hover

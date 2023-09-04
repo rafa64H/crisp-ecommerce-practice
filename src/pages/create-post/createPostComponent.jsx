@@ -91,7 +91,7 @@ const CreatePostComponent = () => {
   return (
     <section className="create-post">
       <h1 className="create-post__title">Create post</h1>
-      <form className="create-post-form" onSubmit={(e) => handleSubmit(e)}>
+      <form className="post-form" onSubmit={(e) => handleSubmit(e)}>
         <aside aria-live="assertive">{alertMessage}</aside>
         <div className="form-input-container form-input-container--file">
           <label className="form-input-label" htmlFor="the-file">
@@ -99,10 +99,10 @@ const CreatePostComponent = () => {
           </label>
 
           <div className="form-input-typing">
-            <div className="create-post-file-btns-container">
+            <div className="post-form-file-btns-container">
               <input
                 type="file"
-                className="create-post-file black-btn"
+                className="post-form-file black-btn"
                 accept="image/*"
                 htmlFor="the-file"
                 ref={fileRef}
@@ -125,7 +125,7 @@ const CreatePostComponent = () => {
 
             <img
               src={previewImg}
-              className="create-post-file-preview"
+              className="post-form-file-preview"
               alt={previewImg ? 'Preview of the mage to be uploaded' : ''}
             />
           </div>
@@ -146,7 +146,7 @@ const CreatePostComponent = () => {
             Write everything you want about it:
           </label>
           <textarea
-            className="form-input-typing create-post-textarea"
+            className="form-input-typing post-form-textarea"
             id="the-text"
             ref={textRef}
           />

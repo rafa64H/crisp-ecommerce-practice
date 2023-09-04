@@ -26,13 +26,16 @@ import {
   editComment,
   likeComment,
   removeComment,
+  submitComment,
 } from '../../components/utils/functionsComment';
 import {
   dislikieReply,
   editReply,
   likeReply,
   removeReply,
+  submitReply,
 } from '../../components/utils/functionsReply';
+import FormComment from '../../components/ui/smaller/formComment';
 
 const PostComponent = () => {
   const [post, setPost] = useState();
@@ -80,36 +83,8 @@ const PostComponent = () => {
 
     if (writeCommentRef.current.value === '') return null;
 
-    const today = new Date();
-
-    const todayDate = today.getDate();
-    const todayMonth = today.getMonth() + 1;
-    const todayYear = today.getFullYear();
-
     try {
-      const currentPost = post;
-
-      const userData = await getDataOfUser();
-
-      const newComment = {
-        commentId: uuidv4(),
-        commentUser: `${userData.firstName} ${userData.lastName}`,
-        commentUserUid: userData.uid,
-        commentDay: todayDate,
-        commentMonth: todayMonth,
-        commentYear: todayYear,
-        commentText: writeCommentRef.current.value,
-        commentLikes: [],
-        commentDislikes: [],
-        commentReplies: [],
-      };
-
-      currentPost.postComments = [...currentPost.postComments, newComment];
-
-      await updateSpecifiedPost(currentPost);
-
-      setPost(currentPost);
-      setCommentsState([...currentPost.postComments]);
+      await submitComment(post, writeCommentRef, { setPost, setCommentsState });
     } catch (err) {
       console.log(err);
     }
@@ -205,7 +180,7 @@ const PostComponent = () => {
 
   return post ? (
     <section className="post">
-      <section className="post-section">
+      <section className="post-section" data-your-post={post.uid === user.uid}>
         <div className="flex-post-comment-options-btn">
           {post.uid === user.uid ? (
             <PostCommentOptionsBtn
@@ -239,7 +214,7 @@ const PostComponent = () => {
         </div>
 
         <form
-          className="create-post-form create-post-form--edit"
+          className="post-form post-form--edit"
           data-show-edit-post={editPostState}
           onSubmit={(e) => handleEditPostSubmit(e)}
         >
@@ -250,10 +225,10 @@ const PostComponent = () => {
             </label>
 
             <div className="form-input-typing">
-              <div className="create-post-file-btns-container">
+              <div className="post-form-file-btns-container">
                 <input
                   type="file"
-                  className="create-post-file black-btn"
+                  className="post-form-file black-btn"
                   accept="image/*"
                   htmlFor="the-file"
                   ref={fileRef}
@@ -276,7 +251,7 @@ const PostComponent = () => {
 
               <img
                 src={previewImg}
-                className="create-post-file-preview"
+                className="post-form-file-preview"
                 alt={previewImg ? 'Preview of the mage to be uploaded' : ''}
               />
             </div>
@@ -297,7 +272,7 @@ const PostComponent = () => {
               Write everything you want about it:
             </label>
             <textarea
-              className="form-input-typing create-post-textarea"
+              className="form-input-typing post-form-textarea"
               id="the-text"
               ref={textRef}
               onFocus={handleFocusInput}
@@ -439,46 +414,12 @@ const CommentItem = ({
 
     if (!replyRef.current.value) return null;
 
-    const today = new Date();
-
-    const todayDate = today.getDate();
-    const todayMonth = today.getMonth() + 1;
-    const todayYear = today.getFullYear();
-
     try {
-      const currentPost = post;
-      const { postComments } = currentPost;
-
-      const userData = await getDataOfUser();
-
-      const newReply = {
-        replyId: uuidv4(),
-        replyUser: `${userData.firstName} ${userData.lastName}`,
-        replyUserUid: user.uid,
-        replyDay: todayDate,
-        replyMonth: todayMonth,
-        replyYear: todayYear,
-        replyText: replyRef.current.value,
-        replyLikes: [],
-        replyDislikes: [],
-      };
-
-      const theComment = postComments.find(
-        (comment) => commentId === comment.commentId
-      );
-      const indexOfComment = postComments.indexOf(theComment);
-
-      theComment.commentReplies = [...theComment.commentReplies, newReply];
-
-      setCommentRepliesState(
-        currentPost.postComments[indexOfComment].commentReplies
-      );
-
-      setShowWriteReply(false);
-
-      await updateSpecifiedPost(currentPost);
-
-      setPost(currentPost);
+      await submitReply(post, user, replyRef, commentId, {
+        setPost,
+        setCommentRepliesState,
+        setShowWriteReply,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -611,20 +552,11 @@ const CommentItem = ({
 
       <p className="comment-text">{commentTextState}</p>
 
-      <form
-        className="form-comment"
-        data-show-form-comment={showFormEditComment}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmitEditComment(e);
-        }}
-      >
-        <textarea className="form-comment__textarea" ref={editCommentRef} />
-
-        <button type="submit" className="black-btn form-comment__btn">
-          Submit
-        </button>
-      </form>
+      <FormComment
+        showFormComment={showFormEditComment}
+        handleSubmit={handleSubmitEditComment}
+        propRef={editCommentRef}
+      />
 
       <LikeDislikeComponent
         handleClickLikeFunction={handleClickLikeComment}
@@ -658,19 +590,11 @@ const CommentItem = ({
         </button>
       </div>
 
-      <form
-        className="form-comment"
-        data-show-form-comment={showWriteReply}
-        onSubmit={(e) => {
-          handleSubmitReply(e);
-        }}
-      >
-        <textarea className="form-comment__textarea" ref={replyRef} />
-
-        <button type="submit" className="black-btn form-comment__btn">
-          Submit
-        </button>
-      </form>
+      <FormComment
+        showFormComment={showWriteReply}
+        handleSubmit={handleSubmitReply}
+        propRef={replyRef}
+      />
 
       <ul className="comment-replies">
         {commentRepliesState.map((reply, index) => (
@@ -891,24 +815,11 @@ const ReplyItem = ({
 
       <p className="comment-text">{replyTextState}</p>
 
-      <form
-        className="form-comment"
-        data-show-form-comment={showFormEditReplyState}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmitEditReply();
-        }}
-      >
-        <textarea
-          className="form-comment__textarea"
-          ref={editReplyRef}
-          defaultValue={editReplyRef.current.value}
-        />
-
-        <button type="submit" className="black-btn form-comment__btn">
-          Submit
-        </button>
-      </form>
+      <FormComment
+        showFormComment={showFormEditReplyState}
+        handleSubmit={handleSubmitEditReply}
+        propRef={editReplyRef}
+      />
 
       <LikeDislikeComponent
         handleClickLikeFunction={handleClickLikeReply}

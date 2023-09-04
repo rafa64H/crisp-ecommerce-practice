@@ -1,5 +1,57 @@
 import React from 'react';
-import { updateSpecifiedPost } from './firebaseFunctions';
+import { v4 as uuidv4 } from 'uuid';
+import { getDataOfUser, updateSpecifiedPost } from './firebaseFunctions';
+
+export async function submitReply(
+  post,
+  user,
+  replyRef,
+  commentId,
+  statesAndSetStates
+) {
+  const { setPost, setCommentRepliesState, setShowWriteReply } =
+    statesAndSetStates;
+
+  const today = new Date();
+
+  const todayDate = today.getDate();
+  const todayMonth = today.getMonth() + 1;
+  const todayYear = today.getFullYear();
+
+  const currentPost = post;
+  const { postComments } = currentPost;
+
+  const userData = await getDataOfUser();
+
+  const newReply = {
+    replyId: uuidv4(),
+    replyUser: `${userData.firstName} ${userData.lastName}`,
+    replyUserUid: user.uid,
+    replyDay: todayDate,
+    replyMonth: todayMonth,
+    replyYear: todayYear,
+    replyText: replyRef.current.value,
+    replyLikes: [],
+    replyDislikes: [],
+  };
+
+  const theComment = postComments.find(
+    (comment) => commentId === comment.commentId
+  );
+  const indexOfComment = postComments.indexOf(theComment);
+
+  theComment.commentReplies = [...theComment.commentReplies, newReply];
+
+  setCommentRepliesState(
+    currentPost.postComments[indexOfComment].commentReplies
+  );
+
+  setShowWriteReply(false);
+
+  await updateSpecifiedPost(currentPost);
+
+  setPost(currentPost);
+}
 
 export async function editReply(
   currentPost,

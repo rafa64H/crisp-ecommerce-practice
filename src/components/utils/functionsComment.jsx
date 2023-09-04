@@ -1,5 +1,60 @@
 import React from 'react';
-import { updateSpecifiedPost } from './firebaseFunctions';
+import { v4 as uuidv4 } from 'uuid';
+import { getDataOfUser, updateSpecifiedPost } from './firebaseFunctions';
+
+export async function submitComment(post, writeCommentRef, statesAndSetStates) {
+  const { setPost, setCommentsState } = statesAndSetStates;
+
+  const today = new Date();
+
+  const todayDate = today.getDate();
+  const todayMonth = today.getMonth() + 1;
+  const todayYear = today.getFullYear();
+
+  const currentPost = post;
+
+  const userData = await getDataOfUser();
+
+  const newComment = {
+    commentId: uuidv4(),
+    commentUser: `${userData.firstName} ${userData.lastName}`,
+    commentUserUid: userData.uid,
+    commentDay: todayDate,
+    commentMonth: todayMonth,
+    commentYear: todayYear,
+    commentText: writeCommentRef.current.value,
+    commentLikes: [],
+    commentDislikes: [],
+    commentReplies: [],
+  };
+
+  currentPost.postComments = [...currentPost.postComments, newComment];
+
+  await updateSpecifiedPost(currentPost);
+
+  setPost(currentPost);
+  setCommentsState([...currentPost.postComments]);
+}
+
+export async function editComment(
+  currentPost,
+  theComment,
+  editCommentRef,
+  statesAndSetStates
+) {
+  const { setPost, setCommentTextState, setShowFormEditComment } =
+    statesAndSetStates;
+
+  if (theComment.commentText === editCommentRef.current.value) return null;
+  if (editCommentRef.current.value === '') return null;
+
+  theComment.commentText = editCommentRef.current.value;
+
+  setPost(currentPost);
+  setShowFormEditComment((prevValue) => !prevValue);
+  await updateSpecifiedPost(currentPost);
+  setCommentTextState(editCommentRef.current.value);
+}
 
 export async function removeComment(post, commentId) {
   const currentPost = post;
@@ -106,24 +161,4 @@ export async function dislikeComment(
   await updateSpecifiedPost(currentPost);
 
   setPost(currentPost);
-}
-
-export async function editComment(
-  currentPost,
-  theComment,
-  editCommentRef,
-  statesAndSetStates
-) {
-  const { setPost, setCommentTextState, setShowFormEditComment } =
-    statesAndSetStates;
-
-  if (theComment.commentText === editCommentRef.current.value) return null;
-  if (editCommentRef.current.value === '') return null;
-
-  theComment.commentText = editCommentRef.current.value;
-
-  setPost(currentPost);
-  setShowFormEditComment((prevValue) => !prevValue);
-  await updateSpecifiedPost(currentPost);
-  setCommentTextState(editCommentRef.current.value);
 }
