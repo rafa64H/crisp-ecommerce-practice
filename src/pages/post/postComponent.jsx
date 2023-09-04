@@ -29,6 +29,7 @@ import {
 } from '../../components/utils/functionsComment';
 import {
   dislikieReply,
+  editReply,
   likeReply,
   removeReply,
 } from '../../components/utils/functionsReply';
@@ -742,8 +743,12 @@ const ReplyItem = ({
   const [replyDislikesState, setReplyDislikesState] = useState([
     ...replyDislikes,
   ]);
+  const [replyTextState, setReplyTextState] = useState(replyText);
 
   const [showReplyOptionsState, setShowReplyOptionsState] = useState(false);
+  const [showFormEditReplyState, setShowFormEditReply] = useState(false);
+
+  const editReplyRef = useRef('');
 
   // Like reply
   async function handleClickLikeReply() {
@@ -811,6 +816,34 @@ const ReplyItem = ({
     }
   }
 
+  function handleShowEditReply(e) {
+    setShowFormEditReply((prevValue) => !prevValue);
+    setShowReplyOptionsState((prevValue) => !prevValue);
+    editReplyRef.current.value = replyText;
+  }
+
+  async function handleSubmitEditReply() {
+    const currentPost = post;
+
+    const theComment = currentPost.postComments.find(
+      (comment) => comment.commentId === commentId
+    );
+
+    const theReply = theComment.commentReplies.find(
+      (replyFromTheComment) => replyFromTheComment.replyId === replyId
+    );
+
+    try {
+      await editReply(currentPost, theComment, theReply, editReplyRef, {
+        setPost,
+        setShowFormEditReply,
+        setReplyTextState,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <li
       className="comment-reply"
@@ -820,21 +853,35 @@ const ReplyItem = ({
       key={uuidv4()}
     >
       {replyUserUid === user.uid ? (
-        <PostCommentOptionsBtn
-          onClickBtnFunction={() =>
-            setShowReplyOptionsState((prevValue) => !prevValue)
-          }
-        />
+        <div className="flex-post-comment-options-btn">
+          <PostCommentOptionsBtn
+            onClickBtnFunction={() =>
+              setShowReplyOptionsState((prevValue) => !prevValue)
+            }
+          />
+
+          <PostCommentOptions
+            showPostCommentOptions={showReplyOptionsState}
+            handleClickEdit={handleShowEditReply}
+            handleClickRemove={handleRemoveReply}
+            editText="Edit reply"
+            removeText="Remove reply"
+          />
+
+          <button
+            type="button"
+            className="transparent-btn post-comment-options-goback"
+            data-show-edit-post={showFormEditReplyState}
+            onClick={(e) => {
+              e.preventDefault();
+              setShowFormEditReply((prevValue) => !prevValue);
+            }}
+          >
+            Go back
+          </button>
+        </div>
       ) : null}
 
-      {replyUserUid === user.uid ? (
-        <PostCommentOptions
-          showPostCommentOptions={showReplyOptionsState}
-          handleClickRemove={handleRemoveReply}
-          editText="Edit reply"
-          removeText="Remove reply"
-        />
-      ) : null}
       <div className="comment-user">
         <i className="fa-solid fa-user comment-user__icon" />
         <p className="comment-user__paragraph">
@@ -842,7 +889,26 @@ const ReplyItem = ({
         </p>
       </div>
 
-      <p className="comment-text">{replyText}</p>
+      <p className="comment-text">{replyTextState}</p>
+
+      <form
+        className="form-comment"
+        data-show-form-comment={showFormEditReplyState}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmitEditReply();
+        }}
+      >
+        <textarea
+          className="form-comment__textarea"
+          ref={editReplyRef}
+          defaultValue={editReplyRef.current.value}
+        />
+
+        <button type="submit" className="black-btn form-comment__btn">
+          Submit
+        </button>
+      </form>
 
       <LikeDislikeComponent
         handleClickLikeFunction={handleClickLikeReply}

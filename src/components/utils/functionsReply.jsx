@@ -1,6 +1,27 @@
 import React from 'react';
 import { updateSpecifiedPost } from './firebaseFunctions';
 
+export async function editReply(
+  currentPost,
+  theComment,
+  theReply,
+  editReplyRef,
+  statesAndSetStates
+) {
+  const { setPost, setShowFormEditReply, setReplyTextState } =
+    statesAndSetStates;
+
+  if (editReplyRef.current.value === theReply.replyText) return null;
+  if (!editReplyRef.current.value) return null;
+
+  theReply.replyText = editReplyRef.current.value;
+
+  setPost(currentPost);
+  setShowFormEditReply((prevValue) => !prevValue);
+  await updateSpecifiedPost(currentPost);
+  setReplyTextState(editReplyRef.current.value);
+}
+
 export async function removeReply(post, commentId, replyId) {
   const currentPost = post;
 
