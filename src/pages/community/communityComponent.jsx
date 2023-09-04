@@ -293,6 +293,10 @@ const CommunityPostListItem = ({
     }
   }
 
+  async function handleClickEditLink(e) {
+    window.location.href = `./post.html?postId=${id}&editPostLinked=${true}`;
+  }
+
   return (
     <li className="community-list-li">
       <a
@@ -312,6 +316,7 @@ const CommunityPostListItem = ({
         {uid === user.uid ? (
           <PostCommentOptions
             showPostCommentOptions={showPostOptionsState}
+            handleClickEdit={handleClickEditLink}
             handleClickRemove={handleClickRemovePost}
             editText="Edit post"
             removeText="Remove post"

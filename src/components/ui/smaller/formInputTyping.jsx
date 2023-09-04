@@ -9,6 +9,7 @@ const FormInputTyping = ({
   theRef,
   onFocusFunction,
   placeholderProp,
+  defaultValueProp,
 }) => {
   if (required) {
     return (
@@ -20,6 +21,7 @@ const FormInputTyping = ({
           </span>
         </label>
         <input
+          defaultValue={defaultValueProp}
           type={type}
           disabled={loading}
           id={id}

@@ -38,6 +38,10 @@ import {
 import FormComment from '../../components/ui/smaller/formComment';
 
 const PostComponent = () => {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('postId');
+  const editPostLinked = !!params.get('editPostLinked');
+
   const [post, setPost] = useState();
   const [user, setUser] = useState();
   const [likesPostState, setLikesPostState] = useState([]);
@@ -45,7 +49,7 @@ const PostComponent = () => {
   const [showPostOptionsState, setShowPostOptionsState] = useState(false);
   const [commentsState, setCommentsState] = useState([]);
 
-  const [editPostState, setEditPostState] = useState(false);
+  const [editPostState, setEditPostState] = useState(false || editPostLinked);
   const [previewImg, setPreviewImg] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const [alertMessage2, setAlertMessage2] = useState('');
@@ -55,8 +59,6 @@ const PostComponent = () => {
   const textRef = useRef();
 
   const writeCommentRef = useRef('');
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('postId');
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
@@ -156,6 +158,7 @@ const PostComponent = () => {
       textRef.current.value = post.postText;
       setEditPostState((prevValue) => !prevValue);
       setShowPostOptionsState((prevValue) => !prevValue);
+      setPreviewImg(post.postImg);
     } catch (err) {
       console.log(err);
     }
@@ -265,6 +268,7 @@ const PostComponent = () => {
             theRef={titleRef}
             placeholderProp="Write your title here"
             onFocusFunction={handleFocusInput}
+            defaultValueProp={post.postTitle}
           />
 
           <div className="form-input-container">
@@ -276,6 +280,7 @@ const PostComponent = () => {
               id="the-text"
               ref={textRef}
               onFocus={handleFocusInput}
+              defaultValue={post.postText}
             />
           </div>
 
