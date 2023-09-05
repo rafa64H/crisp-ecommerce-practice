@@ -4,6 +4,7 @@ import {
   createPost,
   getPostsOfUser,
 } from '../../components/utils/firebaseFunctions';
+import PostForm from '../../components/ui/postForm';
 
 const CreatePostComponent = () => {
   const [loading, setLoading] = useState(false);
@@ -91,73 +92,18 @@ const CreatePostComponent = () => {
   return (
     <section className="create-post">
       <h1 className="create-post__title">Create post</h1>
-      <form className="post-form" onSubmit={(e) => handleSubmit(e)}>
-        <aside aria-live="assertive">{alertMessage}</aside>
-        <div className="form-input-container form-input-container--file">
-          <label className="form-input-label" htmlFor="the-file">
-            Submit image
-          </label>
 
-          <div className="form-input-typing">
-            <div className="post-form-file-btns-container">
-              <input
-                type="file"
-                className="post-form-file black-btn"
-                accept="image/*"
-                htmlFor="the-file"
-                ref={fileRef}
-                onChange={(e) => handleUploadFile(e)}
-              />
-
-              {previewImg ? (
-                <button
-                  type="button"
-                  aria-label="Undo uploaded image"
-                  className="transparent-btn undo-uploaded-file"
-                  onClick={(e) => handleUndoImg(e)}
-                >
-                  <i className="fa-solid fa-xmark" />
-                </button>
-              ) : (
-                ''
-              )}
-            </div>
-
-            <img
-              src={previewImg}
-              className="post-form-file-preview"
-              alt={previewImg ? 'Preview of the mage to be uploaded' : ''}
-            />
-          </div>
-        </div>
-
-        <FormInputTyping
-          required
-          name="Title"
-          type="text"
-          id="title"
-          theRef={titleRef}
-          placeholderProp="Write your title here"
-          onFocusFunction={handleFocusInput}
-        />
-
-        <div className="form-input-container">
-          <label className="form-input-label" htmlFor="the-text">
-            Write everything you want about it:
-          </label>
-          <textarea
-            className="form-input-typing post-form-textarea"
-            id="the-text"
-            ref={textRef}
-          />
-        </div>
-
-        <button type="submit" className="black-btn" disabled={loading}>
-          <i className="fa-solid fa-sticky-note" />
-          Post
-        </button>
-        <aside aria-live="assertive">{alertMessage2}</aside>
-      </form>
+      <PostForm
+        showEditPostAttribute
+        handleSubmitPostForm={handleSubmit}
+        alertMessageState={alertMessage}
+        imgRefProp={fileRef}
+        previewImgState={previewImg}
+        handleUploadImage={handleUploadFile}
+        handleUndoImgProp={handleUndoImg}
+        handleFocusInput={handleFocusInput}
+        alertMessage2State={alertMessage2}
+      />
     </section>
   );
 };

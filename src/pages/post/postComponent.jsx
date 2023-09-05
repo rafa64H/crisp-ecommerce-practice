@@ -32,10 +32,11 @@ import {
   dislikieReply,
   editReply,
   likeReply,
-  removeReply,
+  createObjectRemovedReply,
   submitReply,
 } from '../../components/utils/functionsReply';
 import FormComment from '../../components/ui/smaller/formComment';
+import PostForm from '../../components/ui/postForm';
 
 const PostComponent = () => {
   const params = new URLSearchParams(window.location.search);
@@ -86,7 +87,11 @@ const PostComponent = () => {
     if (writeCommentRef.current.value === '') return null;
 
     try {
-      await submitComment(post, writeCommentRef, { setPost, setCommentsState });
+      const currentPost = post;
+      await submitComment(currentPost, writeCommentRef, {
+        setPost,
+        setCommentsState,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -126,7 +131,8 @@ const PostComponent = () => {
     e.preventDefault();
 
     try {
-      await removePost(post);
+      const currentPost = post;
+      await removePost(currentPost);
 
       window.location.href = './community.html';
     } catch (err) {
@@ -186,21 +192,20 @@ const PostComponent = () => {
       <section className="post-section" data-your-post={post.uid === user.uid}>
         <div className="flex-post-comment-options-btn">
           {post.uid === user.uid ? (
-            <PostCommentOptionsBtn
-              onClickBtnFunction={() =>
-                setShowPostOptionsState((prevValue) => !prevValue)
-              }
-            />
-          ) : null}
-
-          {post.uid === user.uid ? (
-            <PostCommentOptions
-              showPostCommentOptions={showPostOptionsState}
-              handleClickEdit={handleClickShowEditPost}
-              handleClickRemove={handleClickRemovePost}
-              editText="Edit post"
-              removeText="Remove post"
-            />
+            <>
+              <PostCommentOptionsBtn
+                onClickBtnFunction={() =>
+                  setShowPostOptionsState((prevValue) => !prevValue)
+                }
+              />
+              <PostCommentOptions
+                showPostCommentOptions={showPostOptionsState}
+                handleClickEdit={handleClickShowEditPost}
+                handleClickRemove={handleClickRemovePost}
+                editText="Edit post"
+                removeText="Remove post"
+              />
+            </>
           ) : null}
 
           <button
@@ -216,80 +221,21 @@ const PostComponent = () => {
           </button>
         </div>
 
-        <form
-          className="post-form post-form--edit"
-          data-show-edit-post={editPostState}
-          onSubmit={(e) => handleEditPostSubmit(e)}
-        >
-          <aside aria-live="assertive">{alertMessage}</aside>
-          <div className="form-input-container form-input-container--file">
-            <label className="form-input-label" htmlFor="the-file">
-              Submit image
-            </label>
-
-            <div className="form-input-typing">
-              <div className="post-form-file-btns-container">
-                <input
-                  type="file"
-                  className="post-form-file black-btn"
-                  accept="image/*"
-                  htmlFor="the-file"
-                  ref={fileRef}
-                  onChange={(e) => handleUploadFile(e)}
-                />
-
-                {previewImg ? (
-                  <button
-                    type="button"
-                    aria-label="Undo uploaded image"
-                    className="transparent-btn undo-uploaded-file"
-                    onClick={(e) => handleUndoImg(e)}
-                  >
-                    <i className="fa-solid fa-xmark" />
-                  </button>
-                ) : (
-                  ''
-                )}
-              </div>
-
-              <img
-                src={previewImg}
-                className="post-form-file-preview"
-                alt={previewImg ? 'Preview of the mage to be uploaded' : ''}
-              />
-            </div>
-          </div>
-
-          <FormInputTyping
-            required
-            name="Title"
-            type="text"
-            id="title"
-            theRef={titleRef}
-            placeholderProp="Write your title here"
-            onFocusFunction={handleFocusInput}
-            defaultValueProp={post.postTitle}
-          />
-
-          <div className="form-input-container">
-            <label className="form-input-label" htmlFor="the-text">
-              Write everything you want about it:
-            </label>
-            <textarea
-              className="form-input-typing post-form-textarea"
-              id="the-text"
-              ref={textRef}
-              onFocus={handleFocusInput}
-              defaultValue={post.postText}
-            />
-          </div>
-
-          <button type="submit" className="black-btn">
-            <i className="fa-solid fa-sticky-note" />
-            Post
-          </button>
-          <aside aria-live="assertive">{alertMessage2}</aside>
-        </form>
+        <PostForm
+          showEditPostAttribute={editPostState}
+          handleSubmitPostForm={handleEditPostSubmit}
+          imgRefProp={fileRef}
+          handleUploadImage={handleUploadFile}
+          previewImgState={previewImg}
+          handleUndoImgProp={handleUndoImg}
+          titleRefProp={titleRef}
+          handleFocusInput={handleFocusInput}
+          defaultValueTitle={post.postTitle}
+          defaultValueTextArea={post.postText}
+          textRefProp={textRef}
+          alertMessageState={alertMessage}
+          alertMessage2State={alertMessage2}
+        />
 
         {!editPostState ? (
           <>
@@ -353,16 +299,7 @@ const PostComponent = () => {
           {commentsState.map((comment) => (
             <CommentItem
               key={uuidv4()}
-              commentDay={comment.commentDay}
-              commentMonth={comment.commentMonth}
-              commentYear={comment.commentYear}
-              commentId={comment.commentId}
-              commentUser={comment.commentUser}
-              commentUserUid={comment.commentUserUid}
-              commentText={comment.commentText}
-              commentLikes={comment.commentLikes}
-              commentDislikes={comment.commentDislikes}
-              commentReplies={comment.commentReplies}
+              commentObj={comment}
               post={post}
               setPost={setPost}
               setCommentsState={setCommentsState}
@@ -379,22 +316,20 @@ const PostComponent = () => {
 
 export default PostComponent;
 
-const CommentItem = ({
-  commentUser,
-  commentId,
-  commentUserUid,
-  commentDay,
-  commentMonth,
-  commentYear,
-  commentText,
-  commentLikes,
-  commentDislikes,
-  commentReplies,
-  post,
-  setPost,
-  setCommentsState,
-  user,
-}) => {
+const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
+  const {
+    commentUser,
+    commentId,
+    commentUserUid,
+    commentDay,
+    commentMonth,
+    commentYear,
+    commentText,
+    commentLikes,
+    commentDislikes,
+    commentReplies,
+  } = commentObj;
+
   const [showWriteReply, setShowWriteReply] = useState(false);
   const [showFormEditComment, setShowFormEditComment] = useState(false);
   const [commentTextState, setCommentTextState] = useState(commentText);
@@ -420,7 +355,8 @@ const CommentItem = ({
     if (!replyRef.current.value) return null;
 
     try {
-      await submitReply(post, user, replyRef, commentId, {
+      const currentPost = post;
+      await submitReply(currentPost, user, replyRef, commentId, {
         setPost,
         setCommentRepliesState,
         setShowWriteReply,
@@ -434,13 +370,8 @@ const CommentItem = ({
   async function handleClickLikeComment() {
     try {
       const currentPost = post;
-      const { postComments } = currentPost;
 
-      const theComment = postComments.find(
-        (comment) => comment.commentId === commentId
-      );
-
-      await likeComment(user, currentPost, theComment, {
+      await likeComment(user, currentPost, commentId, {
         setPost,
         setCommentLikesState,
         setCommentDislikesState,
@@ -454,13 +385,8 @@ const CommentItem = ({
   async function handleClickDislikeComment() {
     try {
       const currentPost = post;
-      const { postComments } = currentPost;
 
-      const theComment = postComments.find(
-        (comment) => comment.commentId === commentId
-      );
-
-      await dislikeComment(user, currentPost, theComment, {
+      await dislikeComment(user, currentPost, commentId, {
         setPost,
         setCommentLikesState,
         setCommentDislikesState,
@@ -471,7 +397,11 @@ const CommentItem = ({
   }
   async function handleRemoveComment(e) {
     try {
-      const postAfterRemovingComment = await removeComment(post, commentId);
+      const currentPost = post;
+      const postAfterRemovingComment = await removeComment(
+        currentPost,
+        commentId
+      );
       setCommentsState([...postAfterRemovingComment.postComments]);
       setPost(postAfterRemovingComment);
     } catch (err) {
@@ -498,13 +428,9 @@ const CommentItem = ({
 
   async function handleSubmitEditComment(e) {
     const currentPost = post;
-    const { postComments } = currentPost;
-    const theComment = postComments.find(
-      (comment) => comment.commentId === commentId
-    );
 
     try {
-      await editComment(currentPost, theComment, editCommentRef, {
+      await editComment(currentPost, commentId, editCommentRef, {
         setPost,
         setCommentTextState,
         setShowFormEditComment,
@@ -518,21 +444,21 @@ const CommentItem = ({
     <li className="comment">
       <div className="flex-post-comment-options-btn">
         {commentUserUid === user.uid ? (
-          <PostCommentOptionsBtn
-            onClickBtnFunction={() =>
-              setShowCommentOptionsState((prevValue) => !prevValue)
-            }
-          />
-        ) : null}
+          <>
+            <PostCommentOptionsBtn
+              onClickBtnFunction={() =>
+                setShowCommentOptionsState((prevValue) => !prevValue)
+              }
+            />
 
-        {commentUserUid === user.uid ? (
-          <PostCommentOptions
-            showPostCommentOptions={showCommentOptionsState}
-            handleClickEdit={handleShowEditComment}
-            handleClickRemove={handleRemoveComment}
-            editText="Edit comment"
-            removeText="Remove comment"
-          />
+            <PostCommentOptions
+              showPostCommentOptions={showCommentOptionsState}
+              handleClickEdit={handleShowEditComment}
+              handleClickRemove={handleRemoveComment}
+              editText="Edit comment"
+              removeText="Remove comment"
+            />
+          </>
         ) : null}
 
         <button
@@ -606,15 +532,7 @@ const CommentItem = ({
           <ReplyItem
             key={uuidv4()}
             commentId={commentId}
-            replyUser={reply.replyUser}
-            replyId={reply.replyId}
-            replyUserUid={reply.replyUserUid}
-            replyDay={reply.replyDay}
-            replyMonth={reply.replyMonth}
-            replyYear={reply.replyYear}
-            replyText={reply.replyText}
-            replyLikes={reply.replyLikes}
-            replyDislikes={reply.replyDislikes}
+            reply={reply}
             showReplies={showReplies}
             setShowReplies={setShowReplies}
             index={index}
@@ -651,15 +569,7 @@ const CommentItem = ({
 
 const ReplyItem = ({
   commentId,
-  replyUser,
-  replyId,
-  replyUserUid,
-  replyDay,
-  replyMonth,
-  replyYear,
-  replyText,
-  replyLikes,
-  replyDislikes,
+  reply,
   showReplies,
   setShowReplies,
   index,
@@ -668,6 +578,18 @@ const ReplyItem = ({
   setCommentRepliesState,
   user,
 }) => {
+  const {
+    replyUser,
+    replyId,
+    replyUserUid,
+    replyDay,
+    replyMonth,
+    replyYear,
+    replyText,
+    replyLikes,
+    replyDislikes,
+  } = reply;
+
   const [replyLikesState, setReplyLikesState] = useState([...replyLikes]);
   const [replyDislikesState, setReplyDislikesState] = useState([
     ...replyDislikes,
@@ -683,16 +605,8 @@ const ReplyItem = ({
   async function handleClickLikeReply() {
     const currentPost = post;
 
-    const theComment = currentPost.postComments.find(
-      (comment) => comment.commentId === commentId
-    );
-
-    const theReply = theComment.commentReplies.find(
-      (replyFromTheComment) => replyFromTheComment.replyId === replyId
-    );
-
     try {
-      await likeReply(user, currentPost, theReply, {
+      await likeReply(user, currentPost, commentId, {
         setPost,
         setReplyLikesState,
         setReplyDislikesState,
@@ -706,16 +620,8 @@ const ReplyItem = ({
   async function handleClickDislikeReply() {
     const currentPost = post;
 
-    const theComment = currentPost.postComments.find(
-      (comment) => comment.commentId === commentId
-    );
-
-    const theReply = theComment.commentReplies.find(
-      (replyFromTheComment) => replyFromTheComment.replyId === replyId
-    );
-
     try {
-      await dislikieReply(user, currentPost, theReply, {
+      await dislikieReply(user, currentPost, commentId, {
         setPost,
         setReplyLikesState,
         setReplyDislikesState,
@@ -729,9 +635,10 @@ const ReplyItem = ({
     try {
       e.preventDefault();
 
-      const objAfterRemovingReply = await removeReply(post, commentId, replyId);
+      const commentRepliesObjAfterRemovingReply =
+        await createObjectRemovedReply(post, commentId, replyId);
 
-      const { currentPost, theComment } = objAfterRemovingReply;
+      const { currentPost, theComment } = commentRepliesObjAfterRemovingReply;
 
       const removeReplyFromShowRepliesState = theComment.commentReplies.map(
         (replyItem, indexReply) => indexReply
@@ -754,16 +661,8 @@ const ReplyItem = ({
   async function handleSubmitEditReply() {
     const currentPost = post;
 
-    const theComment = currentPost.postComments.find(
-      (comment) => comment.commentId === commentId
-    );
-
-    const theReply = theComment.commentReplies.find(
-      (replyFromTheComment) => replyFromTheComment.replyId === replyId
-    );
-
     try {
-      await editReply(currentPost, theComment, theReply, editReplyRef, {
+      await editReply(currentPost, commentId, editReplyRef, {
         setPost,
         setShowFormEditReply,
         setReplyTextState,

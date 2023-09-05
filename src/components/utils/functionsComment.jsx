@@ -2,7 +2,11 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { getDataOfUser, updateSpecifiedPost } from './firebaseFunctions';
 
-export async function submitComment(post, writeCommentRef, statesAndSetStates) {
+export async function submitComment(
+  currentPost,
+  writeCommentRef,
+  statesAndSetStates
+) {
   const { setPost, setCommentsState } = statesAndSetStates;
 
   const today = new Date();
@@ -10,8 +14,6 @@ export async function submitComment(post, writeCommentRef, statesAndSetStates) {
   const todayDate = today.getDate();
   const todayMonth = today.getMonth() + 1;
   const todayYear = today.getFullYear();
-
-  const currentPost = post;
 
   const userData = await getDataOfUser();
 
@@ -38,10 +40,15 @@ export async function submitComment(post, writeCommentRef, statesAndSetStates) {
 
 export async function editComment(
   currentPost,
-  theComment,
+  commentId,
   editCommentRef,
   statesAndSetStates
 ) {
+  const { postComments } = currentPost;
+  const theComment = postComments.find(
+    (comment) => comment.commentId === commentId
+  );
+
   const { setPost, setCommentTextState, setShowFormEditComment } =
     statesAndSetStates;
 
@@ -56,9 +63,7 @@ export async function editComment(
   setCommentTextState(editCommentRef.current.value);
 }
 
-export async function removeComment(post, commentId) {
-  const currentPost = post;
-
+export async function removeComment(currentPost, commentId) {
   const { postComments } = currentPost;
 
   const filteredComments = postComments.filter(
@@ -75,9 +80,15 @@ export async function removeComment(post, commentId) {
 export async function likeComment(
   user,
   currentPost,
-  theComment,
+  commentId,
   statesAndSetStates
 ) {
+  const { postComments } = currentPost;
+
+  const theComment = postComments.find(
+    (comment) => comment.commentId === commentId
+  );
+
   const { setPost, setCommentLikesState, setCommentDislikesState } =
     statesAndSetStates;
 
@@ -121,9 +132,15 @@ export async function likeComment(
 export async function dislikeComment(
   user,
   currentPost,
-  theComment,
+  commentId,
   statesAndSetStates
 ) {
+  const { postComments } = currentPost;
+
+  const theComment = postComments.find(
+    (comment) => comment.commentId === commentId
+  );
+
   const { setPost, setCommentLikesState, setCommentDislikesState } =
     statesAndSetStates;
 

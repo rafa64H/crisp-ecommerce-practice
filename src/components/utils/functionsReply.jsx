@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getDataOfUser, updateSpecifiedPost } from './firebaseFunctions';
 
 export async function submitReply(
-  post,
+  currentPost,
   user,
   replyRef,
   commentId,
@@ -18,7 +18,6 @@ export async function submitReply(
   const todayMonth = today.getMonth() + 1;
   const todayYear = today.getFullYear();
 
-  const currentPost = post;
   const { postComments } = currentPost;
 
   const userData = await getDataOfUser();
@@ -55,11 +54,18 @@ export async function submitReply(
 
 export async function editReply(
   currentPost,
-  theComment,
-  theReply,
+  commentId,
   editReplyRef,
   statesAndSetStates
 ) {
+  const theComment = currentPost.postComments.find(
+    (comment) => comment.commentId === commentId
+  );
+
+  const theReply = theComment.commentReplies.find(
+    (replyFromTheComment) => replyFromTheComment.replyId === replyId
+  );
+
   const { setPost, setShowFormEditReply, setReplyTextState } =
     statesAndSetStates;
 
@@ -74,7 +80,7 @@ export async function editReply(
   setReplyTextState(editReplyRef.current.value);
 }
 
-export async function removeReply(post, commentId, replyId) {
+export async function createObjectRemovedReply(post, commentId, replyId) {
   const currentPost = post;
 
   const theComment = currentPost.postComments.find(
@@ -92,7 +98,15 @@ export async function removeReply(post, commentId, replyId) {
   return { currentPost, theComment };
 }
 
-export async function likeReply(user, currentPost, theReply, statesSetStates) {
+export async function likeReply(user, currentPost, commentId, statesSetStates) {
+  const theComment = currentPost.postComments.find(
+    (comment) => comment.commentId === commentId
+  );
+
+  const theReply = theComment.commentReplies.find(
+    (replyFromTheComment) => replyFromTheComment.replyId === replyId
+  );
+
   const { setPost, setReplyLikesState, setReplyDislikesState } =
     statesSetStates;
 
@@ -137,9 +151,17 @@ export async function likeReply(user, currentPost, theReply, statesSetStates) {
 export async function dislikieReply(
   user,
   currentPost,
-  theReply,
+  commentId,
   statesSetStates
 ) {
+  const theComment = currentPost.postComments.find(
+    (comment) => comment.commentId === commentId
+  );
+
+  const theReply = theComment.commentReplies.find(
+    (replyFromTheComment) => replyFromTheComment.replyId === replyId
+  );
+
   const { setPost, setReplyLikesState, setReplyDislikesState } =
     statesSetStates;
 

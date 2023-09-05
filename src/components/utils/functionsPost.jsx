@@ -75,16 +75,16 @@ export async function editPost(
   setEditPostState((prevValue) => !prevValue);
 }
 
-export async function removePost(post) {
+export async function removePost(currentPost) {
   const allPostsFromFirestore = await getPostsOfUser();
 
   const filteredPosts = allPostsFromFirestore.filter(
-    (postFromFirestore) => postFromFirestore.postId !== post.postId
+    (postFromFirestore) => postFromFirestore.postId !== currentPost.postId
   );
 
-  if (post.postImg) {
-    console.log(post.postImgRef);
-    const imgRef = ref(storage, post.postImgRef);
+  if (currentPost.postImg) {
+    console.log(currentPost.postImgRef);
+    const imgRef = ref(storage, currentPost.postImgRef);
 
     deleteObject(imgRef)
       .then(() => {

@@ -14,7 +14,11 @@ import {
   PostCommentOptionsBtn,
   PostCommentOptions,
 } from '../../components/ui/smaller/postCommentOptions';
-import { removePost } from '../../components/utils/functionsPost';
+import {
+  dislikePost,
+  likePost,
+  removePost,
+} from '../../components/utils/functionsPost';
 
 const CommunityComponent = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -200,38 +204,10 @@ const CommunityPostListItem = ({
     try {
       const currentPost = post;
 
-      const alreadyLikedPost = currentPost.likes.some(
-        (likeUid) => likeUid === user.uid
-      );
-
-      const alreadyDislikedPost = currentPost.dislikes.some(
-        (dislikeUid) => dislikeUid === user.uid
-      );
-
-      if (alreadyLikedPost) {
-        const indexOfLikeUser = currentPost.likes.indexOf(user.uid);
-
-        currentPost.likes.splice(indexOfLikeUser, 1);
-
-        setLikesPostState([...currentPost.likes]);
-
-        await updateSpecifiedPost(currentPost);
-
-        return null;
-      }
-
-      if (alreadyDislikedPost) {
-        const indexOfDislikeUser = currentPost.dislikes.indexOf(user.uid);
-
-        currentPost.dislikes.splice(indexOfDislikeUser, 1);
-        setDislikesPostState(currentPost.dislikes);
-      }
-
-      currentPost.likes.push(user.uid);
-
-      setLikesPostState([...currentPost.likes]);
-
-      await updateSpecifiedPost(currentPost);
+      await likePost(currentPost, user, {
+        setLikesPostState,
+        setDislikesPostState,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -244,39 +220,10 @@ const CommunityPostListItem = ({
     try {
       const currentPost = post;
 
-      const alreadyLikedPost = currentPost.likes.some(
-        (likeUid) => likeUid === user.uid
-      );
-
-      const alreadyDislikedPost = currentPost.dislikes.some(
-        (dislikeUid) => dislikeUid === user.uid
-      );
-
-      if (alreadyDislikedPost) {
-        const indexOfDislikeUser = currentPost.dislikes.indexOf(user.uid);
-
-        currentPost.dislikes.splice(indexOfDislikeUser, 1);
-
-        setDislikesPostState([...currentPost.dislikes]);
-
-        await updateSpecifiedPost(currentPost);
-
-        return null;
-      }
-
-      if (alreadyLikedPost) {
-        const indexOfLikeUser = currentPost.likes.indexOf(user.uid);
-
-        currentPost.likes.splice(indexOfLikeUser, 1);
-
-        setLikesPostState([...currentPost.likes]);
-      }
-
-      currentPost.dislikes.push(user.uid);
-
-      setDislikesPostState([...currentPost.dislikes]);
-
-      await updateSpecifiedPost(currentPost);
+      await dislikePost(currentPost, user, {
+        setLikesPostState,
+        setDislikesPostState,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -306,21 +253,21 @@ const CommunityPostListItem = ({
         data-your-post={uid === user.uid}
       >
         {uid === user.uid ? (
-          <PostCommentOptionsBtn
-            onClickBtnFunction={() =>
-              setShowPostOptionsState((prevValue) => !prevValue)
-            }
-          />
-        ) : null}
+          <>
+            <PostCommentOptionsBtn
+              onClickBtnFunction={() =>
+                setShowPostOptionsState((prevValue) => !prevValue)
+              }
+            />
 
-        {uid === user.uid ? (
-          <PostCommentOptions
-            showPostCommentOptions={showPostOptionsState}
-            handleClickEdit={handleClickEditLink}
-            handleClickRemove={handleClickRemovePost}
-            editText="Edit post"
-            removeText="Remove post"
-          />
+            <PostCommentOptions
+              showPostCommentOptions={showPostOptionsState}
+              handleClickEdit={handleClickEditLink}
+              handleClickRemove={handleClickRemovePost}
+              editText="Edit post"
+              removeText="Remove post"
+            />
+          </>
         ) : null}
 
         <div
