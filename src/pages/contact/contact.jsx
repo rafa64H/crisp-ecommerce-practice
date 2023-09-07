@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <SectionTwo
       textTitleSectionTwo="Contact us"
       textParaSectionTwo="You can contact us to ask any question to us"
-      classesSection2="section2-contact-us section2-background-center"
+      classesSection2="section2-shop-contact-us section2-background-center"
     />
 
     <ContactPage />

@@ -40,6 +40,7 @@ const Footer = () => {
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="ABOUT US"
+            footerLink="./contact.html"
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}

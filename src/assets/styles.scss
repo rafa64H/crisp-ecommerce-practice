@@ -182,6 +182,73 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
+.search-clothes-list {
+  position: absolute;
+  right: 5%;
+
+  width: min(95%, 30em);
+  height: 10em;
+  overflow-y: scroll;
+  background-color: white;
+
+  transform: translateY(14%) scaleY(0);
+  transform-origin: 50% 0;
+  transition: all 300ms;
+
+  z-index: 1;
+
+  &-close-btn {
+    padding: 0.4em 0.75em;
+  }
+
+  &__input {
+    width: 95% !important;
+    margin: 0.5em;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+
+    background-color: white;
+    margin: 0.5em;
+
+    transition: all 200ms;
+
+    &:hover {
+      background-color: $second-color;
+
+      .search-clothes-list-item-text__paragraph {
+        color: white;
+      }
+    }
+
+    &__img {
+      width: 5.5rem;
+    }
+
+    &-text {
+      transition: all 200ms;
+    }
+  }
+}
+.search-clothes-list--desktop {
+  right: unset;
+
+  transform: translateX(55%) translateY(70%) scaleY(0);
+
+  &[data-show-clothes-list='true'] {
+    transform: translateX(55%) translateY(70%) scaleY(1);
+  }
+
+  .search-clothes-list-close-btn {
+    display: block;
+  }
+}
+[data-show-clothes-list='true'] {
+  transform: translateY(14%) scaleY(1);
+}
+
 .shop-btn-desktop {
   display: none;
 
@@ -378,14 +445,14 @@ input[type='range']::-moz-range-thumb {
     }
   }
 
-  .form-input-typing {
-    width: 100%;
-    padding: 0.75em;
-    border: 2px solid $darker-gray;
-  }
   [data-error-input-typing='true'] {
     border-color: $second-color;
   }
+}
+.form-input-typing {
+  width: 100%;
+  padding: 0.75em;
+  border: 2px solid $darker-gray;
 }
 
 .black-btn {
@@ -1112,7 +1179,7 @@ footer {
     text-align: center;
   }
 
-  &-contact-us {
+  &-shop-contact-us {
     display: flex;
     justify-content: center;
     align-items: center;

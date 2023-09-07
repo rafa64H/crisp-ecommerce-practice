@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       textTitleSectionTwo="SHOPING WITHOUT LIMITS"
       textParaSectionTwo="You can choose the best option for you, and it does not matter whether you are in Prague or San Fransisco"
       linkText="SHOW NOW"
-      classesSection2="section2-shop1 section2-background-center"
+      classesSection2="section2-shop-contact-us section2-background-center"
     />
 
     <ClothesListWithFilters clothesData={clothesData[0]} />
