@@ -1607,7 +1607,6 @@ footer {
 //----------------------------------------------------------------
 
 //Community
-
 .community {
   .create-post-btn-desktop {
     display: block;
@@ -1759,13 +1758,23 @@ footer {
 //----------------------------------------------------------------
 
 //Post
+.post-section {
+  background-color: $notify-color2;
+
+  border-bottom: 2px solid $light-gray;
+}
+
+.post-section--loading {
+  &__title {
+    margin: auto;
+    padding: 2.5em;
+
+    text-align: center;
+  }
+}
 
 .post {
   .post-section {
-    background-color: $notify-color2;
-
-    border-bottom: 2px solid $light-gray;
-
     &__img {
       display: block;
 

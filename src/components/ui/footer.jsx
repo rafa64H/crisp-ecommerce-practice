@@ -22,42 +22,6 @@ const Footer = () => {
       <section className="footer-section">
         <FooterSectionTitle
           desktopOrMobile="desktop"
-          footerSectionTitleText="FEATURES"
-        />
-
-        <FooterSectionTitle
-          desktopOrMobile="mobile"
-          footerSectionTitleText="FEATURES"
-          isListOpen={isListOpen1}
-          setIsListOpen={setIsListOpen1}
-        />
-
-        <ul
-          className="footer-section__list"
-          aria-hidden={!isLargeScreen && !isListOpen1}
-          data-footer-list-expanded={isListOpen1.toString()}
-        >
-          <FooterListItem
-            shouldShowTabIndex={isLargeScreen || isListOpen1}
-            footerItemText="MEN"
-          />
-          <FooterListItem
-            shouldShowTabIndex={isLargeScreen || isListOpen1}
-            footerItemText="WOMEN"
-          />
-          <FooterListItem
-            shouldShowTabIndex={isLargeScreen || isListOpen1}
-            footerItemText="NEW ARRIVALS"
-          />
-          <FooterListItem
-            shouldShowTabIndex={isLargeScreen || isListOpen1}
-            footerItemText="SHOES"
-          />
-        </ul>
-      </section>
-      <section className="footer-section">
-        <FooterSectionTitle
-          desktopOrMobile="desktop"
           footerSectionTitleText="MENU"
         />
 

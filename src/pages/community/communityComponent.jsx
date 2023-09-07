@@ -24,8 +24,8 @@ const CommunityComponent = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [listOfPosts, setListOfPosts] = useState([]);
   const [postsToShow, setPostsToShow] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState();
-  const [loadingPosts, setLoadingPosts] = useState(false);
   const [user, setUser] = useState();
 
   function splitPostsIntoFive(array, size) {
@@ -50,6 +50,7 @@ const CommunityComponent = () => {
         setListOfPosts(communityPostsSplitted);
         setCurrentIndex(0);
         setUser(user);
+        setLoading(false);
       } else {
       }
     });
@@ -60,7 +61,35 @@ const CommunityComponent = () => {
   }, [currentIndex]);
 
   function returningFunction() {
-    if (listOfPosts && postsToShow) {
+    if (!loading && listOfPosts.length === 0) {
+      return (
+        <section className="community">
+          {isLargeScreen ? (
+            <a
+              href="./create-post.html"
+              className="create-post-btn-desktop black-btn"
+            >
+              <i className="fa-solid fa-plus" /> Create post
+            </a>
+          ) : (
+            <a
+              href="./create-post.html"
+              className="create-post-btn-mobile black-btn"
+            >
+              <i className="fa-solid fa-plus" /> Create post
+            </a>
+          )}
+
+          <section className="post-section post-section--loading">
+            <h1 className="post-section__title post-section--loading__title">
+              Posts not found
+            </h1>
+          </section>
+        </section>
+      );
+    }
+
+    if (listOfPosts && postsToShow && !loading) {
       return (
         <section className="community">
           {isLargeScreen ? (
@@ -168,7 +197,14 @@ const CommunityComponent = () => {
         </section>
       );
     }
-    return <div>hola</div>;
+
+    return (
+      <section className="post-section post-section--loading">
+        <h1 className="post-section__title post-section--loading__title">
+          Loading...
+        </h1>
+      </section>
+    );
   }
 
   return returningFunction();

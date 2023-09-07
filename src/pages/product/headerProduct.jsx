@@ -96,11 +96,8 @@ const HeaderProduct = ({
             shouldShowTabIndex={isLargeScreen || isNavOpen}
           />
           <NavItem
-            text="Sale"
-            shouldShowTabIndex={isLargeScreen || isNavOpen}
-          />
-          <NavItem
             text="Contact"
+            link="./contact.html"
             shouldShowTabIndex={isLargeScreen || isNavOpen}
           />
           <SearchBtn desktopOrMobile="desktop" />

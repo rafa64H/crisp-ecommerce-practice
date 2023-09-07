@@ -286,11 +286,7 @@ const PostComponent = () => {
             id="write-comment"
             ref={writeCommentRef}
           />
-          <button
-            type="submit"
-            className="write-comment__btn"
-            className="black-btn"
-          >
+          <button type="submit" className="black-btn write-comment__btn">
             Submit
           </button>
         </form>
@@ -310,7 +306,11 @@ const PostComponent = () => {
       </section>
     </section>
   ) : (
-    <div>null</div>
+    <section className="post-section post-section--loading">
+      <h1 className="post-section__title post-section--loading__title">
+        Loading...
+      </h1>
+    </section>
   );
 };
 

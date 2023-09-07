@@ -99,10 +99,12 @@ const CreatePostComponent = () => {
         alertMessageState={alertMessage}
         imgRefProp={fileRef}
         previewImgState={previewImg}
+        titleRefProp={titleRef}
         handleUploadImage={handleUploadFile}
         handleUndoImgProp={handleUndoImg}
         handleFocusInput={handleFocusInput}
         alertMessage2State={alertMessage2}
+        textRefProp={textRef}
       />
     </section>
   );
