@@ -36,6 +36,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <SectionTwo
         textTitleSectionTwo="CHOOSE YOUR LOOK"
         textParaSectionTwo="See our clothing collections"
+        showLink
         linkText="SEE OFFERS"
         linkHref="./shop.html"
         classesSection2="section2-home1 section2-background-left grid-section2-item1"
@@ -43,6 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <SectionTwo
         textTitleSectionTwo="UP TO 40% OFF"
         textParaSectionTwo="Special offers and great deals"
+        showLink
         linkText="SHOP NOW"
         linkHref="./shop.html"
         classesSection2="section2-home2 section2-background-right grid-section2-item2"
@@ -50,6 +52,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <SectionTwo
         textTitleSectionTwo="BRAND NEW STYLE"
         textParaSectionTwo="Popular clothing brands"
+        showLink
         linkText="SEE OFFERS"
         linkHref="./shop.html"
         classesSection2="section2-home3 section2-background-right grid-section2-item3"
@@ -58,6 +61,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <SectionTwo
       textTitleSectionTwo="SHOPING WITHOUT LIMITS"
       textParaSectionTwo="Choose the best option for you, and it does not matter whether you are"
+      showLink
       linkText="SHOW NOW"
       linkHref="./shop.html"
       classesSection2="section2-home4 section2-background-right"
@@ -65,6 +69,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <SectionTwo
       textTitleSectionTwo="EXLORE THE BEST OF YOU"
       textParaSectionTwo="You can choose the best option for you, and it does not matter whether you are in Prague or San Fransisco"
+      showLink
       linkText="SHOW NOW"
       linkHref="./shop.html"
       classesSection2="section2-home5 section2-background-center"

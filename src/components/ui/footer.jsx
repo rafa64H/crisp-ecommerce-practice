@@ -212,7 +212,7 @@ const FooterListItem = ({ footerLink, footerItemText, shouldShowTabIndex }) => (
 const FooterListItemContact = ({ footerContactTitle, footerContactPara }) => (
   <li className="footer-section__list-item">
     <h4 className="footer-contact__title">{footerContactTitle}</h4>
-    <p>{footerContactPara}</p>
+    <p className="footer-contact__paragraph">{footerContactPara}</p>
   </li>
 );
 

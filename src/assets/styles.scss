@@ -881,6 +881,10 @@ footer {
         grid-template-columns: 4em 4em;
       }
     }
+
+    .footer-contact__paragraph {
+      color: #dadada;
+    }
   }
 
   .footer-copyright {
@@ -1101,6 +1105,20 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    background: linear-gradient(90deg, #dae8f09a 100%, #dae8f09a),
+      url('./shop/woman-shop1.png');
+
+    text-align: center;
+  }
+
+  &-contact-us {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 0;
+    padding: clamp(2em, 5%, 10em);
 
     background: linear-gradient(90deg, #dae8f09a 100%, #dae8f09a),
       url('./shop/woman-shop1.png');
@@ -1934,8 +1952,34 @@ footer {
     color: $second-color !important;
   }
 }
-
 //Post END
+
+//----------------------------------------------------------------
+
+//Contact
+.contact {
+  margin: 1em;
+  .about-us {
+    &__title {
+    }
+
+    &__paragraph {
+      margin: 1em 0;
+      width: min(90%, 70em);
+
+      line-height: 1.5;
+    }
+  }
+
+  .contact-address {
+    &__title {
+      margin: 0.25em 0;
+    }
+    &__paragraph {
+    }
+  }
+}
+//Contact END
 
 //----------------------------------------------------------------
 
