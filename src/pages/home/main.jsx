@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <SectionOne
       classesSectionOne="section1 section1-background1"
       h1Texts={[
-        'SUMMER SALE GET 30% OFF ON ALL DRESS',
+        'GET 30% DISCOUNT',
         'CHOOSE YOUR LOOK',
         'SHOPING WITHOUT LIMITS',
         'EXLORE THE BEST OF YOU',
