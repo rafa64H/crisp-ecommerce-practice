@@ -263,7 +263,7 @@ const PostComponent = () => {
               dislikesArray={dislikesPostState}
               children={
                 <p>
-                  {post.postDay}:0{post.postMonth}:{post.postYear}
+                  0{post.postMonth}/{post.postDay}/{post.postYear}
                 </p>
               }
             />
