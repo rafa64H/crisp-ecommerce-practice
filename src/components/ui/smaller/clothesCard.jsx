@@ -16,6 +16,7 @@ const ClothesCard = ({
   extraClassNames,
   additionalOnClickWishListFunction,
 }) => {
+  const [user, setUser] = useState();
   const [imageSrc, setImageSrc] = useState(`${productImg}`);
   const [activeBtn, setActiveBtn] = useState(0);
   const [addedToWishList, setAddedToWishList] = useState(false);
@@ -38,6 +39,7 @@ const ClothesCard = ({
           setAddedToWishList(true);
         }
       }
+      setUser(user || false);
     });
   }, []);
 
@@ -60,10 +62,6 @@ const ClothesCard = ({
     } catch (err) {
       console.log(err);
     }
-  }
-
-  function handleDefault(e) {
-    e.preventDefault();
   }
 
   function changeImage(imageUrl) {
@@ -104,7 +102,10 @@ const ClothesCard = ({
           </p>
         </div>
 
-        <div className="clothes-card-colors" onClick={(e) => handleDefault(e)}>
+        <div
+          className="clothes-card-colors"
+          onClick={(e) => e.preventDefault()}
+        >
           {productColorsButtons}
         </div>
 
@@ -115,7 +116,9 @@ const ClothesCard = ({
             addedToWishList ? 'Already added' : ''
           }`}
           onClick={(e) => {
-            handleDefault(e);
+            e.preventDefault();
+            if (!user) return null;
+
             handleAddOrRemoveOfWishlist();
             setAddedToWishList((prevValue) => !prevValue);
             additionalOnClickWishListFunction();

@@ -63,26 +63,24 @@ const PostComponent = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const allPostsFromFirestore = getCommunityPosts();
+      const allPostsFromFirestore = getCommunityPosts();
 
-        const theIndicatedPost = (await allPostsFromFirestore).find(
-          (postFromFirestore) => postFromFirestore.postId === id
-        );
+      const theIndicatedPost = (await allPostsFromFirestore).find(
+        (postFromFirestore) => postFromFirestore.postId === id
+      );
 
-        setPost(theIndicatedPost);
-        setUser(user);
-        setLikesPostState([...theIndicatedPost.likes]);
-        setDislikesPostState([...theIndicatedPost.dislikes]);
-        setCommentsState([...theIndicatedPost.postComments]);
-        setPreviewImg(theIndicatedPost.postImg);
-      } else {
-      }
+      setPost(theIndicatedPost);
+      setUser(user || false);
+      setLikesPostState([...theIndicatedPost.likes]);
+      setDislikesPostState([...theIndicatedPost.dislikes]);
+      setCommentsState([...theIndicatedPost.postComments]);
+      setPreviewImg(theIndicatedPost.postImg);
     });
   }, []);
 
   async function handleSubmitComment(e) {
     e.preventDefault();
+    if (!user) return null;
 
     if (writeCommentRef.current.value === '') return null;
 
@@ -99,6 +97,7 @@ const PostComponent = () => {
 
   // Like post
   async function handleLikePost() {
+    if (!user) return null;
     try {
       const currentPost = post;
 
@@ -114,6 +113,7 @@ const PostComponent = () => {
 
   // Dislike post
   async function handleDislikePost() {
+    if (!user) return null;
     try {
       const currentPost = post;
 
@@ -351,6 +351,7 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
 
   async function handleSubmitReply(e) {
     e.preventDefault();
+    if (!user) return null;
 
     if (!replyRef.current.value) return null;
 
@@ -368,6 +369,7 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
 
   // Like comment
   async function handleClickLikeComment() {
+    if (!user) return null;
     try {
       const currentPost = post;
 
@@ -383,6 +385,7 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
 
   // Dislike comment
   async function handleClickDislikeComment() {
+    if (!user) return null;
     try {
       const currentPost = post;
 

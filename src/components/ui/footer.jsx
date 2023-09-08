@@ -1,6 +1,8 @@
 import { React, useEffect, useState } from 'react';
+import { onAuthStateChanged, signInWithPhoneNumber } from 'firebase/auth';
 import CompanyLogo from './smaller/companyLogo';
 import handleLargeScreen from '../utils/handleLargeScreen';
+import { auth } from '../../config-firebase/firebase';
 
 const Footer = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -10,8 +12,14 @@ const Footer = () => {
   const [isListOpen3, setIsListOpen3] = useState(false);
   const [isListOpen4, setIsListOpen4] = useState(false);
 
+  const [user, setUser] = useState();
+
   useEffect(() => {
     handleLargeScreen(setIsLargeScreen);
+
+    onAuthStateChanged(auth, async (user) => {
+      setUser(user || false);
+    });
   }, []);
 
   return (
@@ -45,17 +53,25 @@ const Footer = () => {
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="MY ACCOUNT"
-            footerLink="./account.html"
+            footerLink={`${user ? './account.html' : './create-account.html'}`}
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="ORDERS HISTORY"
-            footerLink="./account.html?option=History of orders"
+            footerLink={`${
+              user
+                ? './account.html?option=History of orders'
+                : './create-account.html'
+            }`}
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="MY WISHLIST"
-            footerLink="./account.html?option=My wishlist"
+            footerLink={`${
+              user
+                ? './account.html?option=My wishlist'
+                : './create-account.html'
+            }`}
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}

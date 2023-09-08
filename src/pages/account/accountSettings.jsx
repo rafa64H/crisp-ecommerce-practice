@@ -7,6 +7,7 @@ import {
   changeAccountInformation,
   getDataOfUser,
   logOutUser,
+  sendEmailVerificationToUser,
   updateOrdersHistory,
 } from '../../components/utils/firebaseFunctions';
 import FormInputTyping from '../../components/ui/smaller/formInputTyping';
@@ -426,6 +427,11 @@ const FormAccountInformation = ({
     dialogPasswordRef.current.showModal();
   }
 
+  async function handleClickSendEmailVerification(e) {
+    e.preventDefault();
+    await sendEmailVerificationToUser();
+  }
+
   return (
     <form
       className="form-account-settings"
@@ -438,6 +444,17 @@ const FormAccountInformation = ({
 
       <aside className="error-message-form" role="alert" aria-live="assertive">
         {alertMessage}
+        {!emailVerified ? (
+          <button
+            className="error-message-form-email-verification"
+            type="button"
+            onClick={(e) => {
+              handleClickSendEmailVerification(e);
+            }}
+          >
+            Click here to send email verification
+          </button>
+        ) : null}
       </aside>
       <FormInputTyping
         required

@@ -47,6 +47,13 @@ export async function getPostsOfUser() {
   return docData.posts;
 }
 
+export async function sendEmailVerificationToUser() {
+  const user = await auth.currentUser;
+
+  sendEmailVerification(user);
+  console.log('hola');
+}
+
 const usersCollectionRef = collection(db, 'users');
 
 export async function createUser(firstName, lastName, email, password) {

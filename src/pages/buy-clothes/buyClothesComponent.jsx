@@ -18,6 +18,7 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
   const [addressFromFirestore, setAddressFromFirestore] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [succededOrder, setSuccededOrder] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
@@ -57,9 +58,22 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
   }
 
   async function handlePlaceOrder() {
-    if (shoppingBagItems.length === 0) {
+    if (addressFromFirestore.streetAddress === '') {
+      setAlertMessage('You have not changed the address settings');
+      setTimeout(() => {
+        setAlertMessage('');
+      }, 1000);
       return null;
     }
+
+    if (shoppingBagItems.length === 0) {
+      setAlertMessage('There are no items');
+      setTimeout(() => {
+        setAlertMessage('');
+      }, 1000);
+      return null;
+    }
+
     try {
       const userData = await getDataOfUser();
       const userPrevOrdersHistory = await userData.ordersHistory;
@@ -157,6 +171,7 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
             >
               Place order
             </button>
+            <aside>{alertMessage}</aside>
           </section>
 
           <section className="order-summary">

@@ -40,19 +40,16 @@ const CommunityComponent = () => {
   useEffect(() => {
     handleLargeScreen(setIsLargeScreen);
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const communityPostsFromFirebase = await getCommunityPosts();
-        const communityPostsSplitted = splitPostsIntoFive(
-          communityPostsFromFirebase,
-          5
-        );
+      const communityPostsFromFirebase = await getCommunityPosts();
+      const communityPostsSplitted = splitPostsIntoFive(
+        communityPostsFromFirebase,
+        5
+      );
 
-        setListOfPosts(communityPostsSplitted);
-        setCurrentIndex(0);
-        setUser(user);
-        setLoading(false);
-      } else {
-      }
+      setListOfPosts(communityPostsSplitted);
+      setCurrentIndex(0);
+      setUser(user || false);
+      setLoading(false);
     });
   }, []);
 
@@ -237,6 +234,8 @@ const CommunityPostListItem = ({
   async function handleLikePost(e) {
     e.preventDefault();
 
+    if (!user) return null;
+
     try {
       const currentPost = post;
 
@@ -252,6 +251,8 @@ const CommunityPostListItem = ({
   // Dislike post
   async function handleDislikePost(e) {
     e.preventDefault();
+
+    if (!user) return null;
 
     try {
       const currentPost = post;

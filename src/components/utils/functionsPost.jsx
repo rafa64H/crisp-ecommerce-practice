@@ -109,6 +109,8 @@ export async function likePost(currentPost, user, stateFunctions) {
     (dislikeUid) => dislikeUid === user.uid
   );
 
+  console.log(currentPost);
+
   if (alreadyLikedPost) {
     const indexOfLikeUser = currentPost.likes.indexOf(user.uid);
 
@@ -132,6 +134,8 @@ export async function likePost(currentPost, user, stateFunctions) {
   currentPost.likes.push(user.uid);
 
   setLikesPostState([...currentPost.likes]);
+
+  console.log(currentPost);
 
   await updateSpecifiedPost(currentPost);
 

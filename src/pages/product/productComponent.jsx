@@ -17,7 +17,7 @@ const ProductComponent = ({
   setShoppingBagItems,
 }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [user, setUser] = useState();
 
   const [selectedImage, setSelectedImage] = useState();
   const [colorImage, setColorImage] = useState();
@@ -34,11 +34,7 @@ const ProductComponent = ({
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUserLoggedIn(true);
-      } else {
-        setUserLoggedIn(false);
-      }
+      setUser(user || false);
     });
   }, []);
 
@@ -77,7 +73,7 @@ const ProductComponent = ({
         itemFromState.size === selectedSize
     );
 
-    if (!userLoggedIn) {
+    if (!user) {
       setAlertMessage('You are not logged in!');
       setTimeout(() => {
         setAlertMessage('');
@@ -129,6 +125,14 @@ const ProductComponent = ({
   }
 
   async function handleAddToWishlist() {
+    if (!user) {
+      setAlertMessage('You are not logged in!');
+      setTimeout(() => {
+        setAlertMessage('');
+      }, 1000);
+      return null;
+    }
+
     const { productId } = product;
 
     try {

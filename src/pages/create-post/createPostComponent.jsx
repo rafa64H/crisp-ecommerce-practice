@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
 import FormInputTyping from '../../components/ui/smaller/formInputTyping';
 import {
   createPost,
   getPostsOfUser,
 } from '../../components/utils/firebaseFunctions';
 import PostForm from '../../components/ui/postForm';
+import { auth } from '../../config-firebase/firebase';
 
 const CreatePostComponent = () => {
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState();
   const [previewImg, setPreviewImg] = useState();
   const [alertMessage, setAlertMessage] = useState('');
   const [alertMessage2, setAlertMessage2] = useState('');
@@ -15,6 +18,12 @@ const CreatePostComponent = () => {
   const fileRef = useRef();
   const titleRef = useRef();
   const textRef = useRef();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      setUser(user || false);
+    });
+  }, []);
 
   function handleUploadFile(e) {
     const [file] = e.target.files;
@@ -25,6 +34,10 @@ const CreatePostComponent = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!user) {
+      setAlertMessage2(`You're not an user`);
+      return null;
+    }
     setLoading(true);
     setAlertMessage2('Loading...');
 
@@ -82,6 +95,7 @@ const CreatePostComponent = () => {
   function handleFocusInput(e) {
     e.target.dataset.errorInputTyping = 'false';
     setAlertMessage('');
+    setAlertMessage2('');
   }
 
   function handleUndoImg() {

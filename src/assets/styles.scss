@@ -430,8 +430,18 @@ input[type='range']::-moz-range-thumb {
 
 .error-message-form {
   display: inline-block;
-  color: $second-color;
   margin: 1em 0;
+
+  .error-message-form-email-verification {
+    margin-left: 0.5em;
+
+    font-size: $fourth-font-size;
+    color: $second-color;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .form-input-container {
