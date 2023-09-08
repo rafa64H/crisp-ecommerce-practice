@@ -965,10 +965,13 @@ footer {
 //SectionOne
 .section1 {
   .flex-section1 {
-    display: flex;
-    flex-direction: column;
+    display: none;
 
     /*&-content and &-images are inside this div*/
+  }
+  [data-show-section1-element='true'] {
+    display: flex;
+    flex-direction: column;
   }
 
   &-content {
@@ -2244,11 +2247,12 @@ footer {
   ////Media SectionOne
   .section1 {
     .flex-section1 {
+      /*&-content and &-images are inside this div*/
+    }
+    [data-show-section1-element='true'] {
       display: flex;
       flex-direction: row;
       align-items: center;
-
-      /*&-content and &-images are inside this div*/
     }
 
     &-content {

@@ -24,10 +24,24 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Header />
     <SectionOne
       classesSectionOne="section1 section1-background1"
-      h1Text="SUMMER SALE GET 30% OFF ON ALL DRESS"
-      linkText="SHOP NOW"
-      srcImg1={womanHomeOne}
-      srcImg2={womanHomeTwo}
+      h1Texts={[
+        'SUMMER SALE GET 30% OFF ON ALL DRESS',
+        'CHOOSE YOUR LOOK',
+        'SHOPING WITHOUT LIMITS',
+        'EXLORE THE BEST OF YOU',
+      ]}
+      links={[
+        ['SHOP NOW', './shop.html'],
+        ['SHOP NOW', './shop.html'],
+        ['SHOP NOW', './shop.html'],
+        ['SHOP NOW', './shop.html'],
+      ]}
+      pairSrcImgs={[
+        [womanHomeOne, womanHomeTwo],
+        [womanHomeTwo, womanHomeOne],
+        [womanHomeOne, womanHomeTwo],
+        [womanHomeTwo, womanHomeOne],
+      ]}
     />
 
     <BrandSection brandsTitle="Choose your brand" brandsObject={brandsData} />
