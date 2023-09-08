@@ -203,7 +203,7 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
                 )}$`}
               </h3>
 
-              <ul>{itemsToShow()}</ul>
+              <ul className="list-items-place-order">{itemsToShow()}</ul>
             </div>
           </section>
         </div>

@@ -1344,6 +1344,8 @@ footer {
 .wishlist {
   margin: 1em;
   border: 1px solid $first-color;
+  height: 30em;
+  overflow-y: scroll;
 
   .wishlist-not-found {
     display: none;
@@ -1354,6 +1356,8 @@ footer {
 .orders-history {
   margin-top: 1em;
   border: 2px solid $darker-gray;
+  height: 30em;
+  overflow-y: scroll;
 
   &-not-found {
     text-align: center;
@@ -1383,6 +1387,7 @@ footer {
 [data-show-wishlist='true'] {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-around;
   align-items: baseline;
 }
 [data-show-wishlist-not-found='true'] {
@@ -1662,6 +1667,11 @@ footer {
         transition: all 200ms;
         transform-origin: 50% 0;
         transform: scaleY(0);
+
+        .list-items-place-order {
+          height: 40rem;
+          overflow-y: scroll;
+        }
       }
       [data-show-summary-div='true'] {
         position: relative;
