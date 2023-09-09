@@ -1,6 +1,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { getDataOfUser, updateSpecifiedPost } from './firebaseFunctions';
+import removeSpacesOfString from './removeSpacesOfString';
 
 export async function submitComment(
   currentPost,
@@ -8,6 +9,8 @@ export async function submitComment(
   statesAndSetStates
 ) {
   const { setPost, setCommentsState } = statesAndSetStates;
+
+  if (!removeSpacesOfString(writeCommentRef.current.value)) return null;
 
   const today = new Date();
 
@@ -44,6 +47,8 @@ export async function editComment(
   editCommentRef,
   statesAndSetStates
 ) {
+  if (!removeSpacesOfString(editCommentRef.current.value)) return null;
+
   const { postComments } = currentPost;
   const theComment = postComments.find(
     (comment) => comment.commentId === commentId

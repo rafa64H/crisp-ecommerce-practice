@@ -9,6 +9,7 @@ import {
   uploadImageOfPostToStorage,
 } from './firebaseFunctions';
 import { storage } from '../../config-firebase/firebase';
+import removeSpacesOfString from './removeSpacesOfString';
 
 export async function editPost(
   currentPost,
@@ -19,7 +20,7 @@ export async function editPost(
 ) {
   const { previewImg, setAlertMessage, setEditPostState } = statesAndSetStates;
 
-  if (titleRef.current.value === '') {
+  if (!removeSpacesOfString(titleRef.current.value)) {
     setAlertMessage('There is no title');
     return null;
   }

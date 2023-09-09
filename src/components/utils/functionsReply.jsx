@@ -1,6 +1,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { getDataOfUser, updateSpecifiedPost } from './firebaseFunctions';
+import removeSpacesOfString from './removeSpacesOfString';
 
 export async function submitReply(
   currentPost,
@@ -11,6 +12,8 @@ export async function submitReply(
 ) {
   const { setPost, setCommentRepliesState, setShowWriteReply } =
     statesAndSetStates;
+
+  if (!removeSpacesOfString(replyRef.current.value)) return null;
 
   const today = new Date();
 
@@ -55,22 +58,25 @@ export async function submitReply(
 export async function editReply(
   currentPost,
   commentId,
+  replyId,
   editReplyRef,
   statesAndSetStates
 ) {
+  const { setPost, setShowFormEditReply, setReplyTextState } =
+    statesAndSetStates;
+
   const theComment = currentPost.postComments.find(
     (comment) => comment.commentId === commentId
   );
+
+  console.log(editReplyRef.current.value);
 
   const theReply = theComment.commentReplies.find(
     (replyFromTheComment) => replyFromTheComment.replyId === replyId
   );
 
-  const { setPost, setShowFormEditReply, setReplyTextState } =
-    statesAndSetStates;
-
   if (editReplyRef.current.value === theReply.replyText) return null;
-  if (!editReplyRef.current.value) return null;
+  if (!removeSpacesOfString(editReplyRef.current.value)) return null;
 
   theReply.replyText = editReplyRef.current.value;
 

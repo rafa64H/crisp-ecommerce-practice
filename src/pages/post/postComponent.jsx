@@ -37,6 +37,7 @@ import {
 } from '../../components/utils/functionsReply';
 import FormComment from '../../components/ui/smaller/formComment';
 import PostForm from '../../components/ui/postForm';
+import removeSpacesOfString from '../../components/utils/removeSpacesOfString';
 
 const PostComponent = () => {
   const params = new URLSearchParams(window.location.search);
@@ -81,8 +82,6 @@ const PostComponent = () => {
   async function handleSubmitComment(e) {
     e.preventDefault();
     if (!user) return null;
-
-    if (writeCommentRef.current.value === '') return null;
 
     try {
       const currentPost = post;
@@ -263,7 +262,7 @@ const PostComponent = () => {
               dislikesArray={dislikesPostState}
               children={
                 <p>
-                  0{post.postMonth}/{post.postDay}/{post.postYear}
+                  {post.postMonth}/{post.postDay}/{post.postYear}
                 </p>
               }
             />
@@ -480,7 +479,7 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
       <div className="comment-user">
         <i className="fa-solid fa-user comment-user__icon" />
         <p className="comment-user__paragraph">
-          {commentUser} {commentDay}/0{commentMonth}/{commentYear}
+          {commentUser} {commentMonth}/{commentDay}/{commentYear}
         </p>
       </div>
 
@@ -665,7 +664,7 @@ const ReplyItem = ({
     const currentPost = post;
 
     try {
-      await editReply(currentPost, commentId, editReplyRef, {
+      await editReply(currentPost, commentId, replyId, editReplyRef, {
         setPost,
         setShowFormEditReply,
         setReplyTextState,

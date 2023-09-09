@@ -349,7 +349,7 @@ const CommunityPostListItem = ({
           dislikesArray={dislikesPostState}
           children={
             <p>
-              0{month}/{day}/{year}
+              {month}/{day}/{year}
             </p>
           }
         />
