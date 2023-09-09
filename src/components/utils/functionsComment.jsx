@@ -9,15 +9,26 @@ export async function submitComment(
   writeCommentRef,
   statesAndSetStates
 ) {
-  const { setPost, setCommentsState } = statesAndSetStates;
+  const { setPost, setCommentsState, setWriteCommentAlertMessage } =
+    statesAndSetStates;
 
-  if (!removeSpacesOfString(writeCommentRef.current.value)) return null;
+  setWriteCommentAlertMessage('');
+
+  if (!removeSpacesOfString(writeCommentRef.current.value)) {
+    setWriteCommentAlertMessage('Error: There is nothing written');
+    return null;
+  }
 
   const writeCommentOffensive = doesIncludeBadWord(
     writeCommentRef.current.value
   );
 
-  if (writeCommentOffensive) return null;
+  if (writeCommentOffensive) {
+    setWriteCommentAlertMessage(
+      'Error: You must not write something offensive'
+    );
+    return null;
+  }
 
   const today = new Date();
 
@@ -59,15 +70,29 @@ export async function editComment(
     (comment) => comment.commentId === commentId
   );
 
-  const { setPost, setCommentTextState, setShowFormEditComment } =
-    statesAndSetStates;
+  const {
+    setPost,
+    setCommentTextState,
+    setShowFormEditComment,
+    setEditCommentAlertMessage,
+  } = statesAndSetStates;
 
-  if (theComment.commentText === editCommentRef.current.value) return null;
+  if (theComment.commentText === editCommentRef.current.value) {
+    setEditCommentAlertMessage('There are no changes');
+    return null;
+  }
 
-  if (!removeSpacesOfString(editCommentRef.current.value)) return null;
+  if (!removeSpacesOfString(editCommentRef.current.value)) {
+    setEditCommentAlertMessage(`There is nothing written`);
+    return null;
+  }
   const editCommentOffensive = doesIncludeBadWord(editCommentRef.current.value);
 
-  if (editCommentOffensive) return null;
+  if (editCommentOffensive) {
+    setEditCommentAlertMessage('You must not write something offensive');
+    return null;
+  }
+
   theComment.commentText = editCommentRef.current.value;
 
   setPost(currentPost);

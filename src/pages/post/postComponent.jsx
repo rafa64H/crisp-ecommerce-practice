@@ -22,7 +22,7 @@ import {
   submitComment,
 } from '../../components/utils/functionsComment';
 import {
-  dislikieReply,
+  dislikeReply,
   editReply,
   likeReply,
   createObjectRemovedReply,
@@ -47,6 +47,7 @@ const PostComponent = () => {
   const [previewImg, setPreviewImg] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const [alertMessage2, setAlertMessage2] = useState('');
+  const [writeCommentAlertMessage, setWriteCommentAlertMessage] = useState('');
 
   const fileRef = useRef();
   const titleRef = useRef();
@@ -71,16 +72,45 @@ const PostComponent = () => {
     });
   }, []);
 
-  async function handleSubmitComment(e) {
+  async function handleClickShowEditPost(e) {
+    try {
+      e.preventDefault();
+
+      titleRef.current.value = post.postTitle;
+      textRef.current.value = post.postText;
+      setEditPostState((prevValue) => !prevValue);
+      setShowPostOptionsState((prevValue) => !prevValue);
+      setPreviewImg(post.postImg);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleEditPostSubmit(e) {
     e.preventDefault();
-    if (!user) return null;
+
+    const currentPost = post;
+
+    try {
+      await editPost(currentPost, fileRef, titleRef, textRef, {
+        previewImg,
+        setAlertMessage,
+        setPost,
+        setEditPostState,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleClickRemovePost(e) {
+    e.preventDefault();
 
     try {
       const currentPost = post;
-      await submitComment(currentPost, writeCommentRef, {
-        setPost,
-        setCommentsState,
-      });
+      await removePost(currentPost);
+
+      window.location.href = './community.html';
     } catch (err) {
       console.log(err);
     }
@@ -118,14 +148,17 @@ const PostComponent = () => {
     }
   }
 
-  async function handleClickRemovePost(e) {
+  async function handleSubmitComment(e) {
     e.preventDefault();
+    if (!user) return null;
 
     try {
       const currentPost = post;
-      await removePost(currentPost);
-
-      window.location.href = './community.html';
+      await submitComment(currentPost, writeCommentRef, {
+        setPost,
+        setCommentsState,
+        setWriteCommentAlertMessage,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -144,37 +177,6 @@ const PostComponent = () => {
     const [file] = e.target.files;
     if (file) {
       setPreviewImg((prevUrl) => URL.createObjectURL(file));
-    }
-  }
-
-  async function handleClickShowEditPost(e) {
-    try {
-      e.preventDefault();
-
-      titleRef.current.value = post.postTitle;
-      textRef.current.value = post.postText;
-      setEditPostState((prevValue) => !prevValue);
-      setShowPostOptionsState((prevValue) => !prevValue);
-      setPreviewImg(post.postImg);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function handleEditPostSubmit(e) {
-    e.preventDefault();
-
-    const currentPost = post;
-
-    try {
-      await editPost(currentPost, fileRef, titleRef, textRef, {
-        previewImg,
-        setAlertMessage,
-        setPost,
-        setEditPostState,
-      });
-    } catch (err) {
-      console.log(err);
     }
   }
 
@@ -280,6 +282,7 @@ const PostComponent = () => {
           <button type="submit" className="black-btn write-comment__btn">
             Submit
           </button>
+          <aside aria-live="assertive">{writeCommentAlertMessage}</aside>
         </form>
 
         <ul className="comments">
@@ -334,25 +337,47 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
   const [commentDislikesState, setCommentDislikesState] = useState([
     ...commentDislikes,
   ]);
+  const [editCommentAlertMessage, setEditCommentAlertMessage] = useState('');
+  const [writeReplyAlertMessage, setWriteReplyAlertMessage] = useState('');
 
   const [showReplies, setShowReplies] = useState([]);
 
   const replyRef = useRef('');
   const editCommentRef = useRef('');
 
-  async function handleSubmitReply(e) {
-    e.preventDefault();
-    if (!user) return null;
+  function handleShowEditComment(e) {
+    setShowFormEditComment((prevValue) => !prevValue);
+    setShowCommentOptionsState((prevValue) => !prevValue);
+    editCommentRef.current.value = commentText;
+    setEditCommentAlertMessage('');
+  }
 
-    if (!replyRef.current.value) return null;
+  async function handleSubmitEditComment(e) {
+    const currentPost = post;
+
+    setEditCommentAlertMessage('');
 
     try {
-      const currentPost = post;
-      await submitReply(currentPost, user, replyRef, commentId, {
+      await editComment(currentPost, commentId, editCommentRef, {
         setPost,
-        setCommentRepliesState,
-        setShowWriteReply,
+        setCommentTextState,
+        setShowFormEditComment,
+        setEditCommentAlertMessage,
       });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function handleRemoveComment(e) {
+    try {
+      const currentPost = post;
+      const postAfterRemovingComment = await removeComment(
+        currentPost,
+        commentId
+      );
+      setCommentsState([...postAfterRemovingComment.postComments]);
+      setPost(postAfterRemovingComment);
     } catch (err) {
       console.log(err);
     }
@@ -389,19 +414,6 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
       console.log(err);
     }
   }
-  async function handleRemoveComment(e) {
-    try {
-      const currentPost = post;
-      const postAfterRemovingComment = await removeComment(
-        currentPost,
-        commentId
-      );
-      setCommentsState([...postAfterRemovingComment.postComments]);
-      setPost(postAfterRemovingComment);
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   function handleShowReplies() {
     const numberOfItemsToShow = [...showReplies];
@@ -414,20 +426,16 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
     setShowReplies((prevValue) => [...numberOfItemsToShow]);
   }
 
-  function handleShowEditComment(e) {
-    setShowFormEditComment((prevValue) => !prevValue);
-    setShowCommentOptionsState((prevValue) => !prevValue);
-    editCommentRef.current.value = commentText;
-  }
-
-  async function handleSubmitEditComment(e) {
-    const currentPost = post;
-
+  async function handleSubmitReply(e) {
+    e.preventDefault();
+    if (!user) return null;
     try {
-      await editComment(currentPost, commentId, editCommentRef, {
+      const currentPost = post;
+      await submitReply(currentPost, user, replyRef, commentId, {
         setPost,
-        setCommentTextState,
-        setShowFormEditComment,
+        setCommentRepliesState,
+        setShowWriteReply,
+        setWriteReplyAlertMessage,
       });
     } catch (err) {
       console.log(err);
@@ -462,6 +470,7 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
           onClick={(e) => {
             e.preventDefault();
             setShowFormEditComment((prevValue) => !prevValue);
+            setEditCommentAlertMessage('');
           }}
         >
           Go back
@@ -482,6 +491,7 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
         handleSubmit={handleSubmitEditComment}
         propRef={editCommentRef}
       />
+      <aside aria-live="assertive">{editCommentAlertMessage}</aside>
 
       <LikeDislikeComponent
         handleClickLikeFunction={handleClickLikeComment}
@@ -500,7 +510,10 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
         <button
           type="button"
           className="transparent-btn reply-btn"
-          onClick={(e) => setShowWriteReply((prevValue) => !prevValue)}
+          onClick={(e) => {
+            setWriteReplyAlertMessage('');
+            setShowWriteReply((prevValue) => !prevValue);
+          }}
         >
           Reply <i className="fa-solid fa-reply" />
         </button>
@@ -520,6 +533,7 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
         handleSubmit={handleSubmitReply}
         propRef={replyRef}
       />
+      <aside aria-live="assertive">{writeReplyAlertMessage}</aside>
 
       <ul className="comment-replies">
         {commentRepliesState.map((reply, index) => (
@@ -589,36 +603,29 @@ const ReplyItem = ({
     ...replyDislikes,
   ]);
   const [replyTextState, setReplyTextState] = useState(replyText);
+  const [editReplyAlertMessage, setEditReplyAlertMessage] = useState('');
 
   const [showReplyOptionsState, setShowReplyOptionsState] = useState(false);
   const [showFormEditReplyState, setShowFormEditReply] = useState(false);
 
   const editReplyRef = useRef('');
 
-  // Like reply
-  async function handleClickLikeReply() {
-    const currentPost = post;
-
-    try {
-      await likeReply(user, currentPost, commentId, {
-        setPost,
-        setReplyLikesState,
-        setReplyDislikesState,
-      });
-    } catch (err) {
-      console.log(err);
-    }
+  function handleShowEditReply(e) {
+    setShowFormEditReply((prevValue) => !prevValue);
+    setShowReplyOptionsState((prevValue) => !prevValue);
+    editReplyRef.current.value = replyText;
+    setEditReplyAlertMessage('');
   }
 
-  // Dislike reply
-  async function handleClickDislikeReply() {
+  async function handleSubmitEditReply() {
     const currentPost = post;
 
     try {
-      await dislikieReply(user, currentPost, commentId, {
+      await editReply(currentPost, commentId, replyId, editReplyRef, {
         setPost,
-        setReplyLikesState,
-        setReplyDislikesState,
+        setShowFormEditReply,
+        setReplyTextState,
+        setEditReplyAlertMessage,
       });
     } catch (err) {
       console.log(err);
@@ -646,20 +653,30 @@ const ReplyItem = ({
     }
   }
 
-  function handleShowEditReply(e) {
-    setShowFormEditReply((prevValue) => !prevValue);
-    setShowReplyOptionsState((prevValue) => !prevValue);
-    editReplyRef.current.value = replyText;
-  }
-
-  async function handleSubmitEditReply() {
+  // Like reply
+  async function handleClickLikeReply() {
     const currentPost = post;
 
     try {
-      await editReply(currentPost, commentId, replyId, editReplyRef, {
+      await likeReply(user, currentPost, commentId, replyId, {
         setPost,
-        setShowFormEditReply,
-        setReplyTextState,
+        setReplyLikesState,
+        setReplyDislikesState,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // Dislike reply
+  async function handleClickDislikeReply() {
+    const currentPost = post;
+
+    try {
+      await dislikeReply(user, currentPost, commentId, replyId, {
+        setPost,
+        setReplyLikesState,
+        setReplyDislikesState,
       });
     } catch (err) {
       console.log(err);
@@ -697,6 +714,7 @@ const ReplyItem = ({
             onClick={(e) => {
               e.preventDefault();
               setShowFormEditReply((prevValue) => !prevValue);
+              setEditReplyAlertMessage('');
             }}
           >
             Go back
@@ -718,6 +736,7 @@ const ReplyItem = ({
         handleSubmit={handleSubmitEditReply}
         propRef={editReplyRef}
       />
+      <aside>{editReplyAlertMessage}</aside>
 
       <LikeDislikeComponent
         handleClickLikeFunction={handleClickLikeReply}

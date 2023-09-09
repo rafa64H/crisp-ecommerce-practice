@@ -11,14 +11,26 @@ export async function submitReply(
   commentId,
   statesAndSetStates
 ) {
-  const { setPost, setCommentRepliesState, setShowWriteReply } =
-    statesAndSetStates;
+  const {
+    setPost,
+    setCommentRepliesState,
+    setShowWriteReply,
+    setWriteReplyAlertMessage,
+  } = statesAndSetStates;
 
-  if (!removeSpacesOfString(replyRef.current.value)) return null;
+  setWriteReplyAlertMessage('');
+
+  if (!removeSpacesOfString(replyRef.current.value)) {
+    setWriteReplyAlertMessage('There is nothing written');
+    return null;
+  }
 
   const replyOffensive = doesIncludeBadWord(replyRef.current.value);
 
-  if (replyOffensive) return null;
+  if (replyOffensive) {
+    setWriteReplyAlertMessage('You must not write something offensive');
+    return null;
+  }
 
   const today = new Date();
 
@@ -67,8 +79,14 @@ export async function editReply(
   editReplyRef,
   statesAndSetStates
 ) {
-  const { setPost, setShowFormEditReply, setReplyTextState } =
-    statesAndSetStates;
+  const {
+    setPost,
+    setShowFormEditReply,
+    setReplyTextState,
+    setEditReplyAlertMessage,
+  } = statesAndSetStates;
+
+  setEditReplyAlertMessage('');
 
   const theComment = currentPost.postComments.find(
     (comment) => comment.commentId === commentId
@@ -78,10 +96,20 @@ export async function editReply(
     (replyFromTheComment) => replyFromTheComment.replyId === replyId
   );
 
-  if (editReplyRef.current.value === theReply.replyText) return null;
-  if (!removeSpacesOfString(editReplyRef.current.value)) return null;
+  if (editReplyRef.current.value === theReply.replyText) {
+    setEditReplyAlertMessage('There are no changes');
+    return null;
+  }
+
+  if (!removeSpacesOfString(editReplyRef.current.value)) {
+    setEditReplyAlertMessage('There is nothing written');
+    return null;
+  }
   const replyOffensive = doesIncludeBadWord(editReplyRef.current.value);
-  if (replyOffensive) return null;
+  if (replyOffensive) {
+    setEditReplyAlertMessage('You must not write something offensive');
+    return null;
+  }
 
   theReply.replyText = editReplyRef.current.value;
 
@@ -109,7 +137,13 @@ export async function createObjectRemovedReply(post, commentId, replyId) {
   return { currentPost, theComment };
 }
 
-export async function likeReply(user, currentPost, commentId, statesSetStates) {
+export async function likeReply(
+  user,
+  currentPost,
+  commentId,
+  replyId,
+  statesSetStates
+) {
   const theComment = currentPost.postComments.find(
     (comment) => comment.commentId === commentId
   );
@@ -159,10 +193,11 @@ export async function likeReply(user, currentPost, commentId, statesSetStates) {
   setPost(currentPost);
 }
 
-export async function dislikieReply(
+export async function dislikeReply(
   user,
   currentPost,
   commentId,
+  replyId,
   statesSetStates
 ) {
   const theComment = currentPost.postComments.find(
