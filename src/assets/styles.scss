@@ -1586,8 +1586,8 @@ footer {
   justify-content: center;
   align-items: center;
 
-  background-color: $notify-color2;
-  border: 2px solid $notify-color;
+  background-color: #acfccd;
+  border: 2px solid $success-color;
   width: min(95%, 50rem);
   padding: 1em;
   margin: 2em auto;
@@ -1600,7 +1600,7 @@ footer {
   i {
     margin-bottom: 1.5em;
     padding: 0.5em;
-    background-color: $notify-color;
+    background-color: $success-color;
     border-radius: 50%;
 
     font-size: $first-font-size;
@@ -1644,8 +1644,8 @@ footer {
     .order-summary {
       order: 1;
 
-      background-color: lightgray;
-      border: 2px solid $light-gray;
+      background-color: $notify-color2;
+      border: 2px solid $notify-color;
       width: min(95%, 50rem);
       padding: 1em;
       margin: 0 auto;
@@ -2722,8 +2722,6 @@ footer {
       .order-summary {
         order: 2;
 
-        background-color: lightgray;
-        border: 2px solid $light-gray;
         width: min(95%, 50rem);
         padding: 1em;
         margin: 0;
