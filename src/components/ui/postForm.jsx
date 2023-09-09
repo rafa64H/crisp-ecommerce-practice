@@ -79,7 +79,10 @@ const PostForm = ({
         className="form-input-typing post-form-textarea"
         id="the-text"
         ref={textRefProp}
-        onFocus={handleFocusInput}
+        onFocus={(e) => {
+          e.target.dataset.errorInputTyping = false;
+          handleFocusInput();
+        }}
         defaultValue={defaultValueTextArea}
       />
     </div>

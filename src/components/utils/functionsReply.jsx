@@ -2,6 +2,7 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { getDataOfUser, updateSpecifiedPost } from './firebaseFunctions';
 import removeSpacesOfString from './removeSpacesOfString';
+import doesIncludeBadWord from './doesIncludeBadWord';
 
 export async function submitReply(
   currentPost,
@@ -14,6 +15,10 @@ export async function submitReply(
     statesAndSetStates;
 
   if (!removeSpacesOfString(replyRef.current.value)) return null;
+
+  const replyOffensive = doesIncludeBadWord(replyRef.current.value);
+
+  if (replyOffensive) return null;
 
   const today = new Date();
 
@@ -69,14 +74,14 @@ export async function editReply(
     (comment) => comment.commentId === commentId
   );
 
-  console.log(editReplyRef.current.value);
-
   const theReply = theComment.commentReplies.find(
     (replyFromTheComment) => replyFromTheComment.replyId === replyId
   );
 
   if (editReplyRef.current.value === theReply.replyText) return null;
   if (!removeSpacesOfString(editReplyRef.current.value)) return null;
+  const replyOffensive = doesIncludeBadWord(editReplyRef.current.value);
+  if (replyOffensive) return null;
 
   theReply.replyText = editReplyRef.current.value;
 

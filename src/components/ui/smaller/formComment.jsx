@@ -9,7 +9,11 @@ const FormComment = ({ showFormComment, handleSubmit, propRef }) => (
       handleSubmit(e);
     }}
   >
-    <textarea className="form-comment__textarea" ref={propRef} />
+    <textarea
+      className="form-comment__textarea"
+      ref={propRef}
+      defaultValue={propRef.current.value}
+    />
 
     <button type="submit" className="black-btn form-comment__btn">
       Submit

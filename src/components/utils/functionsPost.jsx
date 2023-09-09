@@ -10,6 +10,7 @@ import {
 } from './firebaseFunctions';
 import { storage } from '../../config-firebase/firebase';
 import removeSpacesOfString from './removeSpacesOfString';
+import doesIncludeBadWord from './doesIncludeBadWord';
 
 export async function editPost(
   currentPost,
@@ -20,8 +21,19 @@ export async function editPost(
 ) {
   const { previewImg, setAlertMessage, setEditPostState } = statesAndSetStates;
 
+  const titleOffensive = doesIncludeBadWord(titleRef.current.value);
+
+  const textOffensive = doesIncludeBadWord(textRef.current.value);
+
   if (!removeSpacesOfString(titleRef.current.value)) {
     setAlertMessage('There is no title');
+    return null;
+  }
+  if (titleOffensive || textOffensive) {
+    titleOffensive ? (titleRef.current.dataset.errorInputTyping = true) : null;
+
+    textOffensive ? (textRef.current.dataset.errorInputTyping = true) : null;
+    setAlertMessage('Error: You must not write offensive words');
     return null;
   }
   if (
@@ -32,6 +44,7 @@ export async function editPost(
     setAlertMessage(`Error: There are no changes`);
     return null;
   }
+
   if (previewImg === currentPost.postImg) {
     currentPost.postTitle = titleRef.current.value;
     currentPost.postText = textRef.current.value;
@@ -56,6 +69,7 @@ export async function editPost(
   if (currentPost.postImg) {
     await deleteImageOfPost(currentPost);
   }
+
   const [file] = fileRef.current.files;
 
   const imageStringForRefNew = `communityPostsImgs/${titleRef.current.value}/${

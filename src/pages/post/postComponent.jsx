@@ -2,19 +2,12 @@ import { onAuthStateChanged } from 'firebase/auth';
 import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { auth, storage } from '../../config-firebase/firebase';
-import {
-  getCommunityPosts,
-  getDataOfUser,
-  getPostsOfUser,
-  updateSpecifiedPost,
-  updateUsersPosts,
-} from '../../components/utils/firebaseFunctions';
+import { getCommunityPosts } from '../../components/utils/firebaseFunctions';
 import LikeDislikeComponent from '../../components/ui/smaller/likeDislikeContainer';
 import {
   PostCommentOptions,
   PostCommentOptionsBtn,
 } from '../../components/ui/smaller/postCommentOptions';
-import FormInputTyping from '../../components/ui/smaller/formInputTyping';
 import {
   removePost,
   likePost,
@@ -37,7 +30,6 @@ import {
 } from '../../components/utils/functionsReply';
 import FormComment from '../../components/ui/smaller/formComment';
 import PostForm from '../../components/ui/postForm';
-import removeSpacesOfString from '../../components/utils/removeSpacesOfString';
 
 const PostComponent = () => {
   const params = new URLSearchParams(window.location.search);
