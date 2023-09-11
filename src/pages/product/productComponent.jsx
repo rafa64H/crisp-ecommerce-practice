@@ -5,6 +5,11 @@ import { auth } from '../../config-firebase/firebase';
 
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
 import ProductSlider from '../../components/ui/productSlider';
+import ButtonExpand from '../../components/ui/smaller/buttonExpand';
+import {
+  getDataOfUser,
+  updateWishlist,
+} from '../../components/utils/firebaseFunctions';
 
 const ProductComponent = ({
   clothesData,
@@ -12,12 +17,11 @@ const ProductComponent = ({
   setShoppingBagItems,
 }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [user, setUser] = useState();
 
   const [selectedImage, setSelectedImage] = useState();
   const [colorImage, setColorImage] = useState();
   const [showSizeOptions, setShowSizeOptions] = useState(false);
-  const [changeIcon, setChangeIcon] = useState('fa-plus');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
@@ -30,11 +34,7 @@ const ProductComponent = ({
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUserLoggedIn(true);
-      } else {
-        setUserLoggedIn(false);
-      }
+      setUser(user || false);
     });
   }, []);
 
@@ -49,10 +49,8 @@ const ProductComponent = ({
   function handleClickExpandSelectSize() {
     if (showSizeOptions) {
       setShowSizeOptions(false);
-      setChangeIcon('fa-plus');
     } else {
       setShowSizeOptions(true);
-      setChangeIcon('fa-minus');
     }
   }
 
@@ -75,7 +73,7 @@ const ProductComponent = ({
         itemFromState.size === selectedSize
     );
 
-    if (!userLoggedIn) {
+    if (!user) {
       setAlertMessage('You are not logged in!');
       setTimeout(() => {
         setAlertMessage('');
@@ -116,6 +114,7 @@ const ProductComponent = ({
         quantity: quantityRef.current.value,
         price: product.price,
         color: selectedColor,
+        img: selectedImage,
       },
     ]);
 
@@ -123,6 +122,44 @@ const ProductComponent = ({
     setTimeout(() => {
       setAlertMessage('');
     }, 1000);
+  }
+
+  async function handleAddToWishlist() {
+    if (!user) {
+      setAlertMessage('You are not logged in!');
+      setTimeout(() => {
+        setAlertMessage('');
+      }, 1000);
+      return null;
+    }
+
+    const { productId } = product;
+
+    try {
+      const userData = await getDataOfUser();
+      const userWishlist = await userData.wishlist;
+
+      const productAlreadyOnWishlist = userWishlist.some(
+        (idFirestoreWishlist) => idFirestoreWishlist == productId
+      );
+
+      if (productAlreadyOnWishlist) {
+        setAlertMessage('Item already on wishlist');
+        setTimeout(() => {
+          setAlertMessage('');
+        }, 1000);
+        return null;
+      }
+
+      const wishlistToUpdate = [...userWishlist, productId];
+      updateWishlist(wishlistToUpdate);
+      setAlertMessage('Item added to wishlist');
+      setTimeout(() => {
+        setAlertMessage('');
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -159,14 +196,10 @@ const ProductComponent = ({
           <h2>Select size</h2>
 
           <div className="button-expand-container">
-            <button
-              type="button"
-              className="button-expand"
-              onClick={handleClickExpandSelectSize}
-            >
-              Select Size
-              <i className={`fa-solid ${changeIcon} icon`} />
-            </button>
+            <ButtonExpand
+              showTheOtherElement={showSizeOptions}
+              handleClickFunction={handleClickExpandSelectSize}
+            />
 
             <ProductSizeOptions
               sizes={sizes}
@@ -189,8 +222,9 @@ const ProductComponent = ({
             <button
               className=" transparent-btn product-decision__btn"
               type="button"
+              onClick={handleAddToWishlist}
             >
-              Save
+              Save on wishlist
             </button>
           </div>
           <aside aria-live="polite">{alertMessage}</aside>
@@ -391,15 +425,12 @@ const ProductCodeAndSocialMedia = ({ product }) => (
 
 const ProductDetailsSection = ({ product }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const [changeIcon2, setChangeIcon2] = useState('fa-plus');
 
   function handleClickExpandDetails() {
     if (showDetails) {
       setShowDetails(false);
-      setChangeIcon2('fa-plus');
     } else {
       setShowDetails(true);
-      setChangeIcon2('fa-minus');
     }
   }
 
@@ -410,10 +441,13 @@ const ProductDetailsSection = ({ product }) => {
       <button
         type="button"
         className="button-expand2"
+        aria-expanded={showDetails}
         onClick={handleClickExpandDetails}
       >
         Details
-        <i className={`fa-solid ${changeIcon2} icon`} />
+        <i
+          className={`fa-solid ${showDetails ? 'fa-minus' : 'fa-plus'} icon`}
+        />
       </button>
 
       <div

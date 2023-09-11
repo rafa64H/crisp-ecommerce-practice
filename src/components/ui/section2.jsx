@@ -4,6 +4,7 @@ import LinkButton from './smaller/linkButton';
 const SectionTwo = ({
   textTitleSectionTwo,
   textParaSectionTwo,
+  showLink,
   linkText,
   linkHref,
   classesSection2,
@@ -12,7 +13,7 @@ const SectionTwo = ({
     <div className="section2-content">
       <h2 className="section2__title">{textTitleSectionTwo}</h2>
       <p className="section2__para">{textParaSectionTwo}</p>
-      <LinkButton linkText={linkText} linkHref={linkHref} />
+      {showLink ? <LinkButton linkText={linkText} linkHref={linkHref} /> : null}
     </div>
   </section>
 );

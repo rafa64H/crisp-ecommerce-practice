@@ -1,17 +1,19 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useRef } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { auth } from '../../config-firebase/firebase';
 
 import CompanyLogo from './smaller/companyLogo';
 import handleLargeScreen from '../utils/handleLargeScreen';
+import calculatePriceShoppingBagFromFirestore from '../utils/calculatePriceShoppingBagFromFirestore';
 import { getDataOfUser, updateCart } from '../utils/firebaseFunctions';
 import clothesData from '../../data/clothes_data.json';
 
-const HeaderProduct = () => {
+const Header = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [shoppingBagOpen, setShoppingBagOpen] = useState(false);
+  const [showSearchClothes, setShowSearchClothes] = useState(false);
 
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [userEmailVerified, setUserEmailVerified] = useState(true);
@@ -60,25 +62,13 @@ const HeaderProduct = () => {
     else if (shoppingBagItems.length !== 0) setShoppingBagItemsNotFound(false);
   }, [shoppingBagItems]);
 
-  function calculatePrice() {
-    const arrayPrices = shoppingBagItems.map(
-      (item) => item.price * item.quantity
-    );
-
-    const price = arrayPrices.reduce(
-      (priceValue, totalPrice) => priceValue + totalPrice,
-      0
-    );
-
-    return price.toFixed(2);
-  }
-
   return (
     <header>
       <OpenNavBtn
         isNavOpen={isNavOpen}
         setIsNavOpen={setIsNavOpen}
         setShoppingBagOpen={setShoppingBagOpen}
+        setShowSearchClothes={setShowSearchClothes}
       />
       <CompanyLogo />
 
@@ -98,18 +88,22 @@ const HeaderProduct = () => {
             shouldShowTabIndex={isLargeScreen || isNavOpen}
           />
           <NavItem
-            text="Blog"
-            shouldShowTabIndex={isLargeScreen || isNavOpen}
-          />
-          <NavItem
-            text="Sale"
+            text="Community"
+            link="./community.html"
             shouldShowTabIndex={isLargeScreen || isNavOpen}
           />
           <NavItem
             text="Contact"
+            link="./contact.html"
             shouldShowTabIndex={isLargeScreen || isNavOpen}
           />
-          <SearchBtn desktopOrMobile="desktop" />
+          <SearchClothesComponent
+            desktopOrMobile="desktop"
+            showSearchClothes={showSearchClothes}
+            setShowSearchClothes={setShowSearchClothes}
+            setShoppingBagOpen={setShoppingBagOpen}
+            setIsNavOpen={setIsNavOpen}
+          />
 
           <div className="login-sign-cont">
             <NavItemAccount
@@ -135,44 +129,61 @@ const HeaderProduct = () => {
               desktopOrMobile="desktop"
               shoppingBagOpen={shoppingBagOpen}
               setShoppingBagOpen={setShoppingBagOpen}
+              setShowSearchClothes={setShowSearchClothes}
               setIsNavOpen={setIsNavOpen}
             >
-              {calculatePrice()}
+              {calculatePriceShoppingBagFromFirestore(shoppingBagItems)}
             </ShopBtn>
           </div>
         </ul>
       </nav>
 
       <div className="search-shop-btns-cont">
-        <SearchBtn desktopOrMobile="mobile" />
+        <SearchClothesComponent
+          desktopOrMobile="mobile"
+          showSearchClothes={showSearchClothes}
+          setShowSearchClothes={setShowSearchClothes}
+          setShoppingBagOpen={setShoppingBagOpen}
+          setIsNavOpen={setIsNavOpen}
+        />
         <ShopBtn
           desktopOrMobile="mobile"
           shoppingBagOpen={shoppingBagOpen}
           setShoppingBagOpen={setShoppingBagOpen}
+          setShowSearchClothes={setShowSearchClothes}
           setIsNavOpen={setIsNavOpen}
         />
       </div>
 
       <ShoppingBag
+        userLoggedIn={userLoggedIn}
         shoppingBagItems={shoppingBagItems}
         setShoppingBagItems={setShoppingBagItems}
         shoppingBagOpen={shoppingBagOpen}
         setShoppingBagOpen={setShoppingBagOpen}
         shoppingBagItemsNotFound={shoppingBagItemsNotFound}
-        calculatePrice={calculatePrice}
+        calculatePriceShoppingBagFromFirestore={
+          calculatePriceShoppingBagFromFirestore
+        }
       />
     </header>
   );
 };
 
-export default HeaderProduct;
+export default Header;
 
-const OpenNavBtn = ({ isNavOpen, setIsNavOpen, setShoppingBagOpen }) => {
+const OpenNavBtn = ({
+  isNavOpen,
+  setIsNavOpen,
+  setShoppingBagOpen,
+  setShowSearchClothes,
+}) => {
   const [iconNavBtn, setIconNavBtn] = useState('fa-bars');
 
   function handleOpenNav(e) {
     setIsNavOpen(!isNavOpen);
     setShoppingBagOpen(false);
+    setShowSearchClothes(false);
   }
 
   useEffect(() => {
@@ -192,40 +203,156 @@ const OpenNavBtn = ({ isNavOpen, setIsNavOpen, setShoppingBagOpen }) => {
   );
 };
 
-const SearchBtn = ({ desktopOrMobile }) => {
-  // This will have display:none if window width > 1200px
-  if (desktopOrMobile === 'mobile') {
-    return (
+const SearchClothesComponent = ({
+  desktopOrMobile,
+  showSearchClothes,
+  setShowSearchClothes,
+  setShoppingBagOpen,
+  setIsNavOpen,
+}) => {
+  const [clothesDataState, setClothesDataState] = useState(clothesData[0]);
+
+  function handleChangeSearchText(e) {
+    if (e.target.value === '') {
+      console.log('true');
+      return setClothesDataState(clothesData[0]);
+    }
+
+    const filteredItems = clothesData[0].filter((item) =>
+      item.productName.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+
+    setClothesDataState(filteredItems);
+  }
+
+  return desktopOrMobile === 'mobile' ? (
+    <>
       <button
         type="button"
         className="search-btn-mobile"
         aria-label="Search something"
+        onClick={() => {
+          setIsNavOpen(false);
+          setShoppingBagOpen(false);
+          setShowSearchClothes((prevValue) => !prevValue);
+        }}
       >
         <i className="fas fa-search" />
       </button>
-    );
-  }
 
-  // This will have display:none if window width < 1200px
-  return (
-    <button className="search-btn-desktop" type="button">
-      <i className="fas fa-search" />
+      <div
+        className="search-clothes-list"
+        data-show-clothes-list={showSearchClothes}
+        aria-hidden={!showSearchClothes}
+      >
+        <button
+          type="button"
+          className="transparent-btn search-clothes-list-close-btn"
+          onClick={() => setShowSearchClothes((prevValue) => !prevValue)}
+        >
+          <i className="fa-solid fa-xmark" />
+        </button>
+        <input
+          type="text"
+          className="form-input-typing search-clothes-list__input"
+          onChange={(e) => {
+            handleChangeSearchText(e);
+          }}
+        />
 
-      <p className="search__p">Search</p>
-    </button>
+        <ul className="search-clothes-list-ul">
+          {clothesDataState.map((clothesItem) => (
+            <SearchClothesListItem
+              key={uuidv4()}
+              link={`./product.html?productId=${clothesItem.productId}`}
+              clothesItem={clothesItem}
+            />
+          ))}
+        </ul>
+      </div>
+    </>
+  ) : (
+    <>
+      <button
+        className="search-btn-desktop"
+        type="button"
+        onClick={() => {
+          setIsNavOpen(false);
+          setShoppingBagOpen(false);
+          setShowSearchClothes((prevValue) => !prevValue);
+        }}
+      >
+        <i className="fas fa-search" />
+
+        <p className="search__p">Search</p>
+      </button>
+
+      <div
+        className="search-clothes-list search-clothes-list--desktop"
+        data-show-clothes-list={showSearchClothes}
+        aria-hidden={!showSearchClothes}
+      >
+        <button
+          type="button"
+          className="transparent-btn search-clothes-list-close-btn"
+          onClick={() => setShowSearchClothes((prevValue) => !prevValue)}
+        >
+          <i className="fa-solid fa-xmark" />
+        </button>
+        <input
+          type="text"
+          className="form-input-typing search-clothes-list__input"
+          onChange={(e) => {
+            handleChangeSearchText(e);
+          }}
+        />
+
+        <ul className="search-clothes-list-ul">
+          {clothesDataState.map((clothesItem) => (
+            <SearchClothesListItem
+              key={uuidv4()}
+              link={`./product.html?productId=${clothesItem.productId}`}
+              clothesItem={clothesItem}
+            />
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
+
+const SearchClothesListItem = ({ clothesItem, link }) => (
+  <li>
+    <a href={link} className="search-clothes-list-item">
+      <img
+        className="search-clothes-list-item__img"
+        src={clothesItem.otherImages[0]}
+        alt={clothesItem.productName}
+      />
+      <div className="search-clothes-list-item-text">
+        <p className="search-clothes-list-item-text__paragraph">
+          {clothesItem.productName}
+        </p>
+        <p className="search-clothes-list-item-text__paragraph">
+          {clothesItem.price}
+        </p>
+      </div>
+    </a>
+  </li>
+);
 
 const ShopBtn = ({
   desktopOrMobile,
   shoppingBagOpen,
   setShoppingBagOpen,
+  setShowSearchClothes,
   setIsNavOpen,
   children,
 }) => {
   async function handleClickOpenShoppingBag() {
     setShoppingBagOpen(!shoppingBagOpen);
     setIsNavOpen(false);
+    setShowSearchClothes(false);
   }
 
   // This will have display:none if window width > 1200px
@@ -302,7 +429,7 @@ const ProfileLink = ({
   </li>
 );
 
-const ShoppingBagListItem = ({
+export const ShoppingBagListItem = ({
   productImg,
   productName,
   productSize,
@@ -310,8 +437,9 @@ const ShoppingBagListItem = ({
   productQuantity,
   productPrice,
   onClickDeleteItemShoppingBagFunction,
+  extraClassNames,
 }) => (
-  <li className="shopping-bag-list-item">
+  <li className={`shopping-bag-list-item ${extraClassNames}`}>
     <img src={`${productImg}`} className="shopping-bag-list-item__img" alt="" />
     <div className="shopping-bag-list-item-text">
       <p className="shopping-bag-list-item-text__paragraph">
@@ -343,32 +471,25 @@ const ShoppingBagListItem = ({
 );
 
 const ShoppingBag = ({
+  userLoggedIn,
   shoppingBagItems,
   setShoppingBagItems,
   shoppingBagOpen,
   setShoppingBagOpen,
   shoppingBagItemsNotFound,
-  calculatePrice,
+  calculatePriceShoppingBagFromFirestore,
 }) => {
   function buildAllShoppingBagItems() {
     if (shoppingBagItems === undefined) return null;
     if (shoppingBagItems.length !== 0) {
       const allCartItems = shoppingBagItems.map((itemFromShoppingBagState) => {
-        const { name, id, color, size, quantity, price } =
+        const { name, id, color, size, quantity, price, img } =
           itemFromShoppingBagState;
-
-        const product = clothesData[0].find(
-          (clothesDataItem) => clothesDataItem.productId === id
-        );
-
-        const colorImg = product.colors.find(
-          (colorObj) => colorObj.name === color
-        ).imageUrl;
 
         return (
           <ShoppingBagListItem
             key={uuidv4()}
-            productImg={colorImg}
+            productImg={img}
             productColor={color}
             productSize={size}
             productName={name}
@@ -421,10 +542,17 @@ const ShoppingBag = ({
         </p>
         {buildAllShoppingBagItems()}
       </ul>
-      <p className="total-price">Total price is: {calculatePrice()}$</p>
-      <a href="./buy-clothes.html" className="black-btn">
-        Buy clothes
-      </a>
+      <p className="total-price">
+        Total price is:{' '}
+        {calculatePriceShoppingBagFromFirestore(shoppingBagItems)}$
+      </p>
+      {userLoggedIn ? (
+        <a href="./buy-clothes.html" className="black-btn">
+          Buy clothes
+        </a>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

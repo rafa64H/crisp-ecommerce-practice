@@ -9,23 +9,28 @@ const FormInputTyping = ({
   theRef,
   onFocusFunction,
   placeholderProp,
+  defaultValueProp,
 }) => {
   if (required) {
     return (
       <div className="form-input-container">
         <label htmlFor={id} className="form-input-label">
-          {name}{' '}
+          {name}
           <span className="input-required" aria-label="Required">
             *
           </span>
         </label>
         <input
+          defaultValue={defaultValueProp}
           type={type}
           disabled={loading}
           id={id}
           className="form-input-typing"
           ref={theRef}
-          onFocus={(e) => onFocusFunction(e)}
+          onFocus={(e) => {
+            e.target.dataset.errorInputTyping = 'false';
+            onFocusFunction(e);
+          }}
           placeholder={placeholderProp || name}
         />
       </div>

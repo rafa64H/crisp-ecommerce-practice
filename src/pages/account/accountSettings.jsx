@@ -7,10 +7,13 @@ import {
   changeAccountInformation,
   getDataOfUser,
   logOutUser,
+  sendEmailVerificationToUser,
+  updateOrdersHistory,
 } from '../../components/utils/firebaseFunctions';
 import FormInputTyping from '../../components/ui/smaller/formInputTyping';
 import handleLargeScreen from '../../components/utils/handleLargeScreen';
 import ClothesCard from '../../components/ui/smaller/clothesCard';
+import { ShoppingBagListItem } from '../product/headerProduct';
 
 const AccountSettings = ({ clothesData }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -25,6 +28,7 @@ const AccountSettings = ({ clothesData }) => {
   const [typeOfChange, setTypeOfChange] = useState('');
   const [arrayAllCountriesName, setArrayAllCountriesName] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState('');
+  const [ordersHistory, setOrdersHistory] = useState([]);
 
   const firstNameRef = useRef();
   const lastNameRef = useRef();
@@ -84,6 +88,8 @@ const AccountSettings = ({ clothesData }) => {
         setSelectedCountry(docData.address.country);
         stateAddressRef.current.value = docData.address.state;
         postalCodeAddressRef.current.value = docData.address.postalCode;
+
+        setOrdersHistory(docData.ordersHistory);
         setLoading(false);
         setAlertMessage('');
         if (!user.emailVerified) {
@@ -303,6 +309,12 @@ const AccountSettings = ({ clothesData }) => {
 
         <WishList clothesData={clothesData} selectedOption={selectedOption} />
 
+        <HistoryOfOrders
+          selectedOption={selectedOption}
+          ordersHistory={ordersHistory}
+          setOrdersHistory={setOrdersHistory}
+        />
+
         <dialog
           className="account-settings-modal"
           role="alert"
@@ -415,6 +427,11 @@ const FormAccountInformation = ({
     dialogPasswordRef.current.showModal();
   }
 
+  async function handleClickSendEmailVerification(e) {
+    e.preventDefault();
+    await sendEmailVerificationToUser();
+  }
+
   return (
     <form
       className="form-account-settings"
@@ -427,6 +444,17 @@ const FormAccountInformation = ({
 
       <aside className="error-message-form" role="alert" aria-live="assertive">
         {alertMessage}
+        {!emailVerified ? (
+          <button
+            className="error-message-form-email-verification"
+            type="button"
+            onClick={(e) => {
+              handleClickSendEmailVerification(e);
+            }}
+          >
+            Click here to send email verification
+          </button>
+        ) : null}
       </aside>
       <FormInputTyping
         required
@@ -716,6 +744,95 @@ const WishList = ({ clothesData, selectedOption }) => {
         Loading or nothing found
       </h2>
       {elementsToShow()}
+    </ul>
+  );
+};
+
+const HistoryOfOrders = ({
+  selectedOption,
+  ordersHistory,
+  setOrdersHistory,
+}) => {
+  async function deleteOrdersHistoryItem(
+    productCartId,
+    productCartName,
+    productCartColor,
+    productCartSize
+  ) {
+    const itemToDelete = ordersHistory.find(
+      (itemFromState) =>
+        itemFromState.id === productCartId &&
+        itemFromState.name === productCartName &&
+        itemFromState.color === productCartColor &&
+        itemFromState.size === productCartSize
+    );
+
+    const filteredOrdersHistory = ordersHistory.filter(
+      (itemFromState) => itemFromState !== itemToDelete
+    );
+
+    setOrdersHistory(filteredOrdersHistory);
+
+    updateOrdersHistory(filteredOrdersHistory);
+  }
+
+  const returningHtml = () => {
+    if (ordersHistory.length === 0) {
+      return (
+        <div className="orders-history-not-found">
+          <h2>Items not found</h2>
+        </div>
+      );
+    }
+
+    const itemsToShow = ordersHistory.map((item) => (
+      <li key={uuidv4()} className="shopping-bag-list-item orders-history-item">
+        <img
+          src={`${item.img}`}
+          className="shopping-bag-list-item__img"
+          alt=""
+        />
+        <div className="shopping-bag-list-item-text orders-history-item-text">
+          <p className="shopping-bag-list-item-text__paragraph">
+            <strong>{item.name}</strong>
+          </p>
+
+          <div className="shopping-bag-list-item-text-details">
+            <p>Size: {item.size}</p>
+            <p>Color: {item.color}</p>
+            <p>Quantity: {item.quantity}</p>
+          </div>
+
+          <p>
+            <strong>
+              Price: {` ${(item.price * item.quantity).toFixed(2)}$`}
+            </strong>
+          </p>
+          <p>{item.date}</p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() =>
+            deleteOrdersHistoryItem(item.id, item.name, item.color, item.size)
+          }
+          aria-label="Delete item from shopping bag"
+          className="shopping-bag-list-item__delete-btn"
+        >
+          <i className="fa-solid fa-trash" />
+        </button>
+      </li>
+    ));
+
+    return itemsToShow;
+  };
+
+  return (
+    <ul
+      className="form-account-settings orders-history"
+      data-show-orders-history={selectedOption === 'History of orders'}
+    >
+      {returningHtml()}
     </ul>
   );
 };

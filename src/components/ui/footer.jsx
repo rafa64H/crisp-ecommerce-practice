@@ -1,6 +1,8 @@
 import { React, useEffect, useState } from 'react';
+import { onAuthStateChanged, signInWithPhoneNumber } from 'firebase/auth';
 import CompanyLogo from './smaller/companyLogo';
 import handleLargeScreen from '../utils/handleLargeScreen';
+import { auth } from '../../config-firebase/firebase';
 
 const Footer = () => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -10,50 +12,20 @@ const Footer = () => {
   const [isListOpen3, setIsListOpen3] = useState(false);
   const [isListOpen4, setIsListOpen4] = useState(false);
 
+  const [user, setUser] = useState();
+
   useEffect(() => {
     handleLargeScreen(setIsLargeScreen);
+
+    onAuthStateChanged(auth, async (user) => {
+      setUser(user || false);
+    });
   }, []);
 
   return (
     <footer>
       <section className="footer-section">
         <CompanyLogo />
-      </section>
-      <section className="footer-section">
-        <FooterSectionTitle
-          desktopOrMobile="desktop"
-          footerSectionTitleText="FEATURES"
-        />
-
-        <FooterSectionTitle
-          desktopOrMobile="mobile"
-          footerSectionTitleText="FEATURES"
-          isListOpen={isListOpen1}
-          setIsListOpen={setIsListOpen1}
-        />
-
-        <ul
-          className="footer-section__list"
-          aria-hidden={!isLargeScreen && !isListOpen1}
-          data-footer-list-expanded={isListOpen1.toString()}
-        >
-          <FooterListItem
-            shouldShowTabIndex={isLargeScreen || isListOpen1}
-            footerItemText="MEN"
-          />
-          <FooterListItem
-            shouldShowTabIndex={isLargeScreen || isListOpen1}
-            footerItemText="WOMEN"
-          />
-          <FooterListItem
-            shouldShowTabIndex={isLargeScreen || isListOpen1}
-            footerItemText="NEW ARRIVALS"
-          />
-          <FooterListItem
-            shouldShowTabIndex={isLargeScreen || isListOpen1}
-            footerItemText="SHOES"
-          />
-        </ul>
       </section>
       <section className="footer-section">
         <FooterSectionTitle
@@ -76,25 +48,35 @@ const Footer = () => {
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="ABOUT US"
+            footerLink="./contact.html"
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="MY ACCOUNT"
-            footerLink="./account.html"
+            footerLink={`${user ? './account.html' : './create-account.html'}`}
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="ORDERS HISTORY"
-            footerLink="./account.html?option=History of orders"
+            footerLink={`${
+              user
+                ? './account.html?option=History of orders'
+                : './create-account.html'
+            }`}
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
             footerItemText="MY WISHLIST"
-            footerLink="./account.html?option=My wishlist"
+            footerLink={`${
+              user
+                ? './account.html?option=My wishlist'
+                : './create-account.html'
+            }`}
           />
           <FooterListItem
             shouldShowTabIndex={isLargeScreen || isListOpen2}
-            footerItemText="BLOG"
+            footerItemText="COMMUNITY"
+            footerLink="./community.html"
           />
         </ul>
       </section>
@@ -247,7 +229,7 @@ const FooterListItem = ({ footerLink, footerItemText, shouldShowTabIndex }) => (
 const FooterListItemContact = ({ footerContactTitle, footerContactPara }) => (
   <li className="footer-section__list-item">
     <h4 className="footer-contact__title">{footerContactTitle}</h4>
-    <p>{footerContactPara}</p>
+    <p className="footer-contact__paragraph">{footerContactPara}</p>
   </li>
 );
 
