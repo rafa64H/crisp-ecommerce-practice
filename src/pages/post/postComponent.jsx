@@ -150,7 +150,10 @@ const PostComponent = () => {
 
   async function handleSubmitComment(e) {
     e.preventDefault();
-    if (!user) return null;
+    if (!user) {
+      setWriteCommentAlertMessage(`You're not an user`);
+      return null;
+    }
 
     try {
       const currentPost = post;
@@ -278,6 +281,7 @@ const PostComponent = () => {
             className="write-comment__textarea"
             id="write-comment"
             ref={writeCommentRef}
+            onFocus={(e) => setWriteCommentAlertMessage('')}
           />
           <button type="submit" className="black-btn write-comment__btn">
             Submit
@@ -428,7 +432,11 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
 
   async function handleSubmitReply(e) {
     e.preventDefault();
-    if (!user) return null;
+    if (!user) {
+      setWriteReplyAlertMessage(`You're not an user`);
+      return null;
+    }
+
     try {
       const currentPost = post;
       await submitReply(currentPost, user, replyRef, commentId, {
@@ -657,6 +665,8 @@ const ReplyItem = ({
   async function handleClickLikeReply() {
     const currentPost = post;
 
+    if (!user) return null;
+
     try {
       await likeReply(user, currentPost, commentId, replyId, {
         setPost,
@@ -671,6 +681,7 @@ const ReplyItem = ({
   // Dislike reply
   async function handleClickDislikeReply() {
     const currentPost = post;
+    if (!user) return null;
 
     try {
       await dislikeReply(user, currentPost, commentId, replyId, {
