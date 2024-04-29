@@ -1,5 +1,5 @@
 # crisp-ecommerce-practice
 
-This is a page based on this [figma design](https://www.figma.com/community/file/1020672355635265072/Crisp-Ecommerce-Theme)
+This is a fake ecommerce page based on this [figma design](https://www.figma.com/community/file/1316811321603986115/crisp-ecommerce-theme?searchSessionId=lvl5nmps-b13x3cmf7h)
 
-In the future I will add my own details.
+I made it to practice react for the first time
