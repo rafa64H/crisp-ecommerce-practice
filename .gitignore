@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 src/config-firebase/firebase.js
+src/data/clothes_data.json
 *.local
 
 # Editor directories and files
