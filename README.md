@@ -4,7 +4,7 @@ This is a fake ecommerce page based on this [figma design](https://www.figma.com
 
 I made it to practice react for the first time
 
-##Folder structure:
+## Folder structure:
 
 * crisp-ecommerce-practice/ - It's localized the .html files.
 * src/components/utils - There are functions who don't have react components with tags.
