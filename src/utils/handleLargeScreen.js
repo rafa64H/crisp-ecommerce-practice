@@ -1,12 +1,16 @@
-function handleLargeScreen(setIsLargeScreen) {
+import { store } from "../services/redux-toolkit/store";
+
+import { setIsLargeScreen } from "../services/redux-toolkit/large-screen/largeScreenSlice";
+
+function handleLargeScreen() {
   const mediaQuery = window.matchMedia("(min-width: 1200px)");
 
   if (mediaQuery.matches) {
-    setIsLargeScreen(true);
+    store.dispatch(setIsLargeScreen(true));
   }
 
   const handleMediaQueryChange = (event) => {
-    setIsLargeScreen(event.matches);
+    store.dispatch(setIsLargeScreen(event.matches));
   };
 
   mediaQuery.addEventListener("change", handleMediaQueryChange);

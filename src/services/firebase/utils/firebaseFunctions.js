@@ -14,7 +14,6 @@ import {
   getDocs,
   getDoc,
   doc,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import {
@@ -28,11 +27,43 @@ import { auth, db, storage } from "../config-firebase/firebase";
 
 export async function getDataOfUser() {
   const user = await auth.currentUser;
-  const docRef = doc(db, "users", user.uid);
-  const docSnap = await getDoc(docRef);
-  const docData = docSnap.data();
+  const docUserRef = doc(db, "users", user.uid);
+  const mainUserSnap = await getDoc(docUserRef);
+  const mainUserData = mainUserSnap.data();
 
-  return docData;
+  const otherInfoRef = collection(docUserRef, "otherInfo");
+
+  const addressRef = doc(otherInfoRef, "address");
+  const ordersHistoryRef = doc(otherInfoRef, "ordersHistory");
+  const wishlistRef = doc(otherInfoRef, "wishlist");
+  const postsRef = doc(otherInfoRef, "posts");
+
+  const addressSnap = await getDoc(addressRef);
+  const ordersHistorySnap = await getDoc(ordersHistoryRef);
+  const wishlistSnap = await getDoc(wishlistRef);
+  const postsSnap = await getDoc(postsRef);
+  const addressData = addressSnap.data();
+  const ordersHistoryData = ordersHistorySnap.data();
+  const wishlistData = wishlistSnap.data();
+  const postsData = postsSnap.data();
+
+  const userDataForReduxState = {
+    uid: mainUserData.uid,
+    phoneNumber: mainUserData.phoneNumber,
+    firstName: mainUserData.firstName,
+    lastName: mainUserData.lastName,
+    email: mainUserData.email,
+    password: mainUserData.password,
+    cart: mainUserData.cart,
+    firestoreData: {
+      address: addressData,
+      ordersHistory: ordersHistoryData,
+      wishlist: wishlistData,
+      posts: postsData,
+    },
+  };
+
+  return userDataForReduxState;
 }
 
 export async function getPostsOfUser() {
@@ -51,8 +82,6 @@ export async function sendEmailVerificationToUser() {
   console.log("hola");
 }
 
-const usersCollectionRef = collection(db, "users");
-
 export async function createUser(firstName, lastName, email, password) {
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -63,32 +92,51 @@ export async function createUser(firstName, lastName, email, password) {
     const { uid } = userCredential.user;
     const currentUser = await auth.currentUser;
 
-    const communityPostsCollectionRef = collection(db, "communityPosts");
+    const communityPostsUserDocRef = db.collection("communityPosts").doc(uid);
+    const userRef = db.collection("users").doc(uid);
 
-    await setDoc(doc(usersCollectionRef, uid), {
+    await userRef.set({
       firstName,
       lastName,
       password,
       uid,
-      wishlist: [],
       cart: [],
-      ordersHistory: [],
-      address: {
-        firstNameAddress: "",
-        lastNameAddress: "",
-        phoneNumber: "",
-        streetAddress: "",
-        country: "",
-        state: "",
-        postalCode: "",
-      },
       phoneNumber: NaN,
     });
 
-    await setDoc(doc(communityPostsCollectionRef, uid), {
+    const otherInfoCollectionRef = userRef.collection("otherInfo");
+    const addressDocRef = otherInfoCollectionRef.doc("address");
+    const ordersHistoryDocRef = otherInfoCollectionRef.doc("ordersHistory");
+    const wishlistDocRef = otherInfoCollectionRef.doc("wishlist");
+    const postsDocRef = otherInfoCollectionRef.doc("posts");
+
+    await addressDocRef.set({
+      address: {
+        firstNameAddress: null,
+        lastNameAddress: null,
+        phoneNumber: null,
+        streetAddress: null,
+        country: null,
+        state: null,
+        postalCode: null,
+      },
+    });
+
+    await ordersHistoryDocRef.set({
+      ordersHistory: [],
+    });
+
+    await wishlistDocRef.set({
+      wishlist: [],
+    });
+
+    await postsDocRef.set({
       posts: [],
     });
 
+    await communityPostsUserDocRef.set({
+      posts: [],
+    });
     await sendEmailVerification(currentUser);
   } catch (err) {
     console.error(err);
@@ -120,7 +168,9 @@ export async function changeAccountInformation(
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
-  await setDoc(doc(usersCollectionRef, uid), {
+  const userDocRef = db.collection("users").doc(uid);
+
+  await userDocRef.update({
     firstName: newFirstName,
     lastName: newLastName,
     password: newPassword,
@@ -155,6 +205,12 @@ export async function changeAccountAddress(
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
+  const userAddressRef = db
+    .collection("users")
+    .doc(uid)
+    .collection("otherInfo")
+    .doc("address");
+
   const addressToUpdate = {
     firstNameAddress,
     lastNameAddress,
@@ -165,11 +221,7 @@ export async function changeAccountAddress(
     postalCode,
   };
 
-  const userRef = doc(db, "users", uid);
-
-  await updateDoc(userRef, {
-    address: addressToUpdate,
-  });
+  await userAddressRef.update({ addressToUpdate });
 
   console.log("sent");
 }
@@ -182,9 +234,9 @@ export async function updateCart(cartToUpdate) {
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
-  const userRef = doc(db, "users", uid);
+  const cartRef = db.collection("users").doc(uid);
 
-  await updateDoc(userRef, {
+  cartRef.update({
     cart: cartToUpdate,
   });
 
@@ -195,11 +247,13 @@ export async function updateWishlist(wishlistToUpdate) {
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
-  const userRef = doc(db, "users", uid);
+  const wishlistRef = db
+    .collection("users")
+    .doc(uid)
+    .collection("otherInfo")
+    .doc("wishlist");
 
-  await updateDoc(userRef, {
-    wishlist: wishlistToUpdate,
-  });
+  wishlistRef.update({ wishlist: wishlistToUpdate });
 
   console.log("sent wishlist");
 }
