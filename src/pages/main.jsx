@@ -1,6 +1,6 @@
-// Index page
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
+import { Provider, useDispatch, useSelector } from "react-redux";
 
 // Components and sass
 import "../assets/styles.scss";
@@ -10,16 +10,59 @@ import SectionTwo from "../components/section2";
 import BrandSection from "../components/brandSection";
 import SectionThree from "../components/section3";
 import Footer from "../components/footer";
-
+import ProductSlider from "../components/productSlider";
+import handleLargeScreen from "../utils/handleLargeScreen";
 // Images
 import womanHomeOne from "../assets/home/woman-home2.png";
 import womanHomeTwo from "../assets/home/woman-home1.png";
 
 // Data
 import brandsData from "../data/brands.json";
-import ProductSlider from "../components/productSlider";
+import LoadingHeader from "../components/loadingHeader";
+import LoadingPage from "../components/loadingPage";
+import { store } from "../services/redux-toolkit/store";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../services/firebase/config-firebase/firebase";
+import {
+  initialState,
+  setUser,
+} from "../services/redux-toolkit/auth/authSlice";
+import { getDataOfUser } from "../services/firebase/utils/firebaseFunctions";
 
 const Page = () => {
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+
+  const user = useSelector((store) => store.auth.user);
+  const isLargeScreen = useSelector(
+    (store) => store.isLargeScreen.isLargeScreen
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    handleLargeScreen();
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        getDataOfUser().then((userInfo) => {
+          store.dispatch(setUser(userInfo));
+          return userInfo;
+        });
+      } else {
+        store.dispatch(setUser({ uid: false }));
+      }
+    });
+  }, []);
+
+  if (user.uid === null) {
+    return (
+      <>
+        <LoadingHeader />
+        <LoadingPage></LoadingPage>
+        <Footer></Footer>
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
@@ -99,6 +142,8 @@ const Page = () => {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Page></Page>
+    <Provider store={store}>
+      <Page></Page>
+    </Provider>
   </React.StrictMode>
 );

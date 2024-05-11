@@ -29,7 +29,10 @@ const Page = () => {
     handleLargeScreen();
   }, []);
 
-  if (true) {
+  if (
+    user.uid !== null &&
+    window.location.pathname !== "/create-account.html"
+  ) {
     return (
       <>
         <LoadingHeader />
@@ -40,8 +43,7 @@ const Page = () => {
   }
   return (
     <>
-      <LoadingHeader />
-
+      <Header></Header>
       <CreateAccountForm />
 
       <SectionThree />

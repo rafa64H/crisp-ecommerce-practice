@@ -58,7 +58,7 @@ const CreateAccountForm = () => {
         emailRef.current.value,
         passwordRef.current.value
       );
-      window.location.href = "index.html";
+      // window.location.href = "index.html";
     } catch (err) {
       setLoading(false);
       setAlertMessage(err.message);

@@ -15,6 +15,7 @@ import {
   getDoc,
   doc,
   updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import {
   deleteObject,
@@ -92,10 +93,10 @@ export async function createUser(firstName, lastName, email, password) {
     const { uid } = userCredential.user;
     const currentUser = await auth.currentUser;
 
-    const communityPostsUserDocRef = db.collection("communityPosts").doc(uid);
-    const userRef = db.collection("users").doc(uid);
+    const communityPostsUserDocRef = doc(db, "communityPosts", uid);
+    const userRef = doc(db, "users", uid);
 
-    await userRef.set({
+    await setDoc(userRef, {
       firstName,
       lastName,
       password,
@@ -104,13 +105,13 @@ export async function createUser(firstName, lastName, email, password) {
       phoneNumber: NaN,
     });
 
-    const otherInfoCollectionRef = userRef.collection("otherInfo");
-    const addressDocRef = otherInfoCollectionRef.doc("address");
-    const ordersHistoryDocRef = otherInfoCollectionRef.doc("ordersHistory");
-    const wishlistDocRef = otherInfoCollectionRef.doc("wishlist");
-    const postsDocRef = otherInfoCollectionRef.doc("posts");
+    const otherInfoCollectionRef = collection(userRef, "otherInfo");
+    const addressDocRef = doc(otherInfoCollectionRef, "address");
+    const ordersHistoryDocRef = doc(otherInfoCollectionRef, "ordersHistory");
+    const wishlistDocRef = doc(otherInfoCollectionRef, "wishlist");
+    const postsDocRef = doc(otherInfoCollectionRef, "posts");
 
-    await addressDocRef.set({
+    await setDoc(addressDocRef, {
       address: {
         firstNameAddress: null,
         lastNameAddress: null,
@@ -122,21 +123,20 @@ export async function createUser(firstName, lastName, email, password) {
       },
     });
 
-    await ordersHistoryDocRef.set({
+    await setDoc(ordersHistoryDocRef, {
       ordersHistory: [],
     });
 
-    await wishlistDocRef.set({
+    await setDoc(wishlistDocRef, {
       wishlist: [],
     });
-
-    await postsDocRef.set({
+    await setDoc(postsDocRef, {
+      posts: [],
+    });
+    await setDoc(communityPostsUserDocRef, {
       posts: [],
     });
 
-    await communityPostsUserDocRef.set({
-      posts: [],
-    });
     await sendEmailVerification(currentUser);
   } catch (err) {
     console.error(err);
