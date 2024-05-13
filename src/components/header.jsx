@@ -11,59 +11,21 @@ import {
   updateCart,
 } from "../services/firebase/utils/firebaseFunctions.js";
 import clothesData from "../data/clothes_data.json";
+import { useDispatch, useSelector } from "react-redux";
+import { store } from "../services/redux-toolkit/store.js";
+import { setCart } from "../services/redux-toolkit/auth/authSlice.js";
 
 const Header = () => {
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [shoppingBagOpen, setShoppingBagOpen] = useState(false);
   const [showSearchClothes, setShowSearchClothes] = useState(false);
 
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [userEmailVerified, setUserEmailVerified] = useState(true);
-  const [shoppingBagItems, setShoppingBagItems] = useState([]);
-  const [shoppingBagItemsNotFound, setShoppingBagItemsNotFound] =
-    useState(true);
+  const isLargeScreen = useSelector(
+    (store) => store.isLargeScreen.isLargeScreen
+  );
 
-  useEffect(() => {
-    handleLargeScreen(setIsLargeScreen);
-  }, []);
-
-  async function getAndSetCartItems() {
-    const userData = await getDataOfUser();
-    setShoppingBagItems(userData.cart);
-  }
-
-  async function changeShoppingItemFromFirestore(cartToUpdate) {
-    if (!shoppingBagItems) {
-      return null;
-    }
-    try {
-      await updateCart(cartToUpdate);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUserLoggedIn(true);
-        if (!user.emailVerified) {
-          setUserEmailVerified(false);
-        }
-        await getAndSetCartItems();
-      } else {
-        setUserLoggedIn(false);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    changeShoppingItemFromFirestore(shoppingBagItems);
-    if (shoppingBagItems === undefined) {
-    } else if (shoppingBagItems.length === 0) setShoppingBagItemsNotFound(true);
-    else if (shoppingBagItems.length !== 0) setShoppingBagItemsNotFound(false);
-  }, [shoppingBagItems]);
+  const user = useSelector((store) => store.auth.user);
+  const dispatch = useDispatch();
 
   return (
     <header>
@@ -112,20 +74,20 @@ const Header = () => {
             <NavItemAccount
               link="./login.html"
               text="Sign in"
-              userLoggedIn={userLoggedIn}
+              userLoggedIn={user.uid}
               shouldShowTabIndex={isLargeScreen || isNavOpen}
             />
             <NavItemAccount
               link="./create-account.html"
               text="Create an account"
-              userLoggedIn={userLoggedIn}
+              userLoggedIn={user.uid}
               shouldShowTabIndex={isLargeScreen || isNavOpen}
             />
             <ProfileLink
               link="./account.html"
               shouldShowTabIndex={isLargeScreen || isNavOpen}
-              userLoggedIn={userLoggedIn}
-              userEmailVerified={userEmailVerified}
+              userLoggedIn={user.uid}
+              userEmailVerified={user.userEmailVerified}
             />
 
             <ShopBtn
@@ -135,7 +97,7 @@ const Header = () => {
               setShowSearchClothes={setShowSearchClothes}
               setIsNavOpen={setIsNavOpen}
             >
-              {calculatePriceShoppingBagFromFirestore(shoppingBagItems)}
+              {calculatePriceShoppingBagFromFirestore()}
             </ShopBtn>
           </div>
         </ul>
@@ -159,12 +121,9 @@ const Header = () => {
       </div>
 
       <ShoppingBag
-        userLoggedIn={userLoggedIn}
-        shoppingBagItems={shoppingBagItems}
-        setShoppingBagItems={setShoppingBagItems}
+        userLoggedIn={user.uid}
         shoppingBagOpen={shoppingBagOpen}
         setShoppingBagOpen={setShoppingBagOpen}
-        shoppingBagItemsNotFound={shoppingBagItemsNotFound}
         calculatePriceShoppingBagFromFirestore={
           calculatePriceShoppingBagFromFirestore
         }
@@ -399,7 +358,7 @@ const NavItem = ({ text, link, shouldShowTabIndex }) => (
 const NavItemAccount = ({ text, userLoggedIn, link, shouldShowTabIndex }) => (
   <li
     className="nav-item"
-    data-user-loggedin-nav-item-account={`${userLoggedIn}`}
+    data-user-loggedin-nav-item-account={`${userLoggedIn !== false}`}
   >
     <a href={link} tabIndex={shouldShowTabIndex ? 0 : -1} className="nav-link">
       {text}
@@ -413,7 +372,10 @@ const ProfileLink = ({
   link,
   shouldShowTabIndex,
 }) => (
-  <li className="nav-item" data-user-loggedin-profile-link={`${userLoggedIn}`}>
+  <li
+    className="nav-item"
+    data-user-loggedin-profile-link={`${userLoggedIn !== false}`}
+  >
     <a
       href={link}
       tabIndex={shouldShowTabIndex ? 0 : -1}
@@ -475,19 +437,21 @@ export const ShoppingBagListItem = ({
 
 const ShoppingBag = ({
   userLoggedIn,
-  shoppingBagItems,
-  setShoppingBagItems,
   shoppingBagOpen,
   setShoppingBagOpen,
-  shoppingBagItemsNotFound,
   calculatePriceShoppingBagFromFirestore,
 }) => {
+  const user = useSelector((store) => store.auth.user);
+  const dispatch = useDispatch();
+
+  const [shoppingBagItemsNotFound, setShoppingBagItemsNotFound] =
+    useState(true);
+
   function buildAllShoppingBagItems() {
-    if (shoppingBagItems === undefined) return null;
-    if (shoppingBagItems.length !== 0) {
-      const allCartItems = shoppingBagItems.map((itemFromShoppingBagState) => {
-        const { name, id, color, size, quantity, price, img } =
-          itemFromShoppingBagState;
+    if (user.cart === undefined) return null;
+    if (user.cart.length !== 0) {
+      const allCartItems = user.cart.map((itemFromCart) => {
+        const { name, id, color, size, quantity, price, img } = itemFromCart;
 
         return (
           <ShoppingBagListItem
@@ -515,18 +479,34 @@ const ShoppingBag = ({
     productCartColor,
     productCartSize
   ) {
-    const itemToDelete = shoppingBagItems.find(
+    const user = store.getState().auth.user;
+
+    const itemToDelete = user.cart.find(
       (itemFromState) =>
         itemFromState.id === productCartId &&
         itemFromState.name === productCartName &&
         itemFromState.color === productCartColor &&
         itemFromState.size === productCartSize
     );
-    setShoppingBagItems((prevShoppingBagItems) =>
-      prevShoppingBagItems.filter(
-        (itemFromState) => itemFromState !== itemToDelete
-      )
+
+    const cartToUpdate = user.cart.filter(
+      (itemFromState) => itemFromState !== itemToDelete
     );
+
+    dispatch(setCart(cartToUpdate));
+
+    changeShoppingItemFromFirestore();
+  }
+
+  async function changeShoppingItemFromFirestore(cartToUpdate) {
+    try {
+      await updateCart(cartToUpdate);
+
+      if (user.cart.length === 0) setShoppingBagItemsNotFound(true);
+      else if (user.cart.length !== 0) setShoppingBagItemsNotFound(false);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -546,10 +526,9 @@ const ShoppingBag = ({
         {buildAllShoppingBagItems()}
       </ul>
       <p className="total-price">
-        Total price is:{" "}
-        {calculatePriceShoppingBagFromFirestore(shoppingBagItems)}$
+        Total price is: {calculatePriceShoppingBagFromFirestore()}$
       </p>
-      {userLoggedIn ? (
+      {userLoggedIn !== false ? (
         <a href="./buy-clothes.html" className="black-btn">
           Buy clothes
         </a>

@@ -1,9 +1,9 @@
-export default function calculatePriceShoppingBagFromFirestore(
-  arrayItemsShoppingBagFirestore
-) {
-  const arrayPrices = arrayItemsShoppingBagFirestore.map(
-    (item) => item.price * item.quantity
-  );
+import { store } from "../services/redux-toolkit/store";
+
+export default function calculatePriceShoppingBagFromFirestore() {
+  const user = store.getState().auth.user;
+
+  const arrayPrices = user.cart.map((item) => item.price * item.quantity);
 
   const price = arrayPrices.reduce(
     (priceValue, totalPrice) => priceValue + totalPrice,

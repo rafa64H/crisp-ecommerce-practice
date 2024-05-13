@@ -35,9 +35,12 @@ const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
+    setCart: (state, action) => {
+      state.user.cart = action.payload;
+    },
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { setUser, setCart } = authSlice.actions;
 
 export default authSlice.reducer;

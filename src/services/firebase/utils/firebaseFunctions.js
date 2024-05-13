@@ -48,6 +48,12 @@ export async function getDataOfUser() {
   const wishlistData = wishlistSnap.data();
   const postsData = postsSnap.data();
 
+  let emailVerified = false;
+
+  if (user.emailVerified) {
+    emailVerified = true;
+  }
+
   const userDataForReduxState = {
     uid: mainUserData.uid,
     phoneNumber: mainUserData.phoneNumber,
@@ -56,6 +62,7 @@ export async function getDataOfUser() {
     email: mainUserData.email,
     password: mainUserData.password,
     cart: mainUserData.cart,
+    emailVerified: emailVerified,
     firestoreData: {
       address: addressData,
       ordersHistory: ordersHistoryData,
@@ -234,11 +241,9 @@ export async function updateCart(cartToUpdate) {
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
-  const cartRef = db.collection("users").doc(uid);
+  const userRef = doc(db, "users", uid);
 
-  cartRef.update({
-    cart: cartToUpdate,
-  });
+  updateDoc(userRef, { cart: cartToUpdate });
 
   console.log("sent");
 }
