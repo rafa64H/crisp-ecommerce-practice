@@ -29,11 +29,9 @@ const ClothesCard = ({
   const user = useSelector((store) => store.auth.user);
   const dispatch = useDispatch();
 
-  console.log(user);
   const wishlistItem = user.firestoreData.wishlist.find(
     (itemFromState) => itemFromState == productId
   );
-  console.log(wishlistItem, productId, wishlistItem === productId);
 
   useEffect(() => {
     if (wishlistItem) {

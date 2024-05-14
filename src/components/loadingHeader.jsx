@@ -12,9 +12,8 @@ const LoadingHeader = () => {
 
   return (
     <header>
-      <CompanyLogo />
-
       <OpenNavBtn isNavOpen={isNavOpen} setIsNavOpen={setIsNavOpen} />
+      <CompanyLogo />
 
       <nav
         data-nav-list-open={isNavOpen}
