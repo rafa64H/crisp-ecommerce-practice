@@ -1,6 +1,8 @@
 // Index page
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
+import { store } from "../services/redux-toolkit/store";
+import { useDispatch, useSelector, Provider } from "react-redux";
 
 // data
 import clothesData from "../data/clothes_data.json";
@@ -12,16 +14,13 @@ import SectionTwo from "../components/section2";
 import SectionThree from "../components/section3";
 import Footer from "../components/footer";
 import ClothesListWithFilters from "../components/shopWithFilters";
-import { useDispatch, useSelector } from "react-redux";
 import handleLargeScreen from "../utils/handleLargeScreen";
 import { onAuthStateChanged } from "firebase/auth";
 import { getDataOfUser } from "../services/firebase/utils/firebaseFunctions";
 import { setUser } from "../services/redux-toolkit/auth/authSlice";
 import { auth } from "../services/firebase/config-firebase/firebase";
-import { store } from "../services/redux-toolkit/store";
 import LoadingHeader from "../components/loadingHeader";
 import LoadingPage from "../components/loadingPage";
-import { Provider } from "react-redux";
 
 const Page = () => {
   const user = useSelector((store) => store.auth.user);

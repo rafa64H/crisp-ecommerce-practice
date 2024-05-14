@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
+import { store } from "../services/redux-toolkit/store";
+
+// Images
+import womanHomeOne from "../assets/home/woman-home2.png";
+import womanHomeTwo from "../assets/home/woman-home1.png";
+
+// Data
+import brandsData from "../data/brands.json";
 
 // Components and sass
 import "../assets/styles.scss";
@@ -11,22 +19,12 @@ import BrandSection from "../components/brandSection";
 import SectionThree from "../components/section3";
 import Footer from "../components/footer";
 import ProductSlider from "../components/productSlider";
-import handleLargeScreen from "../utils/handleLargeScreen";
-// Images
-import womanHomeOne from "../assets/home/woman-home2.png";
-import womanHomeTwo from "../assets/home/woman-home1.png";
-
-// Data
-import brandsData from "../data/brands.json";
 import LoadingHeader from "../components/loadingHeader";
 import LoadingPage from "../components/loadingPage";
-import { store } from "../services/redux-toolkit/store";
+import handleLargeScreen from "../utils/handleLargeScreen";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../services/firebase/config-firebase/firebase";
-import {
-  initialState,
-  setUser,
-} from "../services/redux-toolkit/auth/authSlice";
+import { setUser } from "../services/redux-toolkit/auth/authSlice";
 import { getDataOfUser } from "../services/firebase/utils/firebaseFunctions";
 
 const Page = () => {
