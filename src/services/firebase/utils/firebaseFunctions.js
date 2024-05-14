@@ -64,10 +64,10 @@ export async function getDataOfUser() {
     cart: mainUserData.cart,
     emailVerified: emailVerified,
     firestoreData: {
-      address: addressData,
-      ordersHistory: ordersHistoryData,
-      wishlist: wishlistData,
-      posts: postsData,
+      address: addressData.address,
+      ordersHistory: ordersHistoryData.ordersHistory,
+      wishlist: wishlistData.wishlist,
+      posts: postsData.posts,
     },
   };
 
@@ -252,13 +252,9 @@ export async function updateWishlist(wishlistToUpdate) {
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
-  const wishlistRef = db
-    .collection("users")
-    .doc(uid)
-    .collection("otherInfo")
-    .doc("wishlist");
+  const wishlistRef = doc(db, "users", uid, "otherInfo", "wishlist");
 
-  wishlistRef.update({ wishlist: wishlistToUpdate });
+  updateDoc(wishlistRef, { wishlist: wishlistToUpdate });
 
   console.log("sent wishlist");
 }

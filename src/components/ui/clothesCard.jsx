@@ -6,6 +6,9 @@ import {
   updateWishlist,
 } from "../../services/firebase/utils/firebaseFunctions";
 import { auth } from "../../services/firebase/config-firebase/firebase.js";
+import { useDispatch, useSelector } from "react-redux";
+import { store } from "../../services/redux-toolkit/store.js";
+import { setWishlist } from "../../services/redux-toolkit/auth/authSlice.js";
 
 const ClothesCard = ({
   link,
@@ -19,49 +22,43 @@ const ClothesCard = ({
   extraClassNames,
   additionalOnClickWishListFunction,
 }) => {
-  const [user, setUser] = useState();
   const [imageSrc, setImageSrc] = useState(`${productImg}`);
   const [activeBtn, setActiveBtn] = useState(0);
-  const [addedToWishList, setAddedToWishList] = useState(false);
+  const [addedToWishlist, setAddedToWishlist] = useState(false);
 
-  async function getWishlistFromFirestore() {
-    const userData = await getDataOfUser();
-    const { wishlist } = userData;
+  const user = useSelector((store) => store.auth.user);
+  const dispatch = useDispatch();
 
-    return wishlist;
-  }
+  console.log(user);
+  const wishlistItem = user.firestoreData.wishlist.find(
+    (itemFromState) => itemFromState == productId
+  );
+  console.log(wishlistItem, productId, wishlistItem === productId);
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const wishList = await getWishlistFromFirestore();
-        const wishListItem = await wishList.find(
-          (itemFromFirestore) => itemFromFirestore == productId
-        );
-        if (wishListItem) {
-          setAddedToWishList(true);
-        }
-      }
-      setUser(user || false);
-    });
+    if (wishlistItem) {
+      setAddedToWishlist(true);
+    }
   }, []);
 
   async function handleAddOrRemoveOfWishlist() {
     try {
-      if (addedToWishList) {
-        const wishList = await getWishlistFromFirestore();
-        const wishListWithRemovedItem = await wishList.filter(
+      if (addedToWishlist) {
+        const wishlist = user.firestoreData.wishlist;
+        const wishlistWithRemovedItem = await wishlist.filter(
           (itemFromFirestore) => itemFromFirestore !== productId
         );
 
-        await updateWishlist(wishListWithRemovedItem);
+        await updateWishlist(wishlistWithRemovedItem);
+        dispatch(setWishlist(wishlistWithRemovedItem));
         return null;
       }
 
-      const wishList = await getWishlistFromFirestore();
-      const wishListWithAddedItem = [...wishList, productId];
+      const wishlist = user.firestoreData.wishlist;
+      const wishlistWithAddedItem = [...wishlist, productId];
 
-      await updateWishlist(wishListWithAddedItem);
+      await updateWishlist(wishlistWithAddedItem);
+      dispatch(setWishlist(wishlistWithAddedItem));
     } catch (err) {
       console.log(err);
     }
@@ -116,20 +113,21 @@ const ClothesCard = ({
           type="button"
           className="clothes-card-heart"
           aria-label={`Add to wishlist ${
-            addedToWishList ? "Already added" : ""
+            addedToWishlist ? "Already added" : ""
           }`}
           onClick={(e) => {
             e.preventDefault();
             if (!user) return null;
 
             handleAddOrRemoveOfWishlist();
-            setAddedToWishList((prevValue) => !prevValue);
-            additionalOnClickWishListFunction();
+            setAddedToWishlist((prevValue) => !prevValue);
+            if (typeof additionalOnClickWishListFunction === "function")
+              additionalOnClickWishListFunction();
           }}
         >
           <i
             className="fa-solid fa-heart"
-            data-added-to-wishlist={addedToWishList}
+            data-added-to-wishlist={addedToWishlist}
           />
         </button>
       </a>
