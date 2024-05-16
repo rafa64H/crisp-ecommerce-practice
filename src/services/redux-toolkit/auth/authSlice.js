@@ -38,12 +38,16 @@ const authSlice = createSlice({
     setCart: (state, action) => {
       state.user.cart = action.payload;
     },
+    setOrdersHistory: (state, action) => {
+      state.user.firestoreData.ordersHistory = action.payload;
+    },
     setWishlist: (state, action) => {
       state.user.firestoreData.wishlist = action.payload;
     },
   },
 });
 
-export const { setUser, setCart, setWishlist } = authSlice.actions;
+export const { setUser, setCart, setOrdersHistory, setWishlist } =
+  authSlice.actions;
 
 export default authSlice.reducer;

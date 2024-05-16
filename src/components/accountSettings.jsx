@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../services/firebase/config-firebase/firebase.js";
+import { auth } from "../services/firebase/config-firebase/firebase.js";
 import {
   changeAccountAddress,
   changeAccountInformation,
@@ -11,10 +10,12 @@ import {
   updateOrdersHistory,
 } from "../services/firebase/utils/firebaseFunctions.js";
 import FormInputTyping from "./ui/formInputTyping.jsx";
-import handleLargeScreen from "../utils/handleLargeScreen.js";
 import ClothesCard from "./ui/clothesCard";
-import { ShoppingBagListItem } from "./headerProduct";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  setOrdersHistory,
+  setWishlist,
+} from "../services/redux-toolkit/auth/authSlice.js";
 
 const AccountSettings = ({ clothesData }) => {
   const [selectedOption, setSelectedOption] = useState("Account information");
@@ -61,7 +62,6 @@ const AccountSettings = ({ clothesData }) => {
   const isLargeScreen = useSelector(
     (store) => store.isLargeScreen.isLargeScreen
   );
-  const dispatch = useDispatch();
 
   async function getAllCountriesName() {
     try {
@@ -680,90 +680,17 @@ const FormAddress = ({
   );
 };
 
-const WishList = ({ clothesData, selectedOption }) => {
-  const [wishListState, setWishListState] = useState([]);
+const HistoryOfOrders = ({ selectedOption }) => {
+  const user = useSelector((store) => store.auth.user);
+  const dispatch = useDispatch();
 
-  async function getWishlistFromFirestore() {
-    const userData = await getDataOfUser();
-    const { wishlist } = userData;
-
-    return wishlist;
-  }
-
-  async function changeWishList(id) {
-    setWishListState((prevValue) =>
-      prevValue.filter((itemFromState) => itemFromState.productId !== id)
-    );
-  }
-
-  useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const wishlistFromFirestore = await getWishlistFromFirestore();
-        const wishList = wishlistFromFirestore.map((idFromFirestore) =>
-          clothesData.find((item) => item.productId === idFromFirestore)
-        );
-
-        setWishListState(wishList);
-      }
-    });
-  }, []);
-
-  function elementsToShow() {
-    if (wishListState.length === 0) {
-      return null;
-    }
-
-    return (
-      <>
-        {wishListState.map((item) => (
-          <ClothesCard
-            link={`./product.html?productId=${item.productId}`}
-            productId={item.productId}
-            productName={item.productName}
-            productColors={item.colors}
-            productImg={item.colors[0].imageUrl}
-            gender={item.gender}
-            productPrice={item.price}
-            category={item.category}
-            key={uuidv4()}
-            additionalOnClickWishListFunction={() =>
-              changeWishList(item.productId)
-            }
-          />
-        ))}
-      </>
-    );
-  }
-
-  return (
-    <ul
-      className="form-account-settings wishlist"
-      data-show-wishlist={selectedOption === "My wishlist"}
-    >
-      <h2
-        data-show-wishlist-not-found={wishListState.length === 0}
-        className="wishlist-not-found"
-      >
-        Loading or nothing found
-      </h2>
-      {elementsToShow()}
-    </ul>
-  );
-};
-
-const HistoryOfOrders = ({
-  selectedOption,
-  ordersHistory,
-  setOrdersHistory,
-}) => {
   async function deleteOrdersHistoryItem(
     productCartId,
     productCartName,
     productCartColor,
     productCartSize
   ) {
-    const itemToDelete = ordersHistory.find(
+    const itemToDelete = user.firestoreData.ordersHistory.find(
       (itemFromState) =>
         itemFromState.id === productCartId &&
         itemFromState.name === productCartName &&
@@ -771,25 +698,25 @@ const HistoryOfOrders = ({
         itemFromState.size === productCartSize
     );
 
-    const filteredOrdersHistory = ordersHistory.filter(
+    const filteredOrdersHistory = user.firestoreData.ordersHistory.filter(
       (itemFromState) => itemFromState !== itemToDelete
     );
 
-    setOrdersHistory(filteredOrdersHistory);
+    dispatch(setOrdersHistory(filteredOrdersHistory));
 
     updateOrdersHistory(filteredOrdersHistory);
   }
 
   const returningHtml = () => {
-    if (ordersHistory.length === 0) {
+    if (user.firestoreData.ordersHistory.length === 0) {
       return (
-        <div className="orders-history-not-found">
+        <div className="wishlist-orders-history-not-found">
           <h2>Items not found</h2>
         </div>
       );
     }
 
-    const itemsToShow = ordersHistory.map((item) => (
+    const itemsToShow = user.firestoreData.ordersHistory.map((item) => (
       <li key={uuidv4()} className="shopping-bag-list-item orders-history-item">
         <img
           src={`${item.img}`}
@@ -833,10 +760,64 @@ const HistoryOfOrders = ({
 
   return (
     <ul
-      className="form-account-settings orders-history"
+      className="form-account-settings wishlist-orders-history"
       data-show-orders-history={selectedOption === "History of orders"}
     >
       {returningHtml()}
+    </ul>
+  );
+};
+
+const WishList = ({ clothesData, selectedOption }) => {
+  const user = useSelector((store) => store.auth.user);
+  const dispatch = useDispatch();
+
+  async function changeWishList(id) {
+    const filteredWishlist = user.firestoreData.wishlist.filter(
+      (itemFromState) => itemFromState.productId !== id
+    );
+    dispatch(setWishlist(filteredWishlist));
+  }
+
+  function elementsToShow() {
+    if (user.firestoreData.wishlist.length === 0) {
+      return null;
+    }
+
+    return (
+      <>
+        {user.firestoreData.wishlist.map((item) => (
+          <ClothesCard
+            link={`./product.html?productId=${item.productId}`}
+            productId={item.productId}
+            productName={item.productName}
+            productColors={item.colors}
+            productImg={item.colors[0].imageUrl}
+            gender={item.gender}
+            productPrice={item.price}
+            category={item.category}
+            key={uuidv4()}
+            additionalOnClickWishListFunction={() =>
+              changeWishList(item.productId)
+            }
+          />
+        ))}
+      </>
+    );
+  }
+
+  return (
+    <ul
+      className="form-account-settings wishlist-orders-history"
+      data-show-wishlist={selectedOption === "My wishlist"}
+    >
+      <h2
+        data-show-wishlist-not-found={user.firestoreData.wishlist.length === 0}
+        className="wishlist-orders-history-not-found"
+      >
+        No items in wishlist
+      </h2>
+      {elementsToShow()}
     </ul>
   );
 };

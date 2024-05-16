@@ -1348,19 +1348,7 @@ footer {
     color: $darker-gray;
   }
 }
-.wishlist {
-  margin: 1em;
-  border: 1px solid $first-color;
-  height: 30em;
-  overflow-y: scroll;
-
-  .wishlist-not-found {
-    display: none;
-    margin: 5em;
-    text-align: center;
-  }
-}
-.orders-history {
+.wishlist-orders-history {
   margin-top: 1em;
   border: 2px solid $darker-gray;
   height: 30em;
@@ -1369,11 +1357,9 @@ footer {
   &-not-found {
     text-align: center;
     margin: 5em;
-
-    h2 {
-    }
   }
-
+}
+.orders-history {
   .orders-history-item {
     margin-top: 1em;
     line-height: 1.5;
