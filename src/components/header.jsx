@@ -87,7 +87,6 @@ const Header = () => {
               link="./account.html"
               shouldShowTabIndex={isLargeScreen || isNavOpen}
               userLoggedIn={user.uid}
-              userEmailVerified={user.userEmailVerified}
             />
 
             <ShopBtn
@@ -371,28 +370,33 @@ const ProfileLink = ({
   userEmailVerified,
   link,
   shouldShowTabIndex,
-}) => (
-  <li
-    className="nav-item"
-    data-user-loggedin-profile-link={`${userLoggedIn !== false}`}
-  >
-    <a
-      href={link}
-      tabIndex={shouldShowTabIndex ? 0 : -1}
-      className="nav-link--profile"
-      aria-label="Go to account settings"
-    >
-      <i className="fa-solid fa-user" />
-    </a>
+}) => {
+  const user = useSelector((store) => store.auth.user);
+  const dispatch = useDispatch();
 
-    <p
-      className="header-not-verified-email"
-      data-user-loggedin-profile-link={`${!userLoggedIn || !userEmailVerified}`}
+  return (
+    <li
+      className="nav-item"
+      data-user-loggedin-profile-link={`${userLoggedIn !== false}`}
     >
-      Email is not verified!
-    </p>
-  </li>
-);
+      <a
+        href={link}
+        tabIndex={shouldShowTabIndex ? 0 : -1}
+        className="nav-link--profile"
+        aria-label="Go to account settings"
+      >
+        <i className="fa-solid fa-user" />
+      </a>
+
+      <p
+        className="header-not-verified-email"
+        data-user-loggedin-profile-link={`${!user.emailVerified}`}
+      >
+        Email is not verified!
+      </p>
+    </li>
+  );
+};
 
 export const ShoppingBagListItem = ({
   productImg,

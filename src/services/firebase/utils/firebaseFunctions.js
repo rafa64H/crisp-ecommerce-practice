@@ -175,27 +175,34 @@ export async function changeAccountInformation(
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
-  const userDocRef = db.collection("users").doc(uid);
+  const userDocRef = doc(db, "users", uid);
 
-  await userDocRef.update({
+  await updateDoc(userDocRef, {
     firstName: newFirstName,
     lastName: newLastName,
-    password: newPassword,
   });
-
-  const credential = EmailAuthProvider.credential(
-    currentUser.email,
-    oldPassword
-  );
-
-  await reauthenticateWithCredential(currentUser, credential);
 
   if (oldEmail !== newEmail) {
     await updateEmail(currentUser, newEmail);
     sendEmailVerification(currentUser);
+    await updateDoc(userDocRef, {
+      email: newEmail,
+    });
   }
-  if (oldPassword !== newPassword)
+  if (oldPassword !== newPassword) {
+    const credential = EmailAuthProvider.credential(
+      currentUser.email,
+      oldPassword
+    );
+
+    await reauthenticateWithCredential(currentUser, credential);
+
     await updatePassword(currentUser, newPassword);
+
+    await updateDoc(userDocRef, {
+      password: newPassword,
+    });
+  }
 
   console.log("sent");
 }
@@ -212,11 +219,7 @@ export async function changeAccountAddress(
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
-  const userAddressRef = db
-    .collection("users")
-    .doc(uid)
-    .collection("otherInfo")
-    .doc("address");
+  const userAddressRef = doc(db, "users", uid, "otherInfo", "address");
 
   const addressToUpdate = {
     firstNameAddress,
@@ -228,7 +231,7 @@ export async function changeAccountAddress(
     postalCode,
   };
 
-  await userAddressRef.update({ addressToUpdate });
+  await updateDoc(userAddressRef, { address: addressToUpdate });
 
   console.log("sent");
 }

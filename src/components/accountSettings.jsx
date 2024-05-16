@@ -14,9 +14,9 @@ import FormInputTyping from "./ui/formInputTyping.jsx";
 import handleLargeScreen from "../utils/handleLargeScreen.js";
 import ClothesCard from "./ui/clothesCard";
 import { ShoppingBagListItem } from "./headerProduct";
+import { useDispatch, useSelector } from "react-redux";
 
 const AccountSettings = ({ clothesData }) => {
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Account information");
   const [showSettingsOptions, setShowSettingsOptions] = useState(false);
   const [changeIcon, setChangeIcon] = useState("fa-plus");
@@ -57,6 +57,12 @@ const AccountSettings = ({ clothesData }) => {
   const params = new URLSearchParams(window.location.search);
   const selectOptionFromParam = params.get("option");
 
+  const user = useSelector((store) => store.auth.user);
+  const isLargeScreen = useSelector(
+    (store) => store.isLargeScreen.isLargeScreen
+  );
+  const dispatch = useDispatch();
+
   async function getAllCountriesName() {
     try {
       const response = await fetch(
@@ -72,39 +78,38 @@ const AccountSettings = ({ clothesData }) => {
   }
 
   useEffect(() => {
-    handleLargeScreen(setIsLargeScreen);
+    firstNameRef.current.value = user.firstName;
+    lastNameRef.current.value = user.lastName;
+    emailRef.current.value = user.email;
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const docData = await getDataOfUser();
-        firstNameRef.current.value = docData.firstName;
-        lastNameRef.current.value = docData.lastName;
-        emailRef.current.value = user.email;
+    firstNameAddressRef.current.value =
+      user.firestoreData.address.firstNameAddress;
+    lastNameAddressRef.current.value =
+      user.firestoreData.address.lastNameAddress;
+    phoneNumberAddressRef.current.value =
+      user.firestoreData.address.phoneNumber;
+    streetAddressRef.current.value = user.firestoreData.address.streetAddress;
+    setSelectedCountry(user.firestoreData.address.country);
+    stateAddressRef.current.value = user.firestoreData.address.state;
+    postalCodeAddressRef.current.value = user.firestoreData.address.postalCode;
 
-        firstNameAddressRef.current.value = docData.address.firstNameAddress;
-        lastNameAddressRef.current.value = docData.address.lastNameAddress;
-        phoneNumberAddressRef.current.value = docData.address.phoneNumber;
-        streetAddressRef.current.value = docData.address.streetAddress;
-        setSelectedCountry(docData.address.country);
-        stateAddressRef.current.value = docData.address.state;
-        postalCodeAddressRef.current.value = docData.address.postalCode;
+    const firstSetAllCountriesName = async () => {
+      const allCountriesNames = await getAllCountriesName();
+      setArrayAllCountriesName(allCountriesNames);
+    };
 
-        setOrdersHistory(docData.ordersHistory);
-        setLoading(false);
-        setAlertMessage("");
-        if (!user.emailVerified) {
-          setEmailVerified(false);
-          setAlertMessage(
-            "Please verify your Email Address first, if you want to change information, after verifying reload this page"
-          );
-        }
+    firstSetAllCountriesName();
+    console.log(user);
+    if (!user.emailVerified) {
+      setEmailVerified(false);
+      setAlertMessage(
+        "Please verify your Email Address first, if you want to change information, after verifying reload this page"
+      );
+    }
 
-        const allCountriesNames = await getAllCountriesName();
-        setArrayAllCountriesName(allCountriesNames);
-      } else {
-        setAlertMessage(`Error: Couldn't get user data`);
-      }
-    });
+    setOrdersHistory(user.firestoreData.ordersHistory);
+    setLoading(false);
+    setAlertMessage("");
 
     if (selectOptionFromParam) {
       setSelectedOption(selectOptionFromParam);
@@ -175,7 +180,6 @@ const AccountSettings = ({ clothesData }) => {
             confirmCurrentPasswordRef.current.value
           );
           setAlertMessageDialog("");
-          window.location.href = "account.html";
           break;
 
         case "address":
@@ -189,7 +193,6 @@ const AccountSettings = ({ clothesData }) => {
             postalCodeAddressRef.current.value
           );
           setAlertMessageDialog("");
-          window.location.href = "account.html";
           break;
 
         default:
@@ -197,6 +200,7 @@ const AccountSettings = ({ clothesData }) => {
           break;
       }
       setLoading(false);
+      window.location.href = "account.html";
     } catch (err) {
       setLoading(false);
       setAlertMessageDialog(err.message);

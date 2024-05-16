@@ -28,8 +28,6 @@ import { setUser } from "../services/redux-toolkit/auth/authSlice";
 import { getDataOfUser } from "../services/firebase/utils/firebaseFunctions";
 
 const Page = () => {
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-
   const user = useSelector((store) => store.auth.user);
   const isLargeScreen = useSelector(
     (store) => store.isLargeScreen.isLargeScreen
