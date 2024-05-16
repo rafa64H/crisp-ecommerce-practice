@@ -8,16 +8,14 @@ import ProductSlider from "./productSlider.jsx";
 import ButtonExpand from "./ui/buttonExpand.jsx";
 import {
   getDataOfUser,
+  updateCart,
   updateWishlist,
 } from "../services/firebase/utils/firebaseFunctions.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setCart } from "../services/redux-toolkit/auth/authSlice.js";
 
-const ProductComponent = ({
-  clothesData,
-  shoppingBagItems,
-  setShoppingBagItems,
-}) => {
+const ProductComponent = ({ clothesData }) => {
   const [isLargeScreen, setIsLargeScreen] = useState(false);
-  const [user, setUser] = useState();
 
   const [selectedImage, setSelectedImage] = useState();
   const [colorImage, setColorImage] = useState();
@@ -26,6 +24,9 @@ const ProductComponent = ({
   const [selectedColor, setSelectedColor] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
 
+  const user = useSelector((store) => store.auth.user);
+  const dispatch = useDispatch();
+
   const quantityRef = useRef();
 
   const params = new URLSearchParams(window.location.search);
@@ -33,9 +34,14 @@ const ProductComponent = ({
   const product = clothesData.find((item) => item.productId === Number(id));
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      setUser(user || false);
-    });
+    if (product) {
+      quantityRef.current.value = 1;
+
+      setSelectedColor(product.colors[0].name);
+      setColorImage(product.colors[0].imageUrl);
+      setSelectedImage(product.colors[0].imageUrl);
+      setSelectedSize(sizes[0]);
+    }
   }, []);
 
   if (!product) {
@@ -54,18 +60,8 @@ const ProductComponent = ({
     }
   }
 
-  useEffect(() => {
-    quantityRef.current.value = 1;
-    handleLargeScreen(setIsLargeScreen);
-
-    setSelectedColor(product.colors[0].name);
-    setColorImage(product.colors[0].imageUrl);
-    setSelectedImage(product.colors[0].imageUrl);
-    setSelectedSize(sizes[0]);
-  }, []);
-
-  function handleAddToBag(newQuantity) {
-    const checkThereIsSameItem = shoppingBagItems.find(
+  async function handleAddToBag(newQuantity) {
+    const checkThereIsSameItem = user.cart.find(
       (itemFromState) =>
         itemFromState.name === product.productName &&
         itemFromState.id === product.productId &&
@@ -73,59 +69,60 @@ const ProductComponent = ({
         itemFromState.size === selectedSize
     );
 
-    if (!user) {
+    if (user.uid === false) {
       setAlertMessage("You are not logged in!");
-      setTimeout(() => {
-        setAlertMessage("");
-      }, 1000);
       return null;
     }
 
-    if (checkThereIsSameItem !== undefined) {
-      setShoppingBagItems((prevShoppingBagItems) =>
-        prevShoppingBagItems.filter(
-          (itemFromState) => itemFromState !== checkThereIsSameItem
-        )
-      );
+    try {
+      if (checkThereIsSameItem !== undefined) {
+        checkThereIsSameItem.quantity =
+          Number(checkThereIsSameItem.quantity) + Number(newQuantity);
 
-      checkThereIsSameItem.quantity =
-        Number(checkThereIsSameItem.quantity) + Number(newQuantity);
+        const cartToUpdate = [...user.cart, checkThereIsSameItem];
 
-      setShoppingBagItems((prevShoppingBagItems) => [
-        ...prevShoppingBagItems,
-        checkThereIsSameItem,
-      ]);
+        console.log(cartToUpdate);
+        dispatch(setCart(cartToUpdate));
+
+        await updateCart(cartToUpdate);
+        setAlertMessage("Item added to bag");
+
+        setTimeout(() => {
+          setAlertMessage("");
+        }, 1000);
+
+        return null;
+      }
+
+      const cartToUpdate = [
+        ...user.cart,
+        {
+          name: product.productName,
+          id: product.productId,
+          size: selectedSize,
+          quantity: quantityRef.current.value,
+          price: product.price,
+          color: selectedColor,
+          img: selectedImage,
+        },
+      ];
+
+      console.log(cartToUpdate);
+      dispatch(setCart(cartToUpdate));
+
+      await updateCart(cartToUpdate);
 
       setAlertMessage("Item added to bag");
-
       setTimeout(() => {
         setAlertMessage("");
       }, 1000);
-
-      return null;
+    } catch (err) {
+      console.log(err);
     }
-
-    setShoppingBagItems([
-      ...shoppingBagItems,
-      {
-        name: product.productName,
-        id: product.productId,
-        size: selectedSize,
-        quantity: quantityRef.current.value,
-        price: product.price,
-        color: selectedColor,
-        img: selectedImage,
-      },
-    ]);
-
-    setAlertMessage("Item added to bag");
-    setTimeout(() => {
-      setAlertMessage("");
-    }, 1000);
   }
 
   async function handleAddToWishlist() {
-    if (!user) {
+    if (user === false) {
       setAlertMessage("You are not logged in!");
       setTimeout(() => {
         setAlertMessage("");
@@ -137,7 +134,7 @@ const ProductComponent = ({
 
     try {
       const userData = await getDataOfUser();
-      const userWishlist = await userData.wishlist;
+      const userWishlist = await userData.firestoreData.wishlist;
 
       const productAlreadyOnWishlist = userWishlist.some(
         (idFirestoreWishlist) => idFirestoreWishlist == productId

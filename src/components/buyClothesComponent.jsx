@@ -8,7 +8,6 @@ import {
 import { auth } from "../services/firebase/config-firebase/firebase.js";
 
 import calculatePriceShoppingBagFromFirestore from "../utils/calculatePriceShoppingBagFromFirestore.js";
-import handleLargeScreen from "../utils/handleLargeScreen.js";
 
 import { ShoppingBagListItem } from "./headerProduct";
 

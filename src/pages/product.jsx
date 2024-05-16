@@ -1,27 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
-import HeaderProduct from "../components/headerProduct";
 import ProductComponent from "../components/productComponent";
 import SectionThree from "../components/section3";
 import clothesData from "../data/clothes_data.json";
 import Footer from "../components/footer";
 
 import "../assets/styles.scss";
+import { useDispatch, useSelector, Provider } from "react-redux";
+import handleLargeScreen from "../utils/handleLargeScreen";
+import { onAuthStateChanged } from "firebase/auth";
+import { getDataOfUser } from "../services/firebase/utils/firebaseFunctions";
+import { store } from "../services/redux-toolkit/store";
+import { setUser } from "../services/redux-toolkit/auth/authSlice";
+import { auth } from "../services/firebase/config-firebase/firebase";
+import LoadingHeader from "../components/loadingHeader";
+import LoadingPage from "../components/loadingPage";
+import Header from "../components/header";
 
 const Page = () => {
-  const [shoppingBagItems, setShoppingBagItems] = useState([]);
+  const user = useSelector((store) => store.auth.user);
+  const isLargeScreen = useSelector(
+    (store) => store.isLargeScreen.isLargeScreen
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    handleLargeScreen();
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        getDataOfUser().then((userInfo) => {
+          store.dispatch(setUser(userInfo));
+          return userInfo;
+        });
+      } else {
+        store.dispatch(setUser({ uid: false }));
+      }
+    });
+  }, []);
+
+  if (user.uid === null) {
+    return (
+      <>
+        <LoadingHeader />
+        <LoadingPage></LoadingPage>
+        <Footer></Footer>
+      </>
+    );
+  }
   return (
     <>
-      <HeaderProduct
-        shoppingBagItems={shoppingBagItems}
-        setShoppingBagItems={setShoppingBagItems}
-      />
-      <ProductComponent
-        clothesData={clothesData[0]}
-        shoppingBagItems={shoppingBagItems}
-        setShoppingBagItems={setShoppingBagItems}
-      />
+      <Header></Header>
+      <ProductComponent clothesData={clothesData[0]} />
       <SectionThree />
       <Footer />
     </>
@@ -30,6 +61,8 @@ const Page = () => {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Page></Page>
+    <Provider store={store}>
+      <Page></Page>
+    </Provider>
   </React.StrictMode>
 );

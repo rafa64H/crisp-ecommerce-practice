@@ -245,6 +245,7 @@ export async function updateCart(cartToUpdate) {
   const { uid } = currentUser;
 
   const userRef = doc(db, "users", uid);
+  console.log(cartToUpdate);
 
   updateDoc(userRef, { cart: cartToUpdate });
 

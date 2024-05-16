@@ -365,12 +365,7 @@ const NavItemAccount = ({ text, userLoggedIn, link, shouldShowTabIndex }) => (
   </li>
 );
 
-const ProfileLink = ({
-  userLoggedIn,
-  userEmailVerified,
-  link,
-  shouldShowTabIndex,
-}) => {
+const ProfileLink = ({ userLoggedIn, link, shouldShowTabIndex }) => {
   const user = useSelector((store) => store.auth.user);
   const dispatch = useDispatch();
 
@@ -451,6 +446,14 @@ const ShoppingBag = ({
   const [shoppingBagItemsNotFound, setShoppingBagItemsNotFound] =
     useState(true);
 
+  useEffect(() => {
+    if (user.cart.length !== 0) {
+      setShoppingBagItemsNotFound(false);
+    } else {
+      setShoppingBagItemsNotFound(true);
+    }
+  }, [user.cart]);
+
   function buildAllShoppingBagItems() {
     if (user.cart === undefined) return null;
     if (user.cart.length !== 0) {
@@ -499,15 +502,15 @@ const ShoppingBag = ({
 
     dispatch(setCart(cartToUpdate));
 
-    changeShoppingItemFromFirestore();
+    changeShoppingItemFromFirestore(cartToUpdate);
   }
 
   async function changeShoppingItemFromFirestore(cartToUpdate) {
     try {
       await updateCart(cartToUpdate);
 
-      if (user.cart.length === 0) setShoppingBagItemsNotFound(true);
-      else if (user.cart.length !== 0) setShoppingBagItemsNotFound(false);
+      if (cartToUpdate.length === 0) setShoppingBagItemsNotFound(true);
+      else if (cartToUpdate.length !== 0) setShoppingBagItemsNotFound(false);
     } catch (err) {
       console.log(err);
     }
@@ -525,7 +528,7 @@ const ShoppingBag = ({
       </button>
       <ul className="shopping-bag-list">
         <p className="not-found" data-not-found={shoppingBagItemsNotFound}>
-          Items not found or you aren't logged in yet
+          There are no items in the cart
         </p>
         {buildAllShoppingBagItems()}
       </ul>
