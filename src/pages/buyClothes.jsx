@@ -7,7 +7,7 @@ import SectionThree from "../components/section3";
 import Footer from "../components/footer";
 
 import "../assets/styles.scss";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, Provider } from "react-redux";
 import handleLargeScreen from "../utils/handleLargeScreen";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../services/firebase/config-firebase/firebase";
@@ -52,10 +52,7 @@ const Page = () => {
   return (
     <>
       <Header />
-      <BuyClothesComponent
-        shoppingBagItems={shoppingBagItems}
-        setShoppingBagItems={setShoppingBagItems}
-      />
+      <BuyClothesComponent />
       <SectionThree />
       <Footer />
     </>
@@ -64,6 +61,8 @@ const Page = () => {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Page />
+    <Provider store={store}>
+      <Page />
+    </Provider>
   </React.StrictMode>
 );

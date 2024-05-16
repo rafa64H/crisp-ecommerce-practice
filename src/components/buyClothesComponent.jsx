@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   getDataOfUser,
+  updateCart,
   updateOrdersHistory,
 } from "../services/firebase/utils/firebaseFunctions.js";
 import { auth } from "../services/firebase/config-firebase/firebase.js";
@@ -10,27 +11,19 @@ import { auth } from "../services/firebase/config-firebase/firebase.js";
 import calculatePriceShoppingBagFromFirestore from "../utils/calculatePriceShoppingBagFromFirestore.js";
 
 import { ShoppingBagListItem } from "./headerProduct";
+import { setCart } from "../services/redux-toolkit/auth/authSlice.js";
+import { useDispatch, useSelector } from "react-redux";
 
 const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
   const [orderDetailsOpened, setOrderDetailsOpened] = useState(false);
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
-  const [addressFromFirestore, setAddressFromFirestore] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
   const [succededOrder, setSuccededOrder] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
-  useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userData = await getDataOfUser();
-        const userAddress = userData.address;
-        setAddressFromFirestore(userAddress);
-        setIsLoading(false);
-      } else {
-      }
-    });
-    handleLargeScreen(setIsLargeScreen);
-  }, []);
+  const user = useSelector((store) => store.auth.user);
+  const isLargeScreen = useSelector(
+    (store) => store.isLargeScreen.isLargeScreen
+  );
+  const dispatch = useDispatch();
 
   function handleClickExpandDetails() {
     setOrderDetailsOpened((prevValue) => !prevValue);
@@ -42,30 +35,28 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
     productCartColor,
     productCartSize
   ) {
-    const itemToDelete = shoppingBagItems.find(
+    const itemToDelete = user.cart.find(
       (itemFromState) =>
         itemFromState.id === productCartId &&
         itemFromState.name === productCartName &&
         itemFromState.color === productCartColor &&
         itemFromState.size === productCartSize
     );
-    setShoppingBagItems((prevShoppingBagItems) =>
-      prevShoppingBagItems.filter(
-        (itemFromState) => itemFromState !== itemToDelete
-      )
+
+    const cartToUpdate = user.cart.filter(
+      (itemFromState) => itemFromState !== itemToDelete
     );
+
+    dispatch(setCart(cartToUpdate));
   }
 
   async function handlePlaceOrder() {
-    if (addressFromFirestore.streetAddress === "") {
+    if (user.firestoreData.address.streetAddress === "") {
       setAlertMessage("You have not changed the address settings");
-      setTimeout(() => {
-        setAlertMessage("");
-      }, 1000);
       return null;
     }
 
-    if (shoppingBagItems.length === 0) {
+    if (user.cart.length === 0) {
       setAlertMessage("There are no items");
       setTimeout(() => {
         setAlertMessage("");
@@ -75,39 +66,39 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
 
     try {
       const userData = await getDataOfUser();
-      const userPrevOrdersHistory = await userData.ordersHistory;
+      const userPrevOrdersHistory = user.firestoreData.ordersHistory;
 
       const today = new Date();
 
-      const shoppingBagItemsWithAddedDate = shoppingBagItems.map(
-        (itemFromState) => {
-          itemFromState.date = `${
-            today.getMonth() + 1
-          }/${today.getDate()}/${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-          return itemFromState;
-        }
-      );
+      const dateString = `${
+        today.getMonth() + 1
+      }/${today.getDate()}/${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+
+      const cartCopy = userData.cart;
+
+      const shoppingBagItemsWithAddedDate = cartCopy.map((itemFromState) => {
+        itemFromState.date = dateString;
+        return itemFromState;
+      });
 
       const ordersHistoryToUpdate = [
-        ...userPrevOrdersHistory,
         ...shoppingBagItemsWithAddedDate,
+        ...userPrevOrdersHistory,
       ];
       await updateOrdersHistory(ordersHistoryToUpdate);
-      await setShoppingBagItems([]);
-      await setSuccededOrder(true);
+      await updateCart([]);
+      dispatch(setCart([]));
+      setSuccededOrder(true);
     } catch (err) {
       console.log(err);
     }
   }
 
   const itemsToShow = () => {
-    if (isLoading) {
-      return <h3 className="items-not-found">Loading...</h3>;
-    }
-    if (shoppingBagItems.length === 0) {
+    if (user.cart.length === 0) {
       return <h3 className="items-not-found">Items not found</h3>;
     }
-    return shoppingBagItems.map((item) => (
+    return user.cart.map((item) => (
       <ShoppingBagListItem
         key={uuidv4()}
         productImg={item.img}
@@ -145,21 +136,25 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
             <h2>Address of client:</h2>
 
             <address className="address-and-buy__address-tag">
-              {`Name: ${addressFromFirestore.firstNameAddress || "..."} ${
-                addressFromFirestore.lastNameAddress || "..."
+              {`Name: ${user.firestoreData.address.firstNameAddress || "..."} ${
+                user.firestoreData.address.lastNameAddress || "..."
               }`}
               <br />
               {`Phone number: ${
-                addressFromFirestore.phoneNumber || "..."
+                user.firestoreData.address.phoneNumber || "..."
               }`}{" "}
               <br />
-              {`Street address: ${addressFromFirestore.streetAddress || "..."}`}
+              {`Street address: ${
+                user.firestoreData.address.streetAddress || "..."
+              }`}
               <br />
-              {`Country: ${addressFromFirestore.country || "..."} `}
+              {`Country: ${user.firestoreData.address.country || "..."} `}
               <br />
-              {`State/Province: ${addressFromFirestore.state || "..."}`}
+              {`State/Province: ${user.firestoreData.address.state || "..."}`}
               <br />
-              {`Zip/Postal code: ${addressFromFirestore.postalCode || "..."}`}
+              {`Zip/Postal code: ${
+                user.firestoreData.address.postalCode || "..."
+              }`}
               <br />
             </address>
 
@@ -180,9 +175,7 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
               onClick={handleClickExpandDetails}
               data-show-btn-expand2={!isLargeScreen}
             >
-              {`${calculatePriceShoppingBagFromFirestore(
-                shoppingBagItems
-              )}$ See details`}
+              {`${calculatePriceShoppingBagFromFirestore()}$ See details`}
               <i
                 className={`fa-solid ${
                   orderDetailsOpened ? "fa-minus" : "fa-plus"
@@ -197,9 +190,7 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
               <h2>Order Summary</h2>
 
               <h3>
-                {`Total price: ${calculatePriceShoppingBagFromFirestore(
-                  shoppingBagItems
-                )}$`}
+                {`Total price: ${calculatePriceShoppingBagFromFirestore()}$`}
               </h3>
 
               <ul className="list-items-place-order">{itemsToShow()}</ul>

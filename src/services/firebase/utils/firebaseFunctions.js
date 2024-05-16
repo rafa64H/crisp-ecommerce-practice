@@ -267,7 +267,7 @@ export async function updateOrdersHistory(ordersHistoryToUpdate) {
   const currentUser = await auth.currentUser;
   const { uid } = currentUser;
 
-  const userRef = doc(db, "users", uid);
+  const userRef = doc(db, "users", uid, "otherInfo", "ordersHistory");
 
   await updateDoc(userRef, {
     ordersHistory: ordersHistoryToUpdate,
