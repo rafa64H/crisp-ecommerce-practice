@@ -715,7 +715,6 @@ input[type="range"]::-moz-range-thumb {
   &-container {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
 
     overflow-x: hidden;
     scroll-behavior: smooth;
@@ -1262,7 +1261,6 @@ footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: baseline;
 }
 
 .shop-section {
@@ -1430,8 +1428,13 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: min(100%, 25rem);
+    width: min(100%, 35rem);
     margin: 0 auto;
+
+    &__main-img {
+      height: min(80vh, 35rem);
+      object-fit: cover;
+    }
 
     &__square-btns {
       margin: 0.5em 0;
@@ -2519,14 +2522,17 @@ footer {
       flex-direction: row;
       align-items: flex-start;
       width: 40%;
-      margin: 0;
 
       &__main-img {
         order: 1;
       }
 
       &__square-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
         margin: 0.5em 0;
+        margin-right: 2em;
         order: 0;
 
         [data-square-active="true"] {
