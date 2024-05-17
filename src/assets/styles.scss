@@ -1382,7 +1382,10 @@ footer {
   align-items: baseline;
 }
 [data-show-wishlist-not-found="true"] {
-  display: block !important;
+  display: block;
+}
+[data-show-wishlist-not-found="false"] {
+  display: none;
 }
 [data-show-orders-history="true"] {
   display: block;

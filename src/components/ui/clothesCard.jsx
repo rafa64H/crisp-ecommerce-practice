@@ -30,7 +30,7 @@ const ClothesCard = ({
   const dispatch = useDispatch();
 
   const wishlistItem = user.firestoreData.wishlist.find(
-    (itemFromState) => itemFromState == productId
+    (itemFromState) => itemFromState.productId == productId
   );
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const ClothesCard = ({
       if (addedToWishlist) {
         const wishlist = user.firestoreData.wishlist;
         const wishlistWithRemovedItem = await wishlist.filter(
-          (itemFromFirestore) => itemFromFirestore !== productId
+          (itemFromFirestore) => itemFromFirestore.productId !== productId
         );
 
         await updateWishlist(wishlistWithRemovedItem);
@@ -53,7 +53,18 @@ const ClothesCard = ({
       }
 
       const wishlist = user.firestoreData.wishlist;
-      const wishlistWithAddedItem = [...wishlist, productId];
+      const wishlistWithAddedItem = [
+        ...wishlist,
+        {
+          productId: productId,
+          productName: productName,
+          productImg: productImg,
+          category: category,
+          gender: gender,
+          price: productPrice,
+          colors: productColors,
+        },
+      ];
 
       await updateWishlist(wishlistWithAddedItem);
       dispatch(setWishlist(wishlistWithAddedItem));

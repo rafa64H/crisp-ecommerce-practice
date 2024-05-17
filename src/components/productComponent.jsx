@@ -130,14 +130,21 @@ const ProductComponent = ({ clothesData }) => {
       return null;
     }
 
-    const { productId } = product;
-
+    const {
+      productId: productIdFromClothesData,
+      productName,
+      category,
+      gender,
+      price,
+      colors,
+    } = product;
     try {
       const userData = await getDataOfUser();
       const userWishlist = await userData.firestoreData.wishlist;
 
       const productAlreadyOnWishlist = userWishlist.some(
-        (idFirestoreWishlist) => idFirestoreWishlist == productId
+        (idFirestoreWishlist) =>
+          idFirestoreWishlist.productId == productIdFromClothesData
       );
 
       if (productAlreadyOnWishlist) {
@@ -148,8 +155,18 @@ const ProductComponent = ({ clothesData }) => {
         return null;
       }
 
-      const wishlistToUpdate = [...userWishlist, productId];
-      updateWishlist(wishlistToUpdate);
+      const wishlistToUpdate = [
+        ...userWishlist,
+        {
+          productId: productIdFromClothesData,
+          productName,
+          category,
+          gender,
+          price,
+          colors,
+        },
+      ];
+      await updateWishlist(wishlistToUpdate);
       setAlertMessage("Item added to wishlist");
       setTimeout(() => {
         setAlertMessage("");
