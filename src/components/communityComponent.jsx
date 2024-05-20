@@ -15,14 +15,19 @@ import {
   PostCommentOptions,
 } from "./ui/postCommentOptions.jsx";
 import { dislikePost, likePost, removePost } from "../utils/functionsPost.js";
+import { useDispatch, useSelector } from "react-redux";
 
 const CommunityComponent = () => {
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [listOfPosts, setListOfPosts] = useState([]);
   const [postsToShow, setPostsToShow] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState();
-  const [user, setUser] = useState();
+
+  const user = useSelector((store) => store.auth.user);
+  const isLargeScreen = useSelector(
+    (store) => store.isLargeScreen.isLargeScreen
+  );
+  const dispatch = useDispatch();
 
   function splitPostsIntoFive(array, size) {
     const newArray = [];
@@ -34,8 +39,7 @@ const CommunityComponent = () => {
   }
 
   useEffect(() => {
-    handleLargeScreen(setIsLargeScreen);
-    onAuthStateChanged(auth, async (user) => {
+    const setPostsFirstTimeFunction = async () => {
       const communityPostsFromFirebase = await getCommunityPosts();
       const communityPostsSplitted = splitPostsIntoFive(
         communityPostsFromFirebase,
@@ -44,9 +48,10 @@ const CommunityComponent = () => {
 
       setListOfPosts(communityPostsSplitted);
       setCurrentIndex(0);
-      setUser(user || false);
       setLoading(false);
-    });
+    };
+
+    setPostsFirstTimeFunction();
   }, []);
 
   useEffect(() => {
@@ -119,7 +124,6 @@ const CommunityComponent = () => {
                 day={post.postDay}
                 month={post.postMonth}
                 year={post.postYear}
-                user={user}
               />
             ))}
           </ul>
@@ -220,17 +224,18 @@ const CommunityPostListItem = ({
   day,
   month,
   year,
-  user,
 }) => {
   const [likesPostState, setLikesPostState] = useState([...likes]);
   const [dislikesPostState, setDislikesPostState] = useState([...dislikes]);
   const [showPostOptionsState, setShowPostOptionsState] = useState(false);
 
+  const user = useSelector((store) => store.auth.user);
+
   // Like post
   async function handleLikePost(e) {
     e.preventDefault();
 
-    if (!user) return null;
+    if (!user.uid) return null;
 
     try {
       const currentPost = post;
