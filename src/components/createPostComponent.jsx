@@ -1,12 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import FormInputTyping from "./ui/formInputTyping";
-import {
-  createPost,
-  getPostsOfUser,
-} from "../services/firebase/utils/firebaseFunctions";
+import { useEffect, useState, useRef } from "react";
+import { createPost } from "../services/firebase/utils/firebaseFunctions";
 import PostForm from "./postForm";
-import { auth } from "../services/firebase/config-firebase/firebase";
 import doesIncludeBadWord from "../utils/doesIncludeBadWord";
 import removeSpacesOfString from "../utils/removeSpacesOfString";
 import { useSelector } from "react-redux";
@@ -48,6 +42,8 @@ const CreatePostComponent = () => {
 
       textOffensive ? (textRef.current.dataset.errorInputTyping = true) : null;
       setAlertMessage("Error: You must not write offensive words");
+      setLoading(false);
+      setAlertMessage2("");
       return null;
     }
 
