@@ -315,7 +315,7 @@ export async function createPost(
 
     const getImageUrl = await getDownloadURL(imageRef);
 
-    const imageUrl = (await getImageUrl).toString();
+    const imageUrl = getImageUrl.toString();
 
     const posts = await getPostsOfUser();
     const newPostsArray = [

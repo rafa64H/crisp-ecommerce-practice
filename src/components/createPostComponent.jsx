@@ -9,10 +9,10 @@ import PostForm from "./postForm";
 import { auth } from "../services/firebase/config-firebase/firebase";
 import doesIncludeBadWord from "../utils/doesIncludeBadWord";
 import removeSpacesOfString from "../utils/removeSpacesOfString";
+import { useSelector } from "react-redux";
 
 const CreatePostComponent = () => {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState();
   const [previewImg, setPreviewImg] = useState();
   const [alertMessage, setAlertMessage] = useState("");
   const [alertMessage2, setAlertMessage2] = useState("");
@@ -20,12 +20,9 @@ const CreatePostComponent = () => {
   const fileRef = useRef();
   const titleRef = useRef();
   const textRef = useRef();
+  const user = useSelector((store) => store.auth.user);
 
-  useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      setUser(user || false);
-    });
-  }, []);
+  useEffect(() => {}, []);
 
   function handleUploadFile(e) {
     const [file] = e.target.files;

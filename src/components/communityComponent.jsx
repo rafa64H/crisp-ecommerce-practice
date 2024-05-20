@@ -40,15 +40,19 @@ const CommunityComponent = () => {
 
   useEffect(() => {
     const setPostsFirstTimeFunction = async () => {
-      const communityPostsFromFirebase = await getCommunityPosts();
-      const communityPostsSplitted = splitPostsIntoFive(
-        communityPostsFromFirebase,
-        5
-      );
+      try {
+        const communityPostsFromFirebase = await getCommunityPosts();
+        const communityPostsSplitted = splitPostsIntoFive(
+          communityPostsFromFirebase,
+          5
+        );
 
-      setListOfPosts(communityPostsSplitted);
-      setCurrentIndex(0);
-      setLoading(false);
+        setListOfPosts(communityPostsSplitted);
+        setCurrentIndex(0);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     setPostsFirstTimeFunction();

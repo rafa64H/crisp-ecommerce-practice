@@ -81,7 +81,7 @@ const PostForm = ({
         ref={textRefProp}
         onFocus={(e) => {
           e.target.dataset.errorInputTyping = false;
-          handleFocusInput();
+          handleFocusInput(e);
         }}
         defaultValue={defaultValueTextArea}
       />
