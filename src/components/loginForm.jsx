@@ -14,36 +14,36 @@ const LoginForm = () => {
     setLoading(true);
     setAlertMessage("Loading");
 
-    const signInValue = await signIn(
-      emailRef.current.value,
-      passwordRef.current.value
-    );
-
-    if (
-      signInValue === "Firebase: Error (auth/missing-password)." ||
-      signInValue === "Firebase: Error (auth/wrong-password)." ||
-      signInValue === "Firebase: Error (auth/invalid-email)." ||
-      signInValue === "Firebase: Error (auth/user-not-found)."
-    ) {
-      setAlertMessage("Error: Invalid Email or password.");
-      emailRef.current.dataset.errorInputTyping = "true";
-      passwordRef.current.dataset.errorInputTyping = "true";
+    try {
+      await signIn(emailRef.current.value, passwordRef.current.value);
       setLoading(false);
-      return null;
+      window.location.href = "/index.html";
+    } catch (err) {
+      console.log(err.message);
+      if (
+        err.message === "Firebase: Error (auth/missing-password)." ||
+        err.message === "Firebase: Error (auth/wrong-password)." ||
+        err.message === "Firebase: Error (auth/invalid-email)." ||
+        err.message === "Firebase: Error (auth/user-not-found)." ||
+        err.message === "Firebase: Error (auth/invalid-login-credentials)."
+      ) {
+        setAlertMessage("Error: Invalid Email or password.");
+        emailRef.current.dataset.errorInputTyping = "true";
+        passwordRef.current.dataset.errorInputTyping = "true";
+        setLoading(false);
+        return;
+      }
+      if (err.message === "Firebase: Error (auth/too-many-requests).") {
+        setAlertMessage("Error: Too many requests, try again later");
+        setLoading(false);
+        return;
+      }
+      if (err.message === "Firebase: Error (auth/network-error).") {
+        setAlertMessage("Error: Network error");
+        setLoading(false);
+        return;
+      }
     }
-    if (signInValue === "Firebase: Error (auth/too-many-requests).") {
-      setAlertMessage("Error: Too many requests, try again later");
-      setLoading(false);
-      return null;
-    }
-    if (signInValue === "Firebase: Error (auth/network-error).") {
-      setAlertMessage("Error: Network error");
-      setLoading(false);
-      return null;
-    }
-
-    setLoading(false);
-    window.location.href = "index.html";
   }
 
   function handleFocusInput(e) {

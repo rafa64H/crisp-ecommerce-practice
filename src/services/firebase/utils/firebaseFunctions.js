@@ -151,15 +151,7 @@ export async function createUser(firstName, lastName, email, password) {
 }
 
 export async function signIn(email, password) {
-  try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-  } catch (err) {
-    return err.message;
-  }
+  await signInWithEmailAndPassword(auth, email, password);
 }
 
 export async function changeAccountInformation(
