@@ -61,6 +61,10 @@ const ProductComponent = ({ clothesData }) => {
   }
 
   async function handleAddToBag(newQuantity) {
+    if (user.uid === false) {
+      setAlertMessage("You are not logged in!");
+      return null;
+    }
     const checkThereIsSameItem = user.cart.find(
       (itemFromState) =>
         itemFromState.name === product.productName &&
@@ -68,11 +72,6 @@ const ProductComponent = ({ clothesData }) => {
         itemFromState.color === selectedColor &&
         itemFromState.size === selectedSize
     );
-
-    if (user.uid === false) {
-      setAlertMessage("You are not logged in!");
-      return null;
-    }
 
     try {
       if (checkThereIsSameItem !== undefined) {
@@ -113,16 +112,13 @@ const ProductComponent = ({ clothesData }) => {
       await updateCart(cartToUpdate);
 
       setAlertMessage("Item added to bag");
-      setTimeout(() => {
-        setAlertMessage("");
-      }, 1000);
     } catch (err) {
       console.log(err);
     }
   }
 
   async function handleAddToWishlist() {
-    if (user === false) {
+    if (user.uid === false) {
       setAlertMessage("You are not logged in!");
       setTimeout(() => {
         setAlertMessage("");

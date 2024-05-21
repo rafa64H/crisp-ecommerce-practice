@@ -410,8 +410,6 @@ export async function updateSpecifiedPost(passedPostData) {
     (post) => post.postId !== passedPostData.postId
   );
 
-  console.log(passedPostData);
-
   await updateDoc(postsOfPosterRef, {
     posts: [...editPost, passedPostData],
   });

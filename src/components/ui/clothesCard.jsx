@@ -29,13 +29,14 @@ const ClothesCard = ({
   const user = useSelector((store) => store.auth.user);
   const dispatch = useDispatch();
 
-  const wishlistItem = user.firestoreData.wishlist.find(
-    (itemFromState) => itemFromState.productId == productId
-  );
-
   useEffect(() => {
-    if (wishlistItem) {
-      setAddedToWishlist(true);
+    if (user.uid) {
+      const wishlistItem = user.firestoreData.wishlist.find(
+        (itemFromState) => itemFromState.productId == productId
+      );
+      if (wishlistItem) {
+        setAddedToWishlist(true);
+      }
     }
   }, []);
 
@@ -126,7 +127,7 @@ const ClothesCard = ({
           }`}
           onClick={(e) => {
             e.preventDefault();
-            if (!user) return null;
+            if (user.uid === false) return null;
 
             handleAddOrRemoveOfWishlist();
             setAddedToWishlist((prevValue) => !prevValue);

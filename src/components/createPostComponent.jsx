@@ -47,7 +47,7 @@ const CreatePostComponent = () => {
       return null;
     }
 
-    if (!user) {
+    if (user.uid === false) {
       setAlertMessage2(`You're not an user`);
       return null;
     }

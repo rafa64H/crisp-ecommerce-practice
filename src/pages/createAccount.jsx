@@ -17,6 +17,10 @@ import handleLargeScreen from "../utils/handleLargeScreen";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "../services/redux-toolkit/store";
 import LoadingPage from "../components/loadingPage";
+import { onAuthStateChanged } from "firebase/auth";
+import { getDataOfUser } from "../services/firebase/utils/firebaseFunctions";
+import { auth } from "../services/firebase/config-firebase/firebase";
+import { setUser } from "../services/redux-toolkit/auth/authSlice";
 
 const Page = () => {
   const user = useSelector((store) => store.auth.user);
@@ -27,12 +31,20 @@ const Page = () => {
 
   useEffect(() => {
     handleLargeScreen();
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        getDataOfUser().then((userInfo) => {
+          store.dispatch(setUser(userInfo));
+          return userInfo;
+        });
+      } else {
+        store.dispatch(setUser({ uid: false }));
+      }
+    });
   }, []);
 
-  if (
-    user.uid !== null &&
-    window.location.pathname !== "/create-account.html"
-  ) {
+  if (user.uid === null) {
     return (
       <>
         <LoadingHeader />
@@ -40,6 +52,8 @@ const Page = () => {
         <Footer></Footer>
       </>
     );
+  } else if (user.uid !== false) {
+    window.location.href = "/index.html";
   }
   return (
     <>

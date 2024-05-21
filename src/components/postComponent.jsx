@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from "firebase/auth";
-import React, { useState, useEffect, useRef, useReducer } from "react";
+import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { auth, storage } from "../services/firebase/config-firebase/firebase";
 import { getCommunityPosts } from "../services/firebase/utils/firebaseFunctions";
@@ -30,6 +30,7 @@ import {
 } from "../utils/functionsReply";
 import FormComment from "./ui/formComment";
 import PostForm from "./postForm";
+import { useSelector } from "react-redux";
 
 const PostComponent = () => {
   const params = new URLSearchParams(window.location.search);
@@ -37,7 +38,6 @@ const PostComponent = () => {
   const editPostLinked = !!params.get("editPostLinked");
 
   const [post, setPost] = useState();
-  const [user, setUser] = useState();
   const [likesPostState, setLikesPostState] = useState([]);
   const [dislikesPostState, setDislikesPostState] = useState([]);
   const [showPostOptionsState, setShowPostOptionsState] = useState(false);
@@ -52,24 +52,30 @@ const PostComponent = () => {
   const fileRef = useRef();
   const titleRef = useRef();
   const textRef = useRef();
+  const user = useSelector((store) => store.auth.user);
 
   const writeCommentRef = useRef("");
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      const allPostsFromFirestore = getCommunityPosts();
+    const setPostFirstTimeFunction = async () => {
+      try {
+        const allPostsFromFirestore = await getCommunityPosts();
 
-      const theIndicatedPost = (await allPostsFromFirestore).find(
-        (postFromFirestore) => postFromFirestore.postId === id
-      );
+        const theIndicatedPost = allPostsFromFirestore.find(
+          (postFromFirestore) => postFromFirestore.postId === id
+        );
 
-      setPost(theIndicatedPost);
-      setUser(user || false);
-      setLikesPostState([...theIndicatedPost.likes]);
-      setDislikesPostState([...theIndicatedPost.dislikes]);
-      setCommentsState([...theIndicatedPost.postComments]);
-      setPreviewImg(theIndicatedPost.postImg);
-    });
+        setPost(theIndicatedPost);
+        setLikesPostState([...theIndicatedPost.likes]);
+        setDislikesPostState([...theIndicatedPost.dislikes]);
+        setCommentsState([...theIndicatedPost.postComments]);
+        setPreviewImg(theIndicatedPost.postImg);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    setPostFirstTimeFunction();
   }, []);
 
   async function handleClickShowEditPost(e) {
@@ -118,7 +124,10 @@ const PostComponent = () => {
 
   // Like post
   async function handleLikePost() {
-    if (!user) return null;
+    if (user.uid === false) {
+      window.location.href = "/create-account.html";
+      return null;
+    }
     try {
       const currentPost = post;
 
@@ -134,7 +143,10 @@ const PostComponent = () => {
 
   // Dislike post
   async function handleDislikePost() {
-    if (!user) return null;
+    if (user.uid === false) {
+      window.location.href = "/create-account.html";
+      return null;
+    }
     try {
       const currentPost = post;
 
@@ -389,7 +401,10 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
 
   // Like comment
   async function handleClickLikeComment() {
-    if (!user) return null;
+    if (user.uid === false) {
+      window.location.href = "/create-account.html";
+      return null;
+    }
     try {
       const currentPost = post;
 
@@ -405,7 +420,10 @@ const CommentItem = ({ commentObj, post, setPost, setCommentsState, user }) => {
 
   // Dislike comment
   async function handleClickDislikeComment() {
-    if (!user) return null;
+    if (user.uid === false) {
+      window.location.href = "/create-account.html";
+      return null;
+    }
     try {
       const currentPost = post;
 
@@ -665,7 +683,10 @@ const ReplyItem = ({
   async function handleClickLikeReply() {
     const currentPost = post;
 
-    if (!user) return null;
+    if (user.uid === false) {
+      window.location.href = "/create-account.html";
+      return null;
+    }
 
     try {
       await likeReply(user, currentPost, commentId, replyId, {
@@ -681,7 +702,10 @@ const ReplyItem = ({
   // Dislike reply
   async function handleClickDislikeReply() {
     const currentPost = post;
-    if (!user) return null;
+    if (user.uid === false) {
+      window.location.href = "/create-account.html";
+      return null;
+    }
 
     try {
       await dislikeReply(user, currentPost, commentId, replyId, {

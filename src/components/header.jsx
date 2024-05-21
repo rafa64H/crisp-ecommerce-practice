@@ -447,10 +447,12 @@ const ShoppingBag = ({
     useState(true);
 
   useEffect(() => {
-    if (user.cart.length !== 0) {
-      setShoppingBagItemsNotFound(false);
-    } else {
-      setShoppingBagItemsNotFound(true);
+    if (user.uid) {
+      if (user.cart.length !== 0) {
+        setShoppingBagItemsNotFound(false);
+      } else {
+        setShoppingBagItemsNotFound(true);
+      }
     }
   }, [user.cart]);
 

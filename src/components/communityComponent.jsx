@@ -239,7 +239,10 @@ const CommunityPostListItem = ({
   async function handleLikePost(e) {
     e.preventDefault();
 
-    if (!user.uid) return null;
+    if (user.uid === false) {
+      window.location.href = "/create-account.html";
+      return null;
+    }
 
     try {
       const currentPost = post;
@@ -257,7 +260,10 @@ const CommunityPostListItem = ({
   async function handleDislikePost(e) {
     e.preventDefault();
 
-    if (!user) return null;
+    if (user.uid === false) {
+      window.location.href = "/create-account.html";
+      return null;
+    }
 
     try {
       const currentPost = post;
