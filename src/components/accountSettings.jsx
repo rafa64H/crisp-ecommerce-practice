@@ -99,7 +99,6 @@ const AccountSettings = ({ clothesData }) => {
     };
 
     firstSetAllCountriesName();
-    console.log(user);
     if (!user.emailVerified) {
       setEmailVerified(false);
       setAlertMessage(
@@ -243,33 +242,13 @@ const AccountSettings = ({ clothesData }) => {
             {selectedOption}
             <i className={`fa-solid ${changeIcon} icon`} />
           </button>
-          <ul
-            className={
-              isLargeScreen ? "account-expand-options" : "button-expand-options" // I will use button-expand-options in other place so I do this
-            }
-            data-show-button-expand-options={showSettingsOptions}
-          >
-            {settingsOptions.map((settingOption) => (
-              <li key={uuidv4()} className="button-expand-options__li">
-                <button
-                  onClick={() => handleClickOption(settingOption)}
-                  tabIndex={isLargeScreen || showSettingsOptions ? 0 : -1}
-                  type="button"
-                  className={
-                    isLargeScreen
-                      ? "account-expand-options__btn"
-                      : "button-expand-options__btn" // Same here
-                  }
-                  aria-pressed={selectedOption === settingOption}
-                  data-selected-option-acc-settings={
-                    selectedOption === settingOption
-                  }
-                >
-                  {settingOption}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <SelectOptionList
+            isLargeScreen={isLargeScreen}
+            handleClickOption={handleClickOption}
+            selectedOption={selectedOption}
+            settingsOptions={settingsOptions}
+            showSettingsOptions={showSettingsOptions}
+          ></SelectOptionList>
         </div>
 
         <FormAccountInformation
@@ -370,6 +349,42 @@ const AccountSettings = ({ clothesData }) => {
 };
 
 export default AccountSettings;
+
+const SelectOptionList = ({
+  isLargeScreen,
+  showSettingsOptions,
+  settingsOptions,
+  handleClickOption,
+  selectedOption,
+}) => {
+  return (
+    <ul
+      className={
+        isLargeScreen ? "account-expand-options" : "button-expand-options"
+      }
+      data-show-button-expand-options={showSettingsOptions}
+    >
+      {settingsOptions.map((settingOption) => (
+        <li key={uuidv4()} className="button-expand-options__li">
+          <button
+            onClick={() => handleClickOption(settingOption)}
+            tabIndex={isLargeScreen || showSettingsOptions ? 0 : -1}
+            type="button"
+            className={
+              isLargeScreen
+                ? "account-expand-options__btn"
+                : "button-expand-options__btn"
+            }
+            aria-pressed={selectedOption === settingOption}
+            data-selected-option-acc-settings={selectedOption === settingOption}
+          >
+            {settingOption}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 const FormAccountInformation = ({
   firstNameRef,

@@ -1435,7 +1435,7 @@ footer {
     margin: 0 auto;
 
     &__main-img {
-      height: min(80vh, 35rem);
+      max-height: 35rem;
       object-fit: cover;
     }
 

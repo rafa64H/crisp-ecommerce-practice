@@ -15,8 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCart } from "../services/redux-toolkit/auth/authSlice.js";
 
 const ProductComponent = ({ clothesData }) => {
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
-
   const [selectedImage, setSelectedImage] = useState();
   const [colorImage, setColorImage] = useState();
   const [showSizeOptions, setShowSizeOptions] = useState(false);
@@ -25,6 +23,10 @@ const ProductComponent = ({ clothesData }) => {
   const [alertMessage, setAlertMessage] = useState("");
 
   const user = useSelector((store) => store.auth.user);
+
+  const isLargeScreen = useSelector(
+    (store) => store.isLargeScreen.isLargeScreen
+  );
   const dispatch = useDispatch();
 
   const quantityRef = useRef();

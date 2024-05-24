@@ -9,7 +9,7 @@ const isLargeScreenSlice = createSlice({
   initialState,
   reducers: {
     setIsLargeScreen: (state, action) => {
-      state.user = action.payload;
+      state.isLargeScreen = action.payload;
     },
   },
 });

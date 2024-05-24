@@ -7,6 +7,8 @@ function handleLargeScreen() {
 
   if (mediaQuery.matches) {
     store.dispatch(setIsLargeScreen(true));
+  } else {
+    store.dispatch(setIsLargeScreen(false));
   }
 
   const handleMediaQueryChange = (event) => {
