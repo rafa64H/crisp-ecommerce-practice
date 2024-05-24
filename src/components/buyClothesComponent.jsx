@@ -29,6 +29,10 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
     setOrderDetailsOpened((prevValue) => !prevValue);
   }
 
+  useEffect(() => {
+    console.log(user);
+  }, []);
+
   function deleteShoppingItemFromState(
     productCartId,
     productCartName,
@@ -51,7 +55,7 @@ const BuyClothesComponent = ({ shoppingBagItems, setShoppingBagItems }) => {
   }
 
   async function handlePlaceOrder() {
-    if (user.firestoreData.address.streetAddress === "") {
+    if (!user.firestoreData.address.streetAddress) {
       setAlertMessage("You have not changed the address settings");
       return null;
     }
