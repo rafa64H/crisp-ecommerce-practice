@@ -22,3 +22,7 @@ I made it to practice react for the first time
 ### vite.config.js:
 
 It only has the inputs of the .html files in crisp-ecommerce-practice/ to build the page.
+
+## Deploy:
+
+https://crisp-ecommerce.web.app
